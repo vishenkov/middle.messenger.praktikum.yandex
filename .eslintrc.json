@@ -9,6 +9,13 @@
         "sourceType": "module"
     },
     "rules": {
-        "curly": "warn"
+        "curly": "warn",
+        "no-restricted-syntax": [
+            "off",
+            {
+                "selector": "ForOfStatement"
+            }
+        ],
+        "no-underscore-dangle": "off"
     }
 }
