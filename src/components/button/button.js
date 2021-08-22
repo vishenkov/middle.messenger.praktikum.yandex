@@ -1,5 +1,7 @@
 import * as styles from './button.css';
 
-console.log('styles', styles, styles.button);
+const Button = (ctx) => `
+  <button class="${styles.button}">${ctx.label}</button>
+`;
 
-export default styles;
+export default Button;
