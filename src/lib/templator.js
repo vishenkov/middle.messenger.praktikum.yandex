@@ -20,31 +20,32 @@ export default class Templator {
     Например,
     Компонент Textarea:
       <div class="textarea">
-        <Label ctx={{label}} />
-        <Input ctx={{value}} />
+        <Label />
+        <Input />
       </div>
     Компонент Label:
-      <span>{{label}}</span>
+      <span>Label</span>
     Компонент Input:
       <input type="text" />
 
     Тогда шаблон
       <div>
-        <Textarea ctx={{value}} />
+        <Textarea />
       </div>
     приведет к виду
       <div>
         <div class="textarea">
-          <span>{{label}}</span>
+          <span>Label</span>
           <input type="text" />
         </div>
       </div>
   */
-  _replaceComponents(template) {
-    let tmpl = template;
+  _replaceComponents(template, ctx) {
+    let tmpl = sanitize(template);
     const componentRegExp = this.COMPONENT_REGEXP;
     let key = null;
 
+    // console.log('tmpl', tmpl, 'this.COMPONENT_REGEXP.exec', this.COMPONENT_REGEXP.exec(tmpl));
     // eslint-disable-next-line no-cond-assign
     while ((key = componentRegExp.exec(tmpl))) {
       if (key[1]) {
@@ -61,9 +62,13 @@ export default class Templator {
         }
 
         const ctxValueKey = this.COMPONENT_CONTEXT_REGEXP.exec(key[0]);
-        const rawComponent = componentFn(ctxValueKey ? ctxValueKey[1] : null);
+        const data = ctxValueKey ? get(ctx, ctxValueKey[1]) : null;
 
-        const component = this._replaceComponents(rawComponent);
+        const rawComponent = componentFn(data);
+
+        const templator = new Templator(rawComponent, this._components);
+
+        const component = templator.compile(data);
 
         tmpl = tmpl.replace(new RegExp(key[0], 'gi'), component);
       }
@@ -104,8 +109,7 @@ export default class Templator {
   }
 
   _compileTemplate(ctx) {
-    const template = sanitize(this._template);
-    const tmplWithoutComponents = this._replaceComponents(template);
+    const tmplWithoutComponents = this._replaceComponents(this._template, ctx);
     const tmplWithData = this._replaceContext(tmplWithoutComponents, ctx);
 
     return tmplWithData;
