@@ -1,7 +1,7 @@
 {
   "name": "chat-project",
   "version": "0.0.1",
-  "description": "",
+  "description": "Yet another chat",
   "scripts": {
     "dev": "parcel ./src/index.html",
     "build": "rimraf ./dist && parcel build ./src/index.html",
@@ -17,7 +17,7 @@
   "keywords": [
     "chat"
   ],
-  "author": "",
+  "author": "Kirill Vishenkov",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/vishenkov/chat-project/issues"
