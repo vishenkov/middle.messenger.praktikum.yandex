@@ -1,6 +1,14 @@
-.root {
+.input {
   border: 2px solid #000000;
   border-radius: 0px;
   min-height: 52px;
   padding: var(--spacing);
+}
+
+.input_gutter-bottom {
+  margin-bottom: var(--spacing2);
+}
+
+.input_full-width {
+  width: 100%;
 }

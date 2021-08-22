@@ -1,6 +1,4 @@
 .button {
-  background: #000000;
-  border: 2px solid #000000;
   border-radius: 6px;
   min-height: 52px;
   padding: var(--spacing);
@@ -20,8 +18,27 @@
   font-family: Roboto;
   font-style: normal;
   font-weight: 900;
-  color: #fff;
   font-size: 0.7rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+}
+
+.button_primary {
+  background: #000000;
+  border: 2px solid #000000;
+  color: #fff;
+}
+
+.button_secondary {
+  background: #fff;
+  border: 2px solid #000000;
+  color: #000000;
+}
+
+.button_full-width {
+  width: 100%;
+}
+
+.button_gutter-bottom {
+  margin-bottom: var(--spacing2);
 }
