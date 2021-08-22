@@ -10,4 +10,5 @@
 
 body {
   font-family: 'Roboto';
+  color: var(--font-color);
 }

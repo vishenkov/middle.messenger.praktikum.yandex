@@ -1,6 +1,13 @@
 {
   "modules": true,
   "plugins": {
+    "postcss-import": {},
+    "postcss-preset-env": { 
+      "stage": 3,
+      "features": {
+        "nesting-rules": true
+      }
+    },
     "postcss-modules": {
       "generateScopedName": "_[name]__[local]"
     }

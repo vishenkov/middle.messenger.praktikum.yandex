@@ -1,0 +1,10 @@
+.root {
+  display: flex;
+  padding: var(--spacing2);
+}
+
+.centered {
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
