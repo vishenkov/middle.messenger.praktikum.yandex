@@ -64,3 +64,22 @@ const htmlString = templator.compile({
 
 // результат: <div><span>John Doe</span></div>
 ```
+
+## Модификаторы
+Компоненты и контейнеры поддерживают модификаторы
+Необходимо определить ключ `modifier` в который передать строковые модификаторы, разделенные запятой. При рендере в компонент будет передан объект, содержащий все параметры как ключи.
+
+```javascript
+// Компонент Container
+const Container = (modifiers) => {
+  const classNames = modifiers.centered ? styles.centered : styles.common;
+  return `<div class="${classNames}">{{children}}</div>`;
+}
+
+// Использование в шаблоне
+const template = `
+  <Container modifier="centered">
+    <span>{{ name }}</span>
+  </Container>
+`;
+```

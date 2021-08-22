@@ -15,6 +15,23 @@ export default class Templator {
     return this._compileTemplate(ctx, components);
   }
 
+  _getModifiers(componentTemplate) {
+    const modifiersValueKey = new RegExp(/modifier="(.*?)"/gi).exec(componentTemplate);
+
+    if (!modifiersValueKey) {
+      return {};
+    }
+
+    const modifiers = modifiersValueKey[1].split(',')
+      .map((modifier) => modifier.trim())
+      .reduce((acc, modifier) => ({
+        ...acc,
+        [modifier]: true,
+      }), {});
+
+    return modifiers;
+  }
+
   /*
     Рекурсивно заменяем контейнеры на их представление в html и компоненты
     Например,
@@ -55,7 +72,9 @@ export default class Templator {
           throw new Error(`Component ${componentValue} should be a function!`);
         }
 
-        const rawComponent = componentFn();
+        const modifiers = this._getModifiers(key[0]);
+
+        const rawComponent = componentFn(modifiers);
 
         const componentWithChildren = rawComponent.replace(new RegExp('{{children}}', 'gi'), key[2]);
 
@@ -118,7 +137,9 @@ export default class Templator {
         const ctxValueKey = new RegExp(/ctx=\{\{(.*?)\}\}/gi).exec(key[0]);
         const data = ctxValueKey ? get(ctx, ctxValueKey[1].trim()) : null;
 
-        const rawComponent = componentFn();
+        const modifiers = this._getModifiers(key[0]);
+
+        const rawComponent = componentFn(modifiers);
 
         const templator = new Templator(rawComponent, this._components);
 
