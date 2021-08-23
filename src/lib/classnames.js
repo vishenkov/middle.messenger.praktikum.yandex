@@ -4,7 +4,7 @@ function classnames(...args) {
       return [...acc, arg];
     }
 
-    if (arg && typeof arg === 'object') {
+    if (arg && typeof arg === 'object' && Object.prototype.toString.call(arg) === '[object Object]') {
       const keys = Object.keys(arg).filter((key) => arg[key]);
 
       return [...acc, ...keys];
