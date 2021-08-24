@@ -1,0 +1,16 @@
+.root {
+  display: flex;
+  justify-content: center;
+  color: var(--font-color);
+  &:visited {
+    color: var(--font-color);
+  }
+}
+
+.input_gutter-bottom {
+  margin-bottom: var(--spacing2);
+}
+
+.input_full-width {
+  width: 100%;
+}

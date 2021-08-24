@@ -7,6 +7,7 @@ import Button from '../../components/button';
 import Input from '../../components/input';
 import Container from '../../components/container';
 import Typography from '../../components/typography';
+import Link from '../../components/link';
 
 const components = {
   Paper,
@@ -14,6 +15,7 @@ const components = {
   Input,
   Container,
   Typography,
+  Link,
 };
 
 const getRegistrationPage = () => {
@@ -52,8 +54,9 @@ const getRegistrationPage = () => {
     createAccButton: {
       label: 'Создать аккаунт',
     },
-    loginButton: {
-      label: 'Войти',
+    loginLink: {
+      text: 'Войти',
+      href: '/',
     },
   });
 };

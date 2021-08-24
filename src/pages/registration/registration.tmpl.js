@@ -41,10 +41,10 @@ export default `
           modifier="fullWidth, gutterBottom"
           ctx={{ createAccButton }}
         />
-        <Button
-          modifier="fullWidth, secondary"
-          ctx={{ loginButton }}
-        />
+        <Link
+         modifier="fullWidth"
+         ctx={{ loginLink }}
+       />
       </Paper>
     </div>
   </Container>
