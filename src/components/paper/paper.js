@@ -1,7 +1,10 @@
+import cn from '../../lib/classnames';
 import * as styles from './paper.css';
 
-export default () => `
-  <div class="${styles.root}">
+export default (modifiers) => `
+  <div class="${cn(styles.root, {
+    [styles.centered]: modifiers.centered,
+  })}">
     {{children}}
   </div>
 `;
