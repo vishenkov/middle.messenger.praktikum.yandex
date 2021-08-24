@@ -20,6 +20,7 @@ const getLoginPage = () => {
   const templator = new Templator(loginTemplate, components);
 
   return templator.compile({
+    title: 'Вход',
     loginInput: {
       name: 'login',
       placeholder: 'Логин',

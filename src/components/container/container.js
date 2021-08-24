@@ -4,6 +4,7 @@ import * as styles from './container.css';
 export default (modifiers) => `
   <div class="${cn(styles.root, {
     [styles.centered]: modifiers.centered,
+    [styles.min100vh]: modifiers.min100vh,
   })}">
     {{children}}
   </div>

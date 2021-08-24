@@ -1,11 +1,11 @@
 import * as styles from './login.css';
 
 export default `
-  <Container modifier="centered">
+  <Container modifier="centered, min100vh">
     <div class="${styles.root}">
       <Paper>
         <Typography modifier="h3, gutterBottom">
-          Вход
+          {{ title }}
         </Typography>
         <Input
           modifier="fullWidth, gutterBottom"
