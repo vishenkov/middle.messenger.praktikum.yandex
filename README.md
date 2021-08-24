@@ -2,8 +2,10 @@
 
 # chat-project
 Простой чат
+
 [Макет в Figma](https://www.figma.com/file/9rNI6xbDfopn8DzbXqJYGj/%D0%A7%D0%B0%D1%82?node-id=4%3A530)
 
+[Live demo](https://zen-boyd-d71884.netlify.app/)
 ## Запуск
 
 Установите все зависимости
@@ -11,12 +13,12 @@
 npm i
 ```
 
-Для разработки, выполните
+Для запуска в режиме разработки выполните
 ```bash
 npm run dev
 ```
 
-Для production сборки - сервер запуститься на 3000 порту
+Для production сборки - сервер запуститься на `3000` порту
 ```bash
 npm run build
 npm run start
