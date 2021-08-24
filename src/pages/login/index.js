@@ -21,9 +21,11 @@ const getLoginPage = () => {
 
   return templator.compile({
     loginInput: {
+      name: 'login',
       placeholder: 'Логин',
     },
     passwordInput: {
+      name: 'password',
       placeholder: 'Пароль',
     },
     loginButton: {

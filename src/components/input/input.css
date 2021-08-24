@@ -1,5 +1,5 @@
 .input {
-  border: 2px solid #000000;
+  border: var(--component-border);
   border-radius: 0px;
   min-height: 52px;
   padding: var(--spacing);

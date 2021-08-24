@@ -8,7 +8,8 @@ const Input = (modifiers) => `
     [styles['input_full-width']]: modifiers.fullWidth,
     [styles['input_gutter-bottom']]: modifiers.gutterBottom,
   })}"
-    placeholder="{{ placeholder }}" 
+    placeholder="{{ placeholder }}"
+    name="{{ name }}"
   />
 `;
 

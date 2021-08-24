@@ -8,5 +8,7 @@
   --spacing3: 24px;
   --spacing4: 32px;
 
-  --corner-radius: 4px;
+  --corner-radius: 6px;
+
+  --component-border: 2px solid #000;
 }

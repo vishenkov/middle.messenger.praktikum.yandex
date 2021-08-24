@@ -1,10 +1,11 @@
 .button {
-  border-radius: 6px;
+  border-radius: var(--corner-radius);
   min-height: 52px;
   padding: var(--spacing);
   display: flex;
   justify-content: center;
   align-items: center;
+  border: var(--component-border);
   &:hover {
     box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
     background-color: #5A5A5A;
@@ -24,15 +25,13 @@
 }
 
 .button_primary {
-  background: #000000;
-  border: 2px solid #000000;
+  background: #000;
   color: #fff;
 }
 
 .button_secondary {
   background: #fff;
-  border: 2px solid #000000;
-  color: #000000;
+  color: #000;
 }
 
 .button_full-width {
