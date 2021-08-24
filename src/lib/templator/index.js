@@ -34,23 +34,6 @@ export default class Templator {
 
   /*
     Рекурсивно заменяем контейнеры на их представление в html и компоненты
-    Например,
-    Компонент Paper:
-      <div class="root">
-        {{children}}
-      </div>
-
-    Компонент Input:
-      <input type="text" />
-
-    Тогда шаблон
-      <Paper>
-        <Input />
-      </Paper>
-    приведет к виду
-      <div class="root">
-        <Input />
-      </div>
   */
   _replaceContainers(template, ctx) {
     let tmpl = sanitize(template);
@@ -91,33 +74,12 @@ export default class Templator {
 
   /*
     Рекурсивно заменяем компоненты на их представление в html
-    Например,
-    Компонент Textarea:
-      <div class="textarea">
-        <Label />
-        <Input />
-      </div>
-    Компонент Label:
-      <span>Label</span>
-    Компонент Input:
-      <input type="text" />
-
-    Тогда шаблон
-      <div>
-        <Textarea />
-      </div>
-    приведет к виду
-      <div>
-        <div class="textarea">
-          <span>Label</span>
-          <input type="text" />
-        </div>
-      </div>
   */
   _replaceComponents(template, ctx) {
-    let tmpl = sanitize(template);
+    const tmpl = sanitize(template);
     const componentRegExp = this.COMPONENT_REGEXP;
     let key = null;
+    let resultTmpl = tmpl;
 
     // eslint-disable-next-line no-cond-assign
     while ((key = componentRegExp.exec(tmpl))) {
@@ -145,29 +107,20 @@ export default class Templator {
 
         const component = templator.compile(data);
 
-        tmpl = tmpl.replace(new RegExp(key[0], 'gi'), component);
+        resultTmpl = resultTmpl.replace(new RegExp(key[0], 'gi'), component);
       }
     }
 
-    return tmpl;
+    return resultTmpl;
   }
 
   /*
     Заменяем шаблонные строки на реальные данные из контекста
-
-    Например,
-    ctx = {
-      name: 'John'
-    };
-
-    <div>{{ name }}</div>
-
-    Получим:
-    <div>John</div>
   */
   _replaceContext(tmplWithoutComponents, ctx) {
-    let tmpl = tmplWithoutComponents;
+    const tmpl = tmplWithoutComponents;
     let key = null;
+    let resultTmpl = tmpl;
 
     const contextRegExp = this.CONTEXT_REGEXP;
     // eslint-disable-next-line no-cond-assign
@@ -176,11 +129,11 @@ export default class Templator {
         const tmplValue = key[1].trim();
 
         const data = get(ctx, tmplValue);
-        tmpl = tmpl.replace(new RegExp(key[0], 'gi'), data);
+        resultTmpl = resultTmpl.replace(new RegExp(key[0], 'gi'), data);
       }
     }
 
-    return tmpl;
+    return resultTmpl;
   }
 
   _compileTemplate(ctx) {
