@@ -1,11 +1,13 @@
-function classnames(...args) {
+import isObject from './utils/isObject';
+
+function classnames(styles, ...args) {
   return args.reduce((acc, arg) => {
     if (typeof arg === 'string') {
-      return [...acc, arg];
+      return [...acc, styles[arg]];
     }
 
-    if (arg && typeof arg === 'object' && Object.prototype.toString.call(arg) === '[object Object]') {
-      const keys = Object.keys(arg).filter((key) => arg[key]);
+    if (isObject(arg)) {
+      const keys = Object.keys(arg).filter((key) => arg[key]).map((key) => styles[key]);
 
       return [...acc, ...keys];
     }

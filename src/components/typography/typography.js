@@ -20,12 +20,12 @@ const getComponent = (modifiers) => {
 export default (modifiers) => {
   const component = getComponent(modifiers);
 
-  const classNames = cn({
-    [styles.h1]: modifiers.h1,
-    [styles.h2]: modifiers.h2,
-    [styles.h3]: modifiers.h3,
-    [styles.body]: modifiers.body,
-    [styles['typography_gutter-bottom']]: modifiers.gutterBottom,
+  const classNames = cn(styles, {
+    h1: modifiers.h1,
+    h2: modifiers.h2,
+    h3: modifiers.h3,
+    body: modifiers.body,
+    'typography_gutter-bottom': modifiers.gutterBottom,
   });
 
   return `
