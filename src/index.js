@@ -13,8 +13,11 @@ function getCurrentPage() {
     case '/registration':
       return getRegistrationPage();
 
+    case '/500':
+      return getErrorPage(500);
+
     default:
-      return getErrorPage();
+      return getErrorPage(404);
   }
 }
 

@@ -16,16 +16,37 @@ const components = {
   Typography,
 };
 
-const getErrorPage = () => {
+const getContext = (code) => {
+  switch (code) {
+    case 404: {
+      return {
+        title: '404',
+        subtitle: 'Не туда попали',
+        backButton: {
+          label: 'Назад к чатам',
+        },
+      };
+    }
+
+    case 500: {
+      return {
+        title: '500',
+        subtitle: 'Уже чиним :(',
+        backButton: {
+          label: 'Назад к чатам',
+        },
+      };
+    }
+
+    default:
+      throw new Error(`code ${code} is not supported`);
+  }
+};
+
+const getErrorPage = (code = 404) => {
   const templator = new Templator(errorTemplate, components);
 
-  return templator.compile({
-    title: '404',
-    subtitle: 'Не туда попали',
-    backButton: {
-      label: 'Назад к чатам',
-    },
-  });
+  return templator.compile(getContext(code));
 };
 
 export default getErrorPage;
