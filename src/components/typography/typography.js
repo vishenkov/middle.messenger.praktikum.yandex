@@ -14,6 +14,10 @@ const getComponent = (modifiers) => {
     return 'h3';
   }
 
+  if (modifiers.h4) {
+    return 'h4';
+  }
+
   return 'p';
 };
 
@@ -24,6 +28,7 @@ export default (modifiers) => {
     h1: modifiers.h1,
     h2: modifiers.h2,
     h3: modifiers.h3,
+    h4: modifiers.h4,
     body: modifiers.body,
     'typography_gutter-bottom': modifiers.gutterBottom,
   });
