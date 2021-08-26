@@ -5,14 +5,10 @@ export default class Templator {
   constructor(template, components) {
     this._template = template;
     this._components = components;
-
-    this.CONTEXT_REGEXP = /\{\{(.*?)\}\}/gi; // Ищем {{ Значение }}
-    this.CONTAINER_REGEXP = /<(?<tag>\b[A-Z].*?\b).*?>(.*?)<\/\k<tag>.*?>/g; // Ищем контейнеры компонентов
-    this.COMPONENT_REGEXP = /<(\b[A-Z].*?\b).*?\/>/g; // Ищем кастомные компоненты. Должны начинаться с большой буквы
   }
 
-  compile(ctx, components) {
-    return this._compileTemplate(ctx, components);
+  compile(ctx) {
+    return this._compileTemplate(this._template, ctx);
   }
 
   _getModifiers(componentTemplate) {
@@ -36,8 +32,9 @@ export default class Templator {
     Рекурсивно заменяем контейнеры на их представление в html и компоненты
   */
   _replaceContainers(template, ctx) {
-    let tmpl = sanitize(template);
-    const containerRegExp = this.CONTAINER_REGEXP;
+    const tmpl = sanitize(template);
+    let resultTmpl = tmpl;
+    const containerRegExp = /<(?<tag>\b[A-Z].*?\b).*?>(.*?)<\/\k<tag>.*?>/g;
     let key = null;
 
     // eslint-disable-next-line no-cond-assign
@@ -61,15 +58,13 @@ export default class Templator {
 
         const componentWithChildren = rawComponent.replace(new RegExp('{{children}}', 'gi'), key[2]);
 
-        const templator = new Templator(componentWithChildren, this._components);
+        const componentWithData = this._compileTemplate(componentWithChildren, ctx);
 
-        const component = templator.compile(ctx);
-
-        tmpl = tmpl.replace(new RegExp(key[0], 'gi'), component);
+        resultTmpl = resultTmpl.replace(new RegExp(key[0], 'gi'), componentWithData);
       }
     }
 
-    return tmpl;
+    return resultTmpl;
   }
 
   /*
@@ -77,7 +72,8 @@ export default class Templator {
   */
   _replaceComponents(template, ctx) {
     const tmpl = sanitize(template);
-    const componentRegExp = this.COMPONENT_REGEXP;
+    // Ищем кастомные компоненты. Должны начинаться с большой буквы;
+    const componentRegExp = /<(\b[A-Z].*?\b).*?\/>/g;
     let key = null;
     let resultTmpl = tmpl;
 
@@ -103,11 +99,9 @@ export default class Templator {
 
         const rawComponent = componentFn(modifiers);
 
-        const templator = new Templator(rawComponent, this._components);
+        const componentWithData = this._compileTemplate(rawComponent, data);
 
-        const component = templator.compile(data);
-
-        resultTmpl = resultTmpl.replace(new RegExp(key[0], 'gi'), component);
+        resultTmpl = resultTmpl.replace(new RegExp(key[0], 'gi'), componentWithData);
       }
     }
 
@@ -122,7 +116,8 @@ export default class Templator {
     let key = null;
     let resultTmpl = tmpl;
 
-    const contextRegExp = this.CONTEXT_REGEXP;
+    // Ищем {{ Значение }}
+    const contextRegExp = /\{\{(.*?)\}\}/gi;
     // eslint-disable-next-line no-cond-assign
     while ((key = contextRegExp.exec(tmpl))) {
       if (key[1]) {
@@ -136,8 +131,8 @@ export default class Templator {
     return resultTmpl;
   }
 
-  _compileTemplate(ctx) {
-    const tmplWithoutContainers = this._replaceContainers(this._template, ctx);
+  _compileTemplate(template, ctx) {
+    const tmplWithoutContainers = this._replaceContainers(template, ctx);
     const tmplWithoutComponents = this._replaceComponents(tmplWithoutContainers, ctx);
     const tmplWithData = this._replaceContext(tmplWithoutComponents, ctx);
 
