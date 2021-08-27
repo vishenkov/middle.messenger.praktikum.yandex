@@ -1,0 +1,20 @@
+:root {
+  --font-color: rgba(0, 0, 0, 0.87);
+  --font-color-contrast: #fff; 
+  --paper-color: #fff;
+  --bg-color: #f5f5f5;
+
+  --spacing: 8px;
+  --spacing2: 16px;
+  --spacing3: 24px;
+  --spacing4: 32px;
+
+  --corner-radius: 6px;
+
+  --component-border: 2px solid #000;
+  --button-hover: #5a5a5a;
+  --button-primary-bg: #000;
+
+  --shadow-level-1: 0px 2px 4px -1px #00000020, 0px 4px 5px 0px #00000014, 0px 1px 10px 0px #00000012;
+  --shadow-level-2: 0px 5px 5px -3px #00000020, 0px 8px 10px 1px #00000014, 0px 3px 14px 2px #00000012;
+}

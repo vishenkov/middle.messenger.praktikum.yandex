@@ -1,0 +1,13 @@
+.root {
+  display: flex;
+  padding: var(--spacing2);
+}
+
+.centered {
+  justify-content: center;
+  align-items: center;
+}
+
+.min100vh {
+  min-height: 100vh;
+}

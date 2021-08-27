@@ -1,0 +1,40 @@
+{
+  "name": "chat-project",
+  "version": "0.0.1",
+  "description": "Yet another chat",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "parcel ./src/index.html",
+    "build": "rimraf ./dist && parcel build ./src/index.html",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "rimraf": "rimraf",
+    "parcel": "parcel",
+    "lint": "eslint src/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vishenkov/chat-project.git"
+  },
+  "keywords": [
+    "chat"
+  ],
+  "author": "Kirill Vishenkov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vishenkov/chat-project/issues"
+  },
+  "homepage": "https://github.com/vishenkov/chat-project#readme",
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.24.1",
+    "parcel": "^2.0.0-rc.0",
+    "postcss": "^8.3.6",
+    "postcss-import": "^14.0.2",
+    "postcss-preset-env": "^6.7.0",
+    "rimraf": "^3.0.2"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

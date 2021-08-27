@@ -1,0 +1,7 @@
+/debug
+node_modules
+/build
+/dist
+.DS_Store
+.vscode/
+.parcel-cache/

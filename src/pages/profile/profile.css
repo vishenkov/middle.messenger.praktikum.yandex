@@ -1,0 +1,14 @@
+.root {
+  width: 620px;
+}
+
+.avatarRoot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: var(--spacing2);
+}
+
+.inputsRoot {
+  margin-bottom: var(--spacing2);
+}

@@ -1,0 +1,42 @@
+.h1 {
+  font-size: 6rem;
+  font-weight: 300;
+  line-height: 1.167;
+  letter-spacing: -0.015em;
+}
+
+.h2 {
+  font-size: 3.75rem;
+  font-weight: 300;
+  line-height: 1.2;
+  letter-spacing: -0.008em;
+}
+
+.h3 {
+  font-size: 3rem;
+  font-weight: 400;
+  line-height: 1.167;
+  letter-spacing: 0em;
+}
+
+.h4 {
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 1.0;
+  letter-spacing: 0em;
+}
+
+.body {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.009em;
+}
+
+.typography_gutter-bottom {
+  margin-bottom: var(--spacing2);
+}
+
+.body .typography_gutter-bottom {
+  margin-bottom: var(--spacing1);
+}
