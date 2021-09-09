@@ -9,7 +9,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "rimraf": "rimraf",
     "parcel": "parcel",
-    "lint": "eslint src/*.js"
+    "stylelint": "stylelint",
+    "lint-css": "stylelint \"**/*.css\"",
+    "lint-js": "eslint src/*.js",
+    "lint": "npm run lint-js && npm run lint-css"
   },
   "repository": {
     "type": "git",
@@ -37,6 +40,8 @@
     "postcss-preset-env": "^6.7.0",
     "prettier": "^2.4.0",
     "rimraf": "^3.0.2",
+    "stylelint": "^13.13.1",
+    "stylelint-config-standard": "^22.0.0",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.2"
   },
