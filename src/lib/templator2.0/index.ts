@@ -15,9 +15,6 @@ export default class Templator {
   /*
     Заменяем шаблонные строки на реальные данные из контекста
   */
-  /**
-   * @deprecated The method should not be used
-  */
   _replaceContext(tmplWithoutComponents, ctx) {
     const tmpl = tmplWithoutComponents;
     let key = null;
@@ -58,7 +55,54 @@ export default class Templator {
     this._tags.pop();
   }
 
-  _parseProps(props) {
+  __getRawValue(rawValue) {
+    const lastCharIndex = rawValue.length - 1;
+    if (rawValue[lastCharIndex] !== '"') {
+      throw new Error(`Props value should have closing " at ${rawValue}`);
+    }
+
+    // removing ""
+    const value = Array.prototype.slice.call(rawValue, 1, lastCharIndex).join('');
+
+    if (value === 'true') {
+      return true;
+    }
+
+    if (value === 'false') {
+      return false;
+    }
+
+    const number = Number(value);
+    if (!Number.isNaN(number)) {
+      return number;
+    }
+
+    return value;
+  }
+
+  __parsePropsKeyValue({ key, value }) {
+    if (!key) {
+      return { key: null, value: null };
+    }
+
+    if (!value) {
+      return { key: null, value: null };
+    }
+
+    const isString = value.startsWith('"');
+    const hasCtxValue = (/\{\{(.*?)\}\}/gi).test(value);
+    if (!hasCtxValue && !isString) {
+      throw new Error(`Check props template for ${value}`!);
+    }
+
+    if (!hasCtxValue) {
+      return { key, value: this.__getRawValue(value) };
+    }
+
+    return { key, value: (ctx) => this._replaceContext(value, ctx) };
+  }
+
+  __parseProps(props) {
     console.log('props', props);
     if (!props) {
       return null;
@@ -69,20 +113,19 @@ export default class Templator {
       return null;
     }
 
-    const resultProps = {};
-    const propsPairsRegExp = /(?<key>\w+)="?(?<value>[\w{}\s]+)"?/gm;
+    const propsPairsRegExp = /(?<key>\w+)=(?<value>{+[\w\s]+}+|"[{\w\s}]+")/gm;
     let match = null;
-    console.log('sanitizedProps', sanitizedProps);
+    const resultProps = {};
+
     // eslint-disable-next-line no-cond-assign
     while (match = propsPairsRegExp.exec(sanitizedProps)) {
-      const { key, value } = match.groups;
-      console.log('key', key, 'value', value);
+      const { key, value } = this.__parsePropsKeyValue(match.groups);
       if (key) {
         resultProps[key] = value;
       }
     }
 
-    // console.log('resultProps', resultProps)
+    // console.log('resultProps', resultProps);
     return Object.keys(resultProps).length ? resultProps : null;
   }
 
@@ -135,7 +178,7 @@ export default class Templator {
     }
 
     // console.log('props', props);
-    const parsedProps = this._parseProps(props);
+    const parsedProps = this.__parseProps(props);
     // console.log('parsedProps', parsedProps)
     if (isSelfClosingTag) {
       return [{
