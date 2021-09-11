@@ -12,29 +12,6 @@ export default class Templator {
     return this.__compileTemplate(this.__template, ctx);
   }
 
-  /*
-    Заменяем шаблонные строки на реальные данные из контекста
-  */
-  __replaceContext(tmplWithoutComponents, ctx) {
-    const tmpl = tmplWithoutComponents;
-    let key = null;
-    let resultTmpl = tmpl;
-
-    // Ищем {{ Значение }}
-    const contextRegExp = /\{\{(.*?)\}\}/gi;
-    // eslint-disable-next-line no-cond-assign
-    while ((key = contextRegExp.exec(tmpl))) {
-      if (key[1]) {
-        const tmplValue = key[1].trim();
-
-        const data = get(ctx, tmplValue);
-        resultTmpl = resultTmpl.replace(new RegExp(key[0], 'gi'), data);
-      }
-    }
-
-    return resultTmpl;
-  }
-
   __addOpeningTag(tag) {
     this.__tags.push(tag);
   }
@@ -125,6 +102,37 @@ export default class Templator {
     return Object.keys(resultProps).length ? resultProps : null;
   }
 
+  __replaceContext(value) {
+    if (!value) {
+      return value;
+    }
+    const hasCtxValue = (/\{\{(.*?)\}\}/gi).test(value);
+
+    if (!hasCtxValue) {
+      return value;
+    }
+
+    return (ctx) => {
+      const tmpl = value;
+      let key = null;
+      let resultTmpl = tmpl;
+
+      // Ищем {{ Значение }}
+      const contextRegExp = /\{\{(.*?)\}\}/gi;
+      // eslint-disable-next-line no-cond-assign
+      while ((key = contextRegExp.exec(tmpl))) {
+        if (key[1]) {
+          const tmplValue = key[1].trim();
+
+          const data = get(ctx, tmplValue);
+          resultTmpl = resultTmpl.replace(new RegExp(key[0], 'gi'), data);
+        }
+      }
+
+      return resultTmpl;
+    };
+  }
+
   __getChildrenAST(template) {
     if (!template) {
       return [null, null];
@@ -136,7 +144,7 @@ export default class Templator {
       return [{
         node: 'raw',
         props: null,
-        children: [template],
+        children: [this.__replaceContext(template)],
       }, null];
     }
 
@@ -152,7 +160,7 @@ export default class Templator {
       return [{
         node: 'raw',
         props: null,
-        children: [rawNode],
+        children: [this.__replaceContext(rawNode)],
       }, restTemplate];
     }
 
@@ -228,21 +236,25 @@ export default class Templator {
     };
   }
 
-  __getNode(astNode) {
+  __getNode(astNode, ctx) {
     if (astNode.node === 'raw') {
       if (astNode.children.length > 1) {
         throw new Error('Text node should have only one children');
       }
 
-      return document.createTextNode(astNode.children[0]);
+      const textValue = astNode.children[0];
+      const text = typeof textValue === 'function'
+        ? textValue(ctx)
+        : textValue;
+
+      return document.createTextNode(text);
     }
 
     return document.createElement(astNode.node);
   }
 
   __createDomElement(astNode, ctx) {
-    const element = this.__getNode(astNode);
-    console.log('astNode', astNode);
+    const element = this.__getNode(astNode, ctx);
 
     if (astNode.node === 'raw') {
       return element;
@@ -293,11 +305,5 @@ export default class Templator {
     const element = this.__createDomElements(ast, ctx);
     console.log('element', element);
     return element;
-    // return ast;
-    // const tmplWithoutContainers = this._replaceContainers(template, ctx);
-    // const tmplWithoutComponents = this._replaceComponents(tmplWithoutContainers, ctx);
-    // const tmplWithData = this.__replaceContext(tmplWithoutComponents, ctx);
-
-    // return tmplWithData;
   }
 }
