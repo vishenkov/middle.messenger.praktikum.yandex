@@ -3,19 +3,19 @@ import sanitize from '../sanitize';
 
 export default class Templator {
   constructor(template, components) {
-    this._template = template;
-    this._components = components;
-    this._tags = [];
+    this.__template = template;
+    this.__components = components;
+    this.__tags = [];
   }
 
   compile(ctx) {
-    return this._compileTemplate(this._template, ctx);
+    return this.__compileTemplate(this.__template, ctx);
   }
 
   /*
     Заменяем шаблонные строки на реальные данные из контекста
   */
-  _replaceContext(tmplWithoutComponents, ctx) {
+  __replaceContext(tmplWithoutComponents, ctx) {
     const tmpl = tmplWithoutComponents;
     let key = null;
     let resultTmpl = tmpl;
@@ -35,24 +35,22 @@ export default class Templator {
     return resultTmpl;
   }
 
-  _addOpeningTag(tag) {
-    // console.log('_addOpeningTag', tag);
-    this._tags.push(tag);
+  __addOpeningTag(tag) {
+    this.__tags.push(tag);
   }
 
-  _closeTag(tag) {
-    // console.log('_closeTag', tag);
-    if (this._tags.length === 0) {
-      throw new Error('"{tag}" has no opening tag');
+  __closeTag(tag) {
+    if (this.__tags.length === 0) {
+      throw new Error(`"${tag}" has no opening tag`);
     }
 
-    const lastTag = this._tags[this._tags.length - 1];
+    const lastTag = this.__tags[this.__tags.length - 1];
 
     if (tag !== lastTag) {
       throw new Error(`"${tag}" is not matched opening tag "${lastTag}""`);
     }
 
-    this._tags.pop();
+    this.__tags.pop();
   }
 
   __getRawValue(rawValue) {
@@ -99,11 +97,10 @@ export default class Templator {
       return { key, value: this.__getRawValue(value) };
     }
 
-    return { key, value: (ctx) => this._replaceContext(value, ctx) };
+    return { key, value: (ctx) => this.__replaceContext(value, ctx) };
   }
 
   __parseProps(props) {
-    console.log('props', props);
     if (!props) {
       return null;
     }
@@ -125,12 +122,10 @@ export default class Templator {
       }
     }
 
-    // console.log('resultProps', resultProps);
     return Object.keys(resultProps).length ? resultProps : null;
   }
 
   __getChildrenAST(template) {
-    // console.log('__getChildrenAST', template);
     if (!template) {
       return [null, null];
     }
@@ -149,7 +144,7 @@ export default class Templator {
       const rawNode = template.slice(0, match.index);
       const isEmptyRawNode = sanitize(rawNode).trim().length === 0;
       const restTemplate = template.slice(match.index);
-      // console.log('rawNode', rawNode, 'restTemplate', restTemplate, match.index);
+
       if (isEmptyRawNode) {
         return this.__getChildrenAST(restTemplate);
       }
@@ -165,26 +160,29 @@ export default class Templator {
       props, rest, tag, fullTag,
     } = match.groups;
 
+    if (!fullTag) {
+      throw new Error(`Check template for: ${rest}`);
+    }
+
     const isClosingTag = fullTag.startsWith('</');
     const isSelfClosingTag = fullTag.endsWith('/>');
 
     if (isClosingTag) {
-      this._closeTag(tag);
+      this.__closeTag(tag);
       return [null, rest];
     }
 
     if (!isSelfClosingTag) {
-      this._addOpeningTag(tag);
+      this.__addOpeningTag(tag);
     }
 
-    // console.log('props', props);
     const parsedProps = this.__parseProps(props);
-    // console.log('parsedProps', parsedProps)
+
     if (isSelfClosingTag) {
       return [{
         node: tag,
         props: parsedProps,
-        children: null,
+        children: [],
       }, rest];
     }
 
@@ -204,13 +202,13 @@ export default class Templator {
     if (children.length > 0) {
       astNode.children = children;
     } else {
-      astNode.children = null;
+      astNode.children = [];
     }
 
     return [astNode, restTemplate];
   }
 
-  _createAST(template) {
+  __createAST(template) {
     const children = [];
     let node;
     let rest = template;
@@ -230,14 +228,75 @@ export default class Templator {
     };
   }
 
-  _compileTemplate(template, ctx) {
+  __getNode(astNode) {
+    if (astNode.node === 'raw') {
+      if (astNode.children.length > 1) {
+        throw new Error('Text node should have only one children');
+      }
+
+      return document.createTextNode(astNode.children[0]);
+    }
+
+    return document.createElement(astNode.node);
+  }
+
+  __createDomElement(astNode, ctx) {
+    const element = this.__getNode(astNode);
+    console.log('astNode', astNode);
+
+    if (astNode.node === 'raw') {
+      return element;
+    }
+
+    if (astNode.props) {
+      Object.keys(astNode.props).forEach((prop) => {
+        const propValue = astNode.props[prop];
+        const value = typeof propValue === 'function'
+          ? propValue(ctx)
+          : propValue;
+
+        element.setAttribute(prop, value);
+      });
+    }
+
+    if (astNode.children.length > 0) {
+      astNode.children.forEach((childNode) => {
+        const childElement = this.__createDomElement(childNode, ctx);
+        element.appendChild(childElement);
+      });
+    }
+
+    return element;
+  }
+
+  __createDomElements(ast, ctx) {
+    if (ast.node !== 'root') {
+      throw new Error(`Should be root element! Received: ${ast.node}`);
+    }
+
+    if (ast.children.length === 0) {
+      return null;
+    }
+
+    if (ast.children.length > 1) {
+      // at least for now
+      throw new Error('Should be only one parent element for component!');
+    }
+
+    return this.__createDomElement(ast.children[0], ctx);
+  }
+
+  __compileTemplate(template, ctx) {
     console.log('template', template, 'ctx', ctx);
-    const ast = this._createAST(template, ctx);
+    const ast = this.__createAST(template);
     console.log('ast', ast);
-    return ast;
+    const element = this.__createDomElements(ast, ctx);
+    console.log('element', element);
+    return element;
+    // return ast;
     // const tmplWithoutContainers = this._replaceContainers(template, ctx);
     // const tmplWithoutComponents = this._replaceComponents(tmplWithoutContainers, ctx);
-    // const tmplWithData = this._replaceContext(tmplWithoutComponents, ctx);
+    // const tmplWithData = this.__replaceContext(tmplWithoutComponents, ctx);
 
     // return tmplWithData;
   }
