@@ -87,7 +87,7 @@ export default class Templator {
       return null;
     }
 
-    const propsPairsRegExp = /(?<key>\w+)=(?<value>{+[\w\s]+}+|"[{\w\s}]+")/gm;
+    const propsPairsRegExp = /(?<key>\w+)=(?<value>{([\S\s]|[^"])*?}|"([\S\s]|[^"])*?")/gm;
     let match = null;
     const resultProps = {};
 
@@ -179,8 +179,9 @@ export default class Templator {
       return [null, null];
     }
 
-    const tagRegexp = /(?<fullTag><\/{0,1}(?<tag>\w+)(?<props>.*?)\/?>)(?<rest>[\s\S]{0,})$/gm;
+    const tagRegexp = /(?<fullTag><\/{0,1}(?<tag>\w+)(?<props>(.|\s)*?)\/?>)(?<rest>[\s\S]{0,})$/gm;
     const match = tagRegexp.exec(template);
+
     if (!match) {
       return this.__parseTextNode(template);
     }
@@ -357,8 +358,6 @@ export default class Templator {
       });
     }
 
-    console.log('element', element);
-    console.log('childrenElements', childrenElements);
     childrenElements.forEach((child) => {
       element.appendChild(child);
     });
