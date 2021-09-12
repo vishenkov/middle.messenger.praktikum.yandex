@@ -1,9 +1,9 @@
 import cn from '../../lib/classnames';
 import * as styles from './paper.css';
 
-export default (modifiers) => `
+export default (props) => `
   <div class="${cn(styles, 'root', {
-    centered: modifiers.centered,
+    centered: props.centered,
   })}">
     {{children}}
   </div>

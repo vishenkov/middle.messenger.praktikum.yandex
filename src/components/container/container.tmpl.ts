@@ -1,10 +1,10 @@
 import cn from '../../lib/classnames';
 import * as styles from './container.css';
 
-export default (modifiers) => `
+export default (props) => `
   <main class="${cn(styles, 'root', {
-    centered: modifiers.centered,
-    min100vh: modifiers.min100vh,
+    centered: props.centered,
+    min100vh: props.min100vh,
   })}">
     {{children}}
   </main>
