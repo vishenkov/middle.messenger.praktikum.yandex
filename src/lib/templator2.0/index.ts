@@ -133,19 +133,56 @@ export default class Templator {
     };
   }
 
+  __parseTextNode(template) {
+    const childrenCtxRegExp = /{{children}}/gm;
+    const match = childrenCtxRegExp.exec(template);
+    console.log('match', match, template);
+    if (!match) {
+      return [{
+        node: 'raw',
+        props: null,
+        children: [template],
+      }, null];
+    }
+
+    const prevText = Array.prototype.slice.call(template, 0, match.index).join('');
+    console.log('prevText', prevText);
+
+    if (sanitize(prevText).trim()) {
+      const restText = Array.prototype.slice.call(template, match.index).join('');
+      console.log('restText', restText);
+      return [{
+        node: 'raw',
+        props: null,
+        children: [prevText],
+      }, restText];
+    }
+
+    const childrenLength = '{{children}}'.length;
+    const restText = Array.prototype.slice.call(template, match.index + childrenLength).join('');
+    const sanitizedRestText = sanitize(restText).trim();
+
+    return [{
+      node: 'children',
+      props: null,
+      children: [],
+    }, sanitizedRestText ? restText : null];
+  }
+
   __getChildrenAST(template) {
     if (!template) {
+      return [null, null];
+    }
+
+    const sanitizedTemplate = sanitize(template).trim();
+    if (!sanitizedTemplate) {
       return [null, null];
     }
 
     const tagRegexp = /(?<fullTag><\/{0,1}(?<tag>\w+)(?<props>.*?)\/?>)(?<rest>[\s\S]{0,})$/gm;
     const match = tagRegexp.exec(template);
     if (!match) {
-      return [{
-        node: 'raw',
-        props: null,
-        children: [this.__replaceContext(template)],
-      }, null];
+      return this.__parseTextNode(template);
     }
 
     if (match.index > 0) {
@@ -157,11 +194,8 @@ export default class Templator {
         return this.__getChildrenAST(restTemplate);
       }
 
-      return [{
-        node: 'raw',
-        props: null,
-        children: [this.__replaceContext(rawNode)],
-      }, restTemplate];
+      const [textNodeAst, restTextNode] = this.__parseTextNode(rawNode);
+      return [textNodeAst, restTextNode ? `${restTextNode}${restTemplate}` : restTemplate];
     }
 
     const {
@@ -253,16 +287,68 @@ export default class Templator {
     return document.createElement(astNode.node);
   }
 
-  __createDomElement(astNode, ctx) {
-    const element = this.__getNode(astNode, ctx);
-
-    if (astNode.node === 'raw') {
-      return element;
+  __createComponent(astNode, ctx, children) {
+    const Component = this.__components[astNode.node];
+    if (!Component) {
+      throw new Error(`Component ${astNode.node} is not provided!`);
     }
 
+    const props = this.__replaceProps(astNode.props, ctx);
+    console.log('__createComponent::props', astNode.props, props);
+    const component = new Component({ ...props, children }, this.__components);
+
+    return component.getContent();
+  }
+
+  __replaceProps(props, ctx) {
+    if (!props) {
+      return props;
+    }
+
+    return Object.keys(props).reduce((acc, prop) => {
+      const propValue = props[prop];
+      const value = typeof propValue === 'function'
+        ? propValue(ctx)
+        : propValue;
+
+      return {
+        ...acc,
+        [prop]: value,
+      };
+    }, {});
+  }
+
+  __createDomElement(astNode, ctx) {
+    if (astNode.node === 'children') {
+      return ctx.children;
+    }
+
+    if (astNode.node === 'raw') {
+      return this.__getNode(astNode, ctx);
+    }
+
+    const childrenElements = [];
+    if (astNode.children.length > 0) {
+      astNode.children.forEach((childNode) => {
+        const childElement = this.__createDomElement(childNode, ctx);
+        if (Array.isArray(childElement)) {
+          childrenElements.push(...childElement);
+        } else {
+          childrenElements.push(childElement);
+        }
+      });
+    }
+
+    if (/[A-Z]/.test(astNode.node[0])) {
+      return this.__createComponent(astNode, ctx, childrenElements);
+    }
+
+    const element = this.__getNode(astNode, ctx);
+
     if (astNode.props) {
-      Object.keys(astNode.props).forEach((prop) => {
-        const propValue = astNode.props[prop];
+      const props = this.__replaceProps(astNode.props, ctx);
+      Object.keys(props).forEach((prop) => {
+        const propValue = props[prop];
         const value = typeof propValue === 'function'
           ? propValue(ctx)
           : propValue;
@@ -271,12 +357,11 @@ export default class Templator {
       });
     }
 
-    if (astNode.children.length > 0) {
-      astNode.children.forEach((childNode) => {
-        const childElement = this.__createDomElement(childNode, ctx);
-        element.appendChild(childElement);
-      });
-    }
+    console.log('element', element);
+    console.log('childrenElements', childrenElements);
+    childrenElements.forEach((child) => {
+      element.appendChild(child);
+    });
 
     return element;
   }
