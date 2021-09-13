@@ -9,9 +9,20 @@ class BaseComponent {
     FLOW_RENDER: 'flow:render',
   };
 
+  static HANDLERS = {
+    onClick: 'click',
+    onBlur: 'blur',
+    onFocus: 'focus',
+    onChange: 'change',
+  };
+
   _element = null;
 
   _meta = null;
+
+  props = null;
+
+  _handlers = {};
 
   constructor(props = {}, components = {}) {
     const eventBus = new EventBus();
@@ -43,9 +54,11 @@ class BaseComponent {
   }
 
   init() {
-    this._createResources();
+    this.registerHandlers();
     this.eventBus().emit(BaseComponent.EVENTS.FLOW_CDM);
   }
+
+  registerHandlers() {}
 
   _componentDidMount() {
     this.componentDidMount();
@@ -69,16 +82,32 @@ class BaseComponent {
     Object.assign(this.props, nextProps);
   };
 
+  setHandlers = (nextHandlers) => {
+    if (!nextHandlers) {
+      return;
+    }
+
+    Object.assign(this._handlers, nextHandlers);
+  };
+
   get element() {
     return this._element;
   }
 
   _render() {
     const block = this.render();
-    console.log('this.__components', this._meta.components);
     const templator = new Templator(block, this._meta.components);
 
-    this._element = templator.compile(this.props);
+    this._element = templator.compile(this.props, this._handlers);
+    this._addEvents();
+  }
+
+  _addEvents() {
+    Object.keys(BaseComponent.HANDLERS).forEach((eventName) => {
+      if (this.props[eventName]) {
+        this._element.addEventListener(BaseComponent.HANDLERS[eventName], this.props[eventName]);
+      }
+    });
   }
 
   // Переопределяется пользователем. Необходимо вернуть разметку
