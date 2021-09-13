@@ -6,6 +6,7 @@ class BaseComponent {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
+    FLOW_CDU: 'flow:component-did-update',
     FLOW_RENDER: 'flow:render',
   };
 
@@ -32,8 +33,6 @@ class BaseComponent {
       components,
     };
 
-    console.log('constructor::props', props);
-
     this.props = this._makePropsProxy(props);
 
     this.eventBus = () => eventBus;
@@ -45,12 +44,8 @@ class BaseComponent {
   _registerEvents(eventBus) {
     eventBus.on(BaseComponent.EVENTS.INIT, this.init.bind(this));
     eventBus.on(BaseComponent.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
+    eventBus.on(BaseComponent.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
     eventBus.on(BaseComponent.EVENTS.FLOW_RENDER, this._render.bind(this));
-  }
-
-  _createResources() {
-    // const { tagName } = this._meta;
-    // this._element = this._createDocumentElement(tagName);
   }
 
   init() {
@@ -68,6 +63,12 @@ class BaseComponent {
   componentDidMount(oldProps) {}
 
   _componentDidUpdate(oldProps, newProps) {
+    const response = this.componentDidUpdate(oldProps, newProps);
+
+    if (response) {
+      this._removeEvents(oldProps);
+      this._render();
+    }
   }
 
   componentDidUpdate(oldProps, newProps) {
@@ -98,7 +99,15 @@ class BaseComponent {
     const block = this.render();
     const templator = new Templator(block, this._meta.components);
 
-    this._element = templator.compile(this.props, this._handlers);
+    const element = templator.compile(this.props, this._handlers);
+
+    if (this._element) {
+      this._element.replaceWith(element);
+    } else {
+      this._element = element;
+    }
+
+    // this._element = templator.compile(this.props, this._handlers);
     this._addEvents();
   }
 
@@ -106,6 +115,14 @@ class BaseComponent {
     Object.keys(BaseComponent.HANDLERS).forEach((eventName) => {
       if (this.props[eventName]) {
         this._element.addEventListener(BaseComponent.HANDLERS[eventName], this.props[eventName]);
+      }
+    });
+  }
+
+  _removeEvents(oldProps) {
+    Object.keys(BaseComponent.HANDLERS).forEach((eventName) => {
+      if (oldProps[eventName]) {
+        this._element.removeEventListener(BaseComponent.HANDLERS[eventName], oldProps[eventName]);
       }
     });
   }
@@ -118,11 +135,24 @@ class BaseComponent {
   }
 
   _makePropsProxy(props) {
-    // Еще один способ передачи this, но он больше не применяется с приходом ES6+
-    const self = this;
+    const proxyProps = new Proxy(props, {
+      get: (target, prop) => {
+        const value = target[prop];
+        return typeof value === 'function' ? value.bind(target) : value;
+      },
+      set: (target, prop, value) => {
+        const oldProps = { ...target };
+        target[prop] = value;
 
-    // Здесь вам предстоит реализовать метод
-    return props;
+        this.eventBus().emit(BaseComponent.EVENTS.FLOW_CDU, oldProps, target);
+        return true;
+      },
+      deleteProperty() {
+        throw new Error('Нет прав');
+      },
+    });
+
+    return proxyProps;
   }
 }
 

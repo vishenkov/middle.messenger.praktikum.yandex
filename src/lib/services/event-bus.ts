@@ -10,9 +10,9 @@ class EventBus {
     this.listeners[event].push(callback);
   }
 
-  emit(event) {
+  emit(event, ...args) {
     this.listeners[event].forEach((listener) => {
-      listener();
+      listener(...args);
     });
   }
 
