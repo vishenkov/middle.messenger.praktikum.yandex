@@ -1,6 +1,9 @@
 import isObject from './utils/is-object';
 
-function classnames(styles, ...args) {
+function classnames(
+  styles: Record<string, string>,
+  ...args: (string | Record<string, boolean>)[]
+): string {
   return args.reduce((acc, arg) => {
     if (typeof arg === 'string') {
       return [...acc, styles[arg]];
