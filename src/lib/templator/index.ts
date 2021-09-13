@@ -361,11 +361,8 @@ export default class Templator {
   }
 
   __compileTemplate(template, ctx, events) {
-    console.log('template', template, 'ctx', ctx);
     const ast = this.__createAST(template);
-    console.log('ast', ast);
     const element = this.__createDomElements(ast, ctx, events);
-    console.log('element', element);
     return element;
   }
 }

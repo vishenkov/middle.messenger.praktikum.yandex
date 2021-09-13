@@ -1,5 +1,5 @@
 import EventBus from './services/event-bus';
-import Templator from './templator2.0';
+import Templator from './templator';
 
 // Нельзя создавать экземпляр данного класса
 class BaseComponent {

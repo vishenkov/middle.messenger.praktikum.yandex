@@ -60,10 +60,10 @@ export default () => `
             label="Создать аккаунт"
           />
           <Link
-          fullWidth="true"
-          text="Войти"
-          href="/"
-        />
+            fullWidth="true"
+            text="Войти"
+            href="/"
+          />
         </Paper>
       </div>
     </Container>
