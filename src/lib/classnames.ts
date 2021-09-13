@@ -1,4 +1,4 @@
-import isObject from './utils/isObject';
+import isObject from './utils/is-object';
 
 function classnames(styles, ...args) {
   return args.reduce((acc, arg) => {

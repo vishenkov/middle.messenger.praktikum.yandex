@@ -1,5 +1,5 @@
-import get from '../get';
-import sanitize from '../sanitize';
+import get from '../utils/get';
+import sanitize from '../utils/sanitize';
 
 export default class Templator {
   constructor(template, components) {
