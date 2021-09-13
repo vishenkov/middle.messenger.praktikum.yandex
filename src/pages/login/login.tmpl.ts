@@ -15,6 +15,7 @@ export default () => `
           gutterBottom="true"
           name="login"
           placeholder="Логин"
+          onChange={{handleLoginChange}}
         />
         <Input
           fullWidth="true"
@@ -27,6 +28,7 @@ export default () => `
           fullWidth="true"
           gutterBottom="true"
           label="Войти"
+          onClick={{handleClick}}
         />
 
         <Link

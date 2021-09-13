@@ -7,6 +7,7 @@ import Button from '../../components/button';
 import Input from '../../components/input';
 import Typography from '../../components/typography';
 import Paper from '../../components/paper';
+import Native from '../../components/native';
 
 class Login extends BaseComponent {
   constructor(props) {
@@ -17,11 +18,27 @@ class Login extends BaseComponent {
       Input,
       Typography,
       Paper,
+      Native,
+    });
+  }
+
+  handleLoginChange(e) {
+    console.log(e.target.value);
+  }
+
+  handleClick() {
+    console.log('CLICK');
+  }
+
+  registerHandlers() {
+    this.setHandlers({
+      handleLoginChange: this.handleLoginChange.bind(this),
+      handleClick: this.handleClick.bind(this),
     });
   }
 
   render() {
-    return getLoginTmpl(this.props);
+    return getLoginTmpl();
   }
 }
 

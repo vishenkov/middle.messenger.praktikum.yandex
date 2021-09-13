@@ -1,7 +1,15 @@
 import BaseComponent from '../../lib/base-component';
 import getContainerTmpl from './container.tmpl';
 
+import Native from '../native';
+
 class Container extends BaseComponent {
+  constructor(props) {
+    super(props, {
+      Native,
+    });
+  }
+
   render() {
     return getContainerTmpl(this.props);
   }

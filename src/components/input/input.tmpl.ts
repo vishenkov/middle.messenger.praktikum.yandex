@@ -1,7 +1,7 @@
 import cn from '../../lib/classnames';
 import * as styles from './input.css';
 
-const Input = (props) => console.log('props', props) || `
+const Input = (props) => `
   <input
     type="text"
     class="${cn(styles, 'input', {
