@@ -25,10 +25,10 @@ function getCurrentPage() {
       return new ChatsPage({});
 
     case '/500':
-      return new ErrorPage({ errorCode: 500 });
+      return new ErrorPage({ errorCode: 500, subtitle: 'Уже чиним :(', });
 
     default:
-      return new ErrorPage({ errorCode: 404 });
+      return new ErrorPage({ errorCode: 404, subtitle: 'Не туда попали', });
   }
 }
 
