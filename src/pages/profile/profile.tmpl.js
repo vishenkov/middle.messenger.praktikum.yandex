@@ -1,53 +1,66 @@
 import * as styles from './profile.css';
 
-export default `
-  <Container modifier="centered, min100vh">
+export default () => `
+  <Container centered="true" min100vh="true">
     <div class="${styles.root}">
       <Paper>
         <div class="${styles.avatarRoot}">
-          <Avatar modifier="gutterBottom" />
-          <Typography modifier="h4">
-            {{ fullName }}
+          <Avatar gutterBottom="true" />
+          <Typography variant="h4">
+            John Doe
           </Typography>
         </div>
         
         <div class="${styles.inputsRoot}">
           <Input
-            modifier="fullWidth, gutterBottom"
-            ctx={{ emailInput }}
+            fullWidth="true"
+            gutterBottom="true"
+            name="email"
+            placeholder="Почта"
           />
           <Input
-            modifier="fullWidth, gutterBottom"
-            ctx={{ nameInput }}
+            fullWidth="true"
+            gutterBottom="true"
+            name="first_name"
+            placeholder="Имя"
           />
           <Input
-            modifier="fullWidth, gutterBottom"
-            ctx={{ secondNameInput }}
+            fullWidth="true"
+            gutterBottom="true"
+            name="second_name"
+            placeholder="Фамилия"
           />
           <Input
-            modifier="fullWidth, gutterBottom"
-            ctx={{ nickNameInput }}
+            fullWidth="true"
+            gutterBottom="true"
+            name="nick_name"
+            placeholder="Имя в чате"
           />
           <Input
-            modifier="fullWidth, gutterBottom"
-            ctx={{ phoneInput }}
+            fullWidth="true"
+            gutterBottom="true"
+            name="phone"
+            placeholder="Телефон"
           />
         </div>
 
         <Button
-          modifier="fullWidth, gutterBottom"
-          ctx={{ saveButton }}
+          fullWidth="true"
+          gutterBottom="true"
+          label="Сохранить"
         />
 
         <Button
-          modifier="fullWidth, secondary, gutterBottom"
-          ctx={{ changePasswordButton }}
+          fullWidth="true"
+          gutterBottom="true"
+          label="Сменить пароль"
         />
 
         <Link
-         modifier="fullWidth"
-         ctx={{ backLink }}
-       />
+          fullWidth="true"
+          text="Назад"
+          href="/"
+        />
       </Paper>
     </div>
   </Container>

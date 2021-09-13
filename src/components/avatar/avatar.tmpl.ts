@@ -1,16 +1,16 @@
 import cn from '../../lib/classnames';
 import * as styles from './avatar.css';
 
-const Avatar = (modifiers) => `
+const getAvatarTmpl = (props) => `
   <div
     class="${cn(styles, 'root', {
-    'avatar_size-m': modifiers.m,
-    'avatar_size-s': modifiers.s,
-    avatar_gutterBottom: modifiers.gutterBottom,
+    'avatar_size-m': props.m,
+    'avatar_size-s': props.s,
+    avatar_gutterBottom: props.gutterBottom,
   })}"
   >
     <div class="${styles.img}"></div>
   </div>
 `;
 
-export default Avatar;
+export default getAvatarTmpl;
