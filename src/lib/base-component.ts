@@ -1,15 +1,17 @@
 import EventBus from './services/event-bus';
 import Templator from './templator';
 
-export type Props = Record<string, unknown>;
-export type Component = Record<string, Function>;
-export type Handler = Record<string, Function>;
+import {
+  Props, Component, Handler, Block,
+} from './types';
+
+export { Props, Component, Handler };
 
 type Meta = {
   props: Props,
   components: Component
 };
-abstract class BaseComponent {
+abstract class BaseComponent implements Block {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -24,13 +26,13 @@ abstract class BaseComponent {
     onChange: 'change',
   } as const;
 
-  protected _element: HTMLElement;
+  protected _element: ChildNode;
 
   protected _meta: Meta;
 
   props: Props;
 
-  protected _handlers: Handler;
+  protected _handlers: Handler = {};
 
   private eventBus: EventBus;
 
@@ -98,7 +100,7 @@ abstract class BaseComponent {
     Object.assign(this._handlers, nextHandlers);
   };
 
-  get element(): HTMLElement {
+  get element(): ChildNode {
     return this._element;
   }
 
@@ -109,9 +111,9 @@ abstract class BaseComponent {
     const element = templator.compile(this.props, this._handlers);
 
     if (this._element) {
-      this._element.replaceWith(element);
+      this._element.replaceWith(element as Node);
     } else {
-      this._element = element;
+      this._element = element as ChildNode;
     }
 
     this._addEvents();
@@ -120,7 +122,7 @@ abstract class BaseComponent {
   _addEvents() {
     Object.keys(BaseComponent.HANDLERS).forEach((eventName) => {
       if (this.props[eventName]) {
-        this._element.addEventListener(
+        this._element!.addEventListener(
           BaseComponent.HANDLERS[eventName],
           this.props[eventName] as EventListener,
         );
@@ -131,7 +133,7 @@ abstract class BaseComponent {
   _removeEvents(oldProps: Props) {
     Object.keys(BaseComponent.HANDLERS).forEach((eventName) => {
       if (oldProps[eventName]) {
-        this._element.removeEventListener(
+        this._element!.removeEventListener(
           BaseComponent.HANDLERS[eventName],
           oldProps[eventName] as EventListener,
         );
@@ -141,7 +143,7 @@ abstract class BaseComponent {
 
   abstract render(): string;
 
-  getContent(): HTMLElement {
+  getContent(): ChildNode {
     return this.element;
   }
 

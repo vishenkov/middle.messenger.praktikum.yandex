@@ -1,22 +1,43 @@
+import { Component as C, Handler, Props } from '../types';
 import get from '../utils/get';
 import sanitize from '../utils/sanitize';
 
+const enum Nodes {
+  raw = 'raw',
+  children = 'children',
+  root = 'root',
+}
+
+type ASTNode = {
+  node: Nodes | string,
+  props: Props | null,
+  children: (ASTNode | string)[],
+};
+
+type ASTNodeChildrenResult = [ASTNode | null, string | null];
+
 export default class Templator {
-  constructor(template, components) {
+  private __template: string;
+
+  private __components: C;
+
+  private __tags: string[];
+
+  constructor(template: string, components: C) {
     this.__template = template;
     this.__components = components;
     this.__tags = [];
   }
 
-  compile(ctx, events) {
+  compile(ctx: Props, events: Handler) {
     return this.__compileTemplate(this.__template, ctx, events);
   }
 
-  __addOpeningTag(tag) {
+  __addOpeningTag(tag: string) {
     this.__tags.push(tag);
   }
 
-  __closeTag(tag) {
+  __closeTag(tag: string) {
     if (this.__tags.length === 0) {
       throw new Error(`"${tag}" has no opening tag`);
     }
@@ -30,7 +51,7 @@ export default class Templator {
     this.__tags.pop();
   }
 
-  __getRawValue(rawValue) {
+  __getRawValue(rawValue: string) {
     const lastCharIndex = rawValue.length - 1;
     if (rawValue[lastCharIndex] !== '"') {
       throw new Error(`Props value should have closing " at ${rawValue}`);
@@ -55,7 +76,7 @@ export default class Templator {
     return value;
   }
 
-  __parsePropsKeyValue({ key, value }) {
+  __parsePropsKeyValue({ key, value }: Record<string, string>) {
     if (!key) {
       return { key: null, value: null };
     }
@@ -77,7 +98,7 @@ export default class Templator {
     return { key, value: this.__replaceContext(value) };
   }
 
-  __parseProps(props) {
+  __parseProps(props: string) {
     if (!props) {
       return null;
     }
@@ -89,25 +110,27 @@ export default class Templator {
 
     const propsPairsRegExp = /(?<key>\w+)=(?<value>{{([\S\s]|[^"])*?}}|"([\S\s]|[^"])*?")/gm;
     let match = null;
-    const resultProps = {};
+    const resultProps: Props = {};
 
     // eslint-disable-next-line no-cond-assign
     while (match = propsPairsRegExp.exec(sanitizedProps)) {
-      const { key, value } = this.__parsePropsKeyValue(match.groups);
-      if (key) {
-        resultProps[key] = value;
+      if (match.groups) {
+        const { key, value } = this.__parsePropsKeyValue(match.groups);
+        if (key) {
+          resultProps[key] = value;
+        }
       }
     }
 
     return Object.keys(resultProps).length ? resultProps : null;
   }
 
-  __replaceContext(value) {
+  __replaceContext(value: string) {
     if (!value) {
       return value;
     }
 
-    return (ctx) => {
+    return (ctx: Props) => {
       // Ищем {{ Значение }}
       const contextRegExp = /\{\{(.*?)\}\}/gi;
       const key = contextRegExp.exec(value);
@@ -121,7 +144,7 @@ export default class Templator {
     };
   }
 
-  __parseTextNode(template) {
+  __parseTextNode(template: string): ASTNodeChildrenResult {
     const childrenCtxRegExp = /{{children}}/gm;
     const match = childrenCtxRegExp.exec(template);
 
@@ -155,7 +178,7 @@ export default class Templator {
     }, sanitizedRestText ? restText : null];
   }
 
-  __getChildrenAST(template) {
+  __getChildrenAST(template: string | null): ASTNodeChildrenResult {
     if (!template) {
       return [null, null];
     }
@@ -183,6 +206,10 @@ export default class Templator {
 
       const [textNodeAst, restTextNode] = this.__parseTextNode(rawNode);
       return [textNodeAst, restTextNode ? `${restTextNode}${restTemplate}` : restTemplate];
+    }
+
+    if (!match.groups) {
+      throw new Error(`Check template for: ${template}`);
     }
 
     const {
@@ -218,29 +245,22 @@ export default class Templator {
     const astNode = {
       node: tag,
       props: parsedProps,
-      children: [],
+      children: [] as ASTNode[],
     };
 
-    const children = [];
     let [node, restTemplate] = this.__getChildrenAST(rest);
     while (node) {
-      children.push(node);
+      astNode.children.push(node);
       [node, restTemplate] = this.__getChildrenAST(restTemplate);
-    }
-
-    if (children.length > 0) {
-      astNode.children = children;
-    } else {
-      astNode.children = [];
     }
 
     return [astNode, restTemplate];
   }
 
-  __createAST(template) {
+  __createAST(template: string): ASTNode {
     const children = [];
     let node;
-    let rest = template;
+    let rest: string | null = template;
 
     while (rest) {
       [node, rest] = this.__getChildrenAST(rest);
@@ -251,23 +271,23 @@ export default class Templator {
     }
 
     return {
-      node: 'root',
+      node: Nodes.root,
       props: null,
       children,
     };
   }
 
-  __getTextNode(astNode) {
+  __getTextNode(astNode: ASTNode): ChildNode {
     if (astNode.children.length > 1) {
       throw new Error('Text node should have only one children');
     }
 
-    const textValue = astNode.children[0];
+    const textValue = String(astNode.children[0]);
 
     return document.createTextNode(textValue);
   }
 
-  __createComponent(astNode, events, children) {
+  __createComponent(astNode: ASTNode, events: Handler, children: ChildNode[]) {
     const Component = this.__components[astNode.node];
     if (!Component) {
       throw new Error(`Component ${astNode.node} is not provided!`);
@@ -279,7 +299,7 @@ export default class Templator {
     return component.getContent();
   }
 
-  __createNativeComponent(astNode, events) {
+  __createNativeComponent(astNode: ASTNode, events: Handler) {
     const Component = this.__components.Native;
     if (!Component) {
       throw new Error(`Native component for ${astNode.node} is not provided!`);
@@ -291,7 +311,7 @@ export default class Templator {
     return component.getContent();
   }
 
-  __replaceProps(props, events) {
+  __replaceProps(props: Props | null, events: Handler) {
     if (!props) {
       return props;
     }
@@ -309,19 +329,23 @@ export default class Templator {
     }, {});
   }
 
-  __createDomElement(astNode, ctx, events) {
+  __createDomElement(
+    astNode: ASTNode,
+    ctx: Props,
+    events: Handler,
+  ): ChildNode[] | ChildNode {
     if (astNode.node === 'children') {
-      return ctx.children;
+      return ctx.children as HTMLElement[];
     }
 
     if (astNode.node === 'raw') {
       return this.__getTextNode(astNode);
     }
 
-    const childrenElements = [];
+    const childrenElements: ChildNode[] = [];
     if (astNode.children.length > 0) {
       astNode.children.forEach((childNode) => {
-        const childElement = this.__createDomElement(childNode, ctx, events);
+        const childElement = this.__createDomElement(childNode as ASTNode, ctx, events);
         if (Array.isArray(childElement)) {
           childrenElements.push(...childElement);
         } else {
@@ -343,7 +367,7 @@ export default class Templator {
     return element;
   }
 
-  __createDomElements(ast, ctx, events) {
+  __createDomElements(ast: ASTNode, ctx: Props, events: Handler) {
     if (ast.node !== 'root') {
       throw new Error(`Should be root element! Received: ${ast.node}`);
     }
@@ -357,10 +381,10 @@ export default class Templator {
       throw new Error('Should be only one parent element for component!');
     }
 
-    return this.__createDomElement(ast.children[0], ctx, events);
+    return this.__createDomElement(ast.children[0] as ASTNode, ctx, events);
   }
 
-  __compileTemplate(template, ctx, events) {
+  __compileTemplate(template: string, ctx: Props, events: Handler) {
     const ast = this.__createAST(template);
     const element = this.__createDomElements(ast, ctx, events);
     return element;
