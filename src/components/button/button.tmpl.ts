@@ -1,7 +1,8 @@
+import { Props } from '../../lib/base-component';
 import cn from '../../lib/classnames';
 import * as styles from './button.css';
 
-const Button = (props) => `
+const Button = (props: Props) => `
   <button class="${cn(styles, 'button', {
     'button_full-width': props.fullWidth,
     'button_gutter-bottom': props.gutterBottom,

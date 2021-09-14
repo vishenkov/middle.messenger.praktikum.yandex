@@ -8,8 +8,8 @@ import Paper from '../../components/paper';
 import Native from '../../components/native';
 
 class Chats extends BaseComponent {
-  constructor(props) {
-    super(props, {
+  constructor() {
+    super({}, {
       Container,
       Button,
       Typography,
@@ -19,7 +19,7 @@ class Chats extends BaseComponent {
   }
 
   render() {
-    return getChatsTmpl(this.props);
+    return getChatsTmpl();
   }
 }
 

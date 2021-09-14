@@ -11,8 +11,8 @@ import Paper from '../../components/paper';
 import Native from '../../components/native';
 
 class Profile extends BaseComponent {
-  constructor(props) {
-    super(props, {
+  constructor() {
+    super({}, {
       Container,
       Link,
       Avatar,
@@ -25,7 +25,7 @@ class Profile extends BaseComponent {
   }
 
   render() {
-    return getProfileTmpl(this.props);
+    return getProfileTmpl();
   }
 }
 

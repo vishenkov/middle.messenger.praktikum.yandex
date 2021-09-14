@@ -10,8 +10,8 @@ import Paper from '../../components/paper';
 import Native from '../../components/native';
 
 class Login extends BaseComponent {
-  constructor(props) {
-    super(props, {
+  constructor() {
+    super({}, {
       Container,
       Link,
       Button,
@@ -22,8 +22,8 @@ class Login extends BaseComponent {
     });
   }
 
-  handleLoginChange(e) {
-    console.log(e.target.value);
+  handleLoginChange(e: Event) {
+    console.log((e.target as HTMLTextAreaElement).value);
   }
 
   handleClick() {

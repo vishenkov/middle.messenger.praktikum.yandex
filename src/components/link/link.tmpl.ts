@@ -1,7 +1,8 @@
+import { Props } from '../../lib/base-component';
 import cn from '../../lib/classnames';
 import * as styles from './link.css';
 
-const Link = (props) => `
+const Link = (props: Props) => `
   <a
     class="${cn(styles, 'root', {
     'input_full-width': props.fullWidth,

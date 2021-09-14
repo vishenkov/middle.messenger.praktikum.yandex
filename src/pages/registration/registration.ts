@@ -10,8 +10,8 @@ import Paper from '../../components/paper';
 import Native from '../../components/native';
 
 class Registration extends BaseComponent {
-  constructor(props) {
-    super(props, {
+  constructor() {
+    super({}, {
       Container,
       Link,
       Button,
@@ -23,7 +23,7 @@ class Registration extends BaseComponent {
   }
 
   render() {
-    return getRegistrationTmpl(this.props);
+    return getRegistrationTmpl();
   }
 }
 

@@ -1,7 +1,8 @@
+import { Props } from '../../lib/base-component';
 import cn from '../../lib/classnames';
 import * as styles from './input.css';
 
-const Input = (props) => `
+const Input = (props: Props) => `
   <input
     type="text"
     class="${cn(styles, 'input', {

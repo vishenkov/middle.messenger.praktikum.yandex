@@ -2,7 +2,7 @@ import isObject from './utils/is-object';
 
 function classnames(
   styles: Record<string, string>,
-  ...args: (string | Record<string, boolean>)[]
+  ...args: (string | Record<string, unknown>)[]
 ): string {
   return args.reduce((acc, arg) => {
     if (typeof arg === 'string') {

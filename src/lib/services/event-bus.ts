@@ -1,12 +1,6 @@
 type VoidFunction = (...args: unknown[]) => void;
-
-export interface IEventBus {
-  on(event: string, cb: VoidFunction): void,
-  emit(event: string, ...args: unknown[]): void,
-  off(event: string, callback: VoidFunction): void,
-}
-class EventBus implements IEventBus {
-  private listeners: Record<string, (VoidFunction)[]>;
+class EventBus {
+  private listeners: Record<string, VoidFunction[]>;
 
   constructor() {
     this.listeners = {};
@@ -20,6 +14,10 @@ class EventBus implements IEventBus {
   }
 
   emit(event: string, ...args: unknown[]) {
+    if (!this.listeners[event]) {
+      throw new Error(`Event ${event} is not defined!`);
+    }
+
     this.listeners[event].forEach((listener: VoidFunction) => {
       listener(...args);
     });

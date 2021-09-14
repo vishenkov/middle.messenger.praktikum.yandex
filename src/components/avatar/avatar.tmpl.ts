@@ -1,7 +1,8 @@
+import { Props } from '../../lib/base-component';
 import cn from '../../lib/classnames';
 import * as styles from './avatar.css';
 
-const getAvatarTmpl = (props) => `
+const getAvatarTmpl = (props: Props) => `
   <div
     class="${cn(styles, 'root', {
     'avatar_size-m': props.m,

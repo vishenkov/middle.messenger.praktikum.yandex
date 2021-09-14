@@ -1,10 +1,10 @@
-import BaseComponent from '../../lib/base-component';
+import BaseComponent, { Props } from '../../lib/base-component';
 import getButtonTmpl from './button.tmpl';
 
 import Native from '../native';
 
 class Button extends BaseComponent {
-  constructor(props) {
+  constructor(props: Props) {
     super(props, {
       Native,
     });

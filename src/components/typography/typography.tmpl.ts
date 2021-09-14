@@ -1,7 +1,8 @@
+import { Props } from '../../lib/base-component';
 import cn from '../../lib/classnames';
 import * as styles from './typography.css';
 
-const getComponent = (variant) => {
+const getComponent = (variant: string) => {
   switch (variant) {
     case 'h1':
       return 'h2';
@@ -20,8 +21,8 @@ const getComponent = (variant) => {
   }
 };
 
-export default (props) => {
-  const component = getComponent(props.variant);
+export default (props: Props) => {
+  const component = getComponent(String(props.variant));
 
   const classNames = cn(styles, {
     h1: props.variant === 'h1',

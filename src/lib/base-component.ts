@@ -1,33 +1,40 @@
 import EventBus from './services/event-bus';
 import Templator from './templator';
 
-// Нельзя создавать экземпляр данного класса
-class BaseComponent {
+export type Props = Record<string, unknown>;
+export type Component = Record<string, Function>;
+export type Handler = Record<string, Function>;
+
+type Meta = {
+  props: Props,
+  components: Component
+};
+abstract class BaseComponent {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
     FLOW_CDU: 'flow:component-did-update',
     FLOW_RENDER: 'flow:render',
-  };
+  } as const;
 
-  static HANDLERS = {
+  static HANDLERS: Record<string, string> = {
     onClick: 'click',
     onBlur: 'blur',
     onFocus: 'focus',
     onChange: 'change',
-  };
+  } as const;
 
-  _element = null;
+  protected _element: HTMLElement;
 
-  _meta = null;
+  protected _meta: Meta;
 
-  props = null;
+  props: Props;
 
-  _handlers = {};
+  protected _handlers: Handler;
 
-  constructor(props = {}, components = {}) {
-    const eventBus = new EventBus();
+  private eventBus: EventBus;
 
+  constructor(props: Props = {}, components: Component = {}) {
     this._meta = {
       props,
       components,
@@ -35,34 +42,34 @@ class BaseComponent {
 
     this.props = this._makePropsProxy(props);
 
-    this.eventBus = () => eventBus;
+    this.eventBus = new EventBus();
 
-    this._registerEvents(eventBus);
-    eventBus.emit(BaseComponent.EVENTS.INIT);
+    this._registerEvents();
+    this.eventBus.emit(BaseComponent.EVENTS.INIT);
   }
 
-  _registerEvents(eventBus) {
-    eventBus.on(BaseComponent.EVENTS.INIT, this.init.bind(this));
-    eventBus.on(BaseComponent.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
-    eventBus.on(BaseComponent.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
-    eventBus.on(BaseComponent.EVENTS.FLOW_RENDER, this._render.bind(this));
+  protected _registerEvents() {
+    this.eventBus.on(BaseComponent.EVENTS.INIT, this.init.bind(this));
+    this.eventBus.on(BaseComponent.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
+    this.eventBus.on(BaseComponent.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
+    this.eventBus.on(BaseComponent.EVENTS.FLOW_RENDER, this._render.bind(this));
   }
 
-  init() {
+  protected init() {
     this.registerHandlers();
-    this.eventBus().emit(BaseComponent.EVENTS.FLOW_CDM);
+    this.eventBus.emit(BaseComponent.EVENTS.FLOW_CDM);
   }
 
   registerHandlers() {}
 
-  _componentDidMount() {
+  protected _componentDidMount() {
     this.componentDidMount();
-    this.eventBus().emit(BaseComponent.EVENTS.FLOW_RENDER);
+    this.eventBus.emit(BaseComponent.EVENTS.FLOW_RENDER);
   }
 
-  componentDidMount(oldProps) {}
+  componentDidMount(): void {}
 
-  _componentDidUpdate(oldProps, newProps) {
+  protected _componentDidUpdate(oldProps: Props, newProps: Props) {
     const response = this.componentDidUpdate(oldProps, newProps);
 
     if (response) {
@@ -71,11 +78,11 @@ class BaseComponent {
     }
   }
 
-  componentDidUpdate(oldProps, newProps) {
-    return true;
+  componentDidUpdate(oldProps: Props, newProps: Props): boolean {
+    return oldProps !== newProps;
   }
 
-  setProps = (nextProps) => {
+  setProps = (nextProps: Props) => {
     if (!nextProps) {
       return;
     }
@@ -83,7 +90,7 @@ class BaseComponent {
     Object.assign(this.props, nextProps);
   };
 
-  setHandlers = (nextHandlers) => {
+  setHandlers = (nextHandlers: Handler) => {
     if (!nextHandlers) {
       return;
     }
@@ -91,7 +98,7 @@ class BaseComponent {
     Object.assign(this._handlers, nextHandlers);
   };
 
-  get element() {
+  get element(): HTMLElement {
     return this._element;
   }
 
@@ -107,44 +114,49 @@ class BaseComponent {
       this._element = element;
     }
 
-    // this._element = templator.compile(this.props, this._handlers);
     this._addEvents();
   }
 
   _addEvents() {
     Object.keys(BaseComponent.HANDLERS).forEach((eventName) => {
       if (this.props[eventName]) {
-        this._element.addEventListener(BaseComponent.HANDLERS[eventName], this.props[eventName]);
+        this._element.addEventListener(
+          BaseComponent.HANDLERS[eventName],
+          this.props[eventName] as EventListener,
+        );
       }
     });
   }
 
-  _removeEvents(oldProps) {
+  _removeEvents(oldProps: Props) {
     Object.keys(BaseComponent.HANDLERS).forEach((eventName) => {
       if (oldProps[eventName]) {
-        this._element.removeEventListener(BaseComponent.HANDLERS[eventName], oldProps[eventName]);
+        this._element.removeEventListener(
+          BaseComponent.HANDLERS[eventName],
+          oldProps[eventName] as EventListener,
+        );
       }
     });
   }
 
-  // Переопределяется пользователем. Необходимо вернуть разметку
-  render() {}
+  abstract render(): string;
 
-  getContent() {
+  getContent(): HTMLElement {
     return this.element;
   }
 
-  _makePropsProxy(props) {
+  private _makePropsProxy(props: Props) {
     const proxyProps = new Proxy(props, {
-      get: (target, prop) => {
+      get: (target: Props, prop: string) => {
         const value = target[prop];
         return typeof value === 'function' ? value.bind(target) : value;
       },
-      set: (target, prop, value) => {
+      set: (target: Props, prop: string, value: unknown) => {
         const oldProps = { ...target };
+        // eslint-disable-next-line no-param-reassign
         target[prop] = value;
 
-        this.eventBus().emit(BaseComponent.EVENTS.FLOW_CDU, oldProps, target);
+        this.eventBus.emit(BaseComponent.EVENTS.FLOW_CDU, oldProps, target);
         return true;
       },
       deleteProperty() {
