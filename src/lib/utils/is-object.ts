@@ -1,4 +1,4 @@
-function isObject(arg?: unknown): boolean {
+function isObject(arg?: unknown): arg is object {
   if (!arg) {
     return false;
   }
