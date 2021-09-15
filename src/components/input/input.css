@@ -12,3 +12,7 @@
 .input_full-width {
   width: 100%;
 }
+
+.input_error {
+  border-color: var(--error-color);
+}

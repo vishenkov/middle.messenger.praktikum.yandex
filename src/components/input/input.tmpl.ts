@@ -8,6 +8,7 @@ const Input = (props: Props) => `
     class="${cn(styles, 'input', {
     'input_full-width': props.fullWidth,
     'input_gutter-bottom': props.gutterBottom,
+    input_error: props.error,
   })}"
     placeholder="${props.placeholder}"
     name="${props.name}"
