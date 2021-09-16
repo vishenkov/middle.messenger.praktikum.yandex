@@ -35,7 +35,7 @@ export default (props: Props) => {
 
   return `
     <${component} 
-      class="${classNames}">
+      class="${classNames} ${props.className as string}">
     {{children}}
   </${component}>
 `;

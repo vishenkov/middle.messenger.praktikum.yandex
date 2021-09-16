@@ -1,22 +1,81 @@
 import * as styles from './chats.css';
 
 export default () => `
-  <Container centered="true" min100vh="true">
-    <div class="${styles.root}">
-      <Paper centered="true">
-        <Typography variant="h3" gutterBottom="true">
-          WORK IN PROGRESS
-        </Typography>
+  <main class="${styles.root}">
+    <div class="${styles.chatsRoot}">
+      <div class="${styles.toolbar}">
+        <div class="${styles.avatarRoot}">
+          <Avatar s="true" />
+          <Typography className="${styles.toolbarItem}" variant="body">
+            John Doe
+          </Typography>
+        </div>
 
-        <Typography variant="body" gutterBottom="true">
-          Скоро здесь будут чаты
-        </Typography>
-
-        <Button
-          modifier="fullWidth"
-          label="Назад"
+        <Link
+          className="${styles.toolbarItem}"
+          text="Профиль"
+          href="/profile"
         />
-      </Paper>
+      </div>
+
+      <div class="${styles.chatList}">
+        <div class="${styles.chatListItem}">
+          <div class="${styles.avatarRoot}">
+            <Avatar s="true" />
+            <Typography className="${styles.toolbarItem}" variant="body">
+              Chat 1
+            </Typography>
+          </div>
+        </div>
+
+        <div class="${styles.chatListItem}">
+          <div class="${styles.avatarRoot}">
+            <Avatar s="true" />
+            <Typography className="${styles.toolbarItem}" variant="body">
+              Chat 2
+            </Typography>
+          </div>
+        </div>
+      </div>
     </div>
-  </Container>
+
+    <div class="${styles.chatContainer}">
+      <div class="${styles.toolbar}">
+      </div>
+
+      <div class="${styles.chatRoom}">
+        <div class="${styles.chatRoomDummy}">
+          <Paper centered="true">
+            <Typography
+              variant="h4"
+              gutterBottom="true"
+            >
+              Chat dummy
+            </Typography>
+
+            <Link
+              href="/"
+              text="Назад"
+            />
+          </Paper>
+        </div>
+      </div>
+
+      <form method="POST" onSubmit={{handleSubmit}}>
+        <div class="${styles.messageRoot}">
+          <Input
+            fullWidth="true"
+            name="message"
+            placeholder="Сообщение"
+            validate="message"
+          />
+
+          <Button
+            type="submit"
+            label="Отправить"
+          />
+        </div>
+      </form>
+    </div>
+  </main>
 `;

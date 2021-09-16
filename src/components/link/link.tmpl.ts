@@ -7,7 +7,7 @@ const Link = (props: Props) => `
     class="${cn(styles, 'root', {
     'input_full-width': props.fullWidth,
     'input_gutter-bottom': props.gutterBottom,
-  })}"
+  })} ${props.className}"
     href="${props.href}"
   >
     ${props.text}
