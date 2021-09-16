@@ -88,8 +88,10 @@ abstract class BaseComponent implements Block {
     if (!nextProps) {
       return;
     }
-
+    const oldProps = { ...this.props };
     Object.assign(this.props, nextProps);
+    // batch update
+    this.eventBus.emit(BaseComponent.EVENTS.FLOW_CDU, oldProps, nextProps);
   };
 
   setHandlers = (nextHandlers: Handler) => {
@@ -112,9 +114,9 @@ abstract class BaseComponent implements Block {
 
     if (this._element) {
       this._element.replaceWith(element as Node);
-    } else {
-      this._element = element as ChildNode;
     }
+
+    this._element = element as ChildNode;
 
     this._addEvents();
   }
@@ -154,11 +156,9 @@ abstract class BaseComponent implements Block {
         return typeof value === 'function' ? value.bind(target) : value;
       },
       set: (target: Props, prop: string, value: unknown) => {
-        const oldProps = { ...target };
         // eslint-disable-next-line no-param-reassign
         target[prop] = value;
 
-        this.eventBus.emit(BaseComponent.EVENTS.FLOW_CDU, oldProps, target);
         return true;
       },
       deleteProperty() {
