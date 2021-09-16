@@ -22,6 +22,7 @@ const Input = (props: Props) => {
       placeholder="${props.placeholder}"
       name="${props.name}"
       onBlur={{handleBlur}}
+      onFocus={{handleFocus}}
       ${valueProp}
     />
   `;

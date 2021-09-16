@@ -30,11 +30,17 @@ class Input extends BaseComponent {
     return !isEqual(oldProps, newProps);
   }
 
+  validate(value: string) {
+    if (this.props.validate) {
+      return this.formValidator.prop(this.props.validate as string).validate(value);
+    }
+
+    return true;
+  }
+
   handleBlur(e: Event) {
     const { value } = e.currentTarget;
-    const isValid = this.props.validate
-      ? this.formValidator.prop(this.props.validate as string).validate(value)
-      : true;
+    const isValid = this.validate(value);
 
     this.setProps({
       error: !isValid,
@@ -42,9 +48,17 @@ class Input extends BaseComponent {
     });
   }
 
+  handleFocus(e: Event) {
+    const { value } = e.currentTarget;
+    const isValid = this.validate(value);
+
+    console.warn('is valid', this.props.name, isValid);
+  }
+
   registerHandlers() {
     this.setHandlers({
       handleBlur: this.handleBlur.bind(this),
+      handleFocus: this.handleFocus.bind(this),
     });
   }
 
