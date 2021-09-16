@@ -10,26 +10,31 @@ export default () => `
         >
           Вход
         </Typography>
-        <Input
-          fullWidth="true"
-          gutterBottom="true"
-          name="login"
-          placeholder="Логин"
-          onChange={{handleLoginChange}}
-        />
-        <Input
-          fullWidth="true"
-          gutterBottom="true"
-          name="password"
-          placeholder="Пароль"
-        />
+        <form method="POST" onSubmit={{handleSubmit}}>
+          <Input
+            fullWidth="true"
+            gutterBottom="true"
+            name="login"
+            placeholder="Логин"
+            validate="login"
+          />
+          <Input
+            fullWidth="true"
+            gutterBottom="true"
+            name="password"
+            placeholder="Пароль"
+            validate="password"
+            type="password"
+          />
 
-        <Button
-          fullWidth="true"
-          gutterBottom="true"
-          label="Войти"
-          onClick={{handleClick}}
-        />
+          <Button
+            type="submit"
+            fullWidth="true"
+            gutterBottom="true"
+            label="Войти"
+            onClick={{handleClick}}
+          />
+        </form>
 
         <Link
          fullWidth="true"
