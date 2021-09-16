@@ -41,8 +41,12 @@ class Registration extends BaseComponent {
     const formProps = Object.fromEntries(formData);
 
     const hasError = Object.entries(formProps).some(([key, value]) => {
-      const isValid = this.formValidator.prop(key).validate(value as string);
-      return !isValid;
+      if (this.formValidator.supports(key)) {
+        const isValid = this.formValidator.prop(key).validate(value as string);
+        return !isValid;
+      }
+
+      return false;
     });
 
     console.warn('Has errors:', hasError);

@@ -12,43 +12,50 @@ export default () => `
         </div>
         
         <div class="${styles.inputsRoot}">
-          <Input
-            fullWidth="true"
-            gutterBottom="true"
-            name="email"
-            placeholder="Почта"
-          />
-          <Input
-            fullWidth="true"
-            gutterBottom="true"
-            name="first_name"
-            placeholder="Имя"
-          />
-          <Input
-            fullWidth="true"
-            gutterBottom="true"
-            name="second_name"
-            placeholder="Фамилия"
-          />
-          <Input
-            fullWidth="true"
-            gutterBottom="true"
-            name="nick_name"
-            placeholder="Имя в чате"
-          />
-          <Input
-            fullWidth="true"
-            gutterBottom="true"
-            name="phone"
-            placeholder="Телефон"
-          />
-        </div>
+          <form method="POST" onSubmit={{handleSubmit}}>
+            <Input
+              fullWidth="true"
+              gutterBottom="true"
+              name="email"
+              placeholder="Почта"
+              validate="email"
+            />
+            <Input
+              fullWidth="true"
+              gutterBottom="true"
+              name="first_name"
+              placeholder="Имя"
+              validate="first_name"
+            />
+            <Input
+              fullWidth="true"
+              gutterBottom="true"
+              name="second_name"
+              placeholder="Фамилия"
+              validate="second_name"
+            />
+            <Input
+              fullWidth="true"
+              gutterBottom="true"
+              name="nick_name"
+              placeholder="Имя в чате"
+            />
+            <Input
+              fullWidth="true"
+              gutterBottom="true"
+              name="phone"
+              placeholder="Телефон"
+              validate="phone"
+            />
 
-        <Button
-          fullWidth="true"
-          gutterBottom="true"
-          label="Сохранить"
-        />
+            <Button
+              type="submit"
+              fullWidth="true"
+              gutterBottom="true"
+              label="Сохранить"
+            />
+          </form>
+        </div>
 
         <Button
           fullWidth="true"
