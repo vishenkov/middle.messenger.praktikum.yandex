@@ -24,6 +24,7 @@ abstract class BaseComponent implements Block {
     onBlur: 'blur',
     onFocus: 'focus',
     onChange: 'change',
+    onSubmit: 'submit',
   } as const;
 
   protected _element: ChildNode;
