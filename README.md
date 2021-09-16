@@ -18,6 +18,11 @@ npm i
 npm run dev
 ```
 
+Линт кода: проверит все JavaScript-файлы и файлы стилей
+```bash
+npm run lint
+```
+
 Для production сборки - сервер запуститься на `3000` порту
 ```bash
 npm run build

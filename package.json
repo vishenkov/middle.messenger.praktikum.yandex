@@ -11,7 +11,7 @@
     "parcel": "parcel",
     "stylelint": "stylelint",
     "lint-css": "stylelint \"**/*.css\"",
-    "lint-js": "eslint src/*.js",
+    "lint-js": "eslint src/*.ts",
     "lint": "npm run lint-js && npm run lint-css"
   },
   "repository": {
