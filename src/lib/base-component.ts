@@ -2,8 +2,10 @@ import EventBus from './services/event-bus';
 import Templator from './templator';
 
 import {
-  Props, Component, Handler, Block,
+  Props, Component, Handler, Block, DomNode,
 } from './types';
+
+import isNull from './utils/is-null';
 
 export { Props, Component, Handler };
 
@@ -27,7 +29,7 @@ abstract class BaseComponent implements Block {
     onSubmit: 'submit',
   } as const;
 
-  protected _element: ChildNode;
+  protected _element: DomNode;
 
   protected _meta: Meta;
 
@@ -103,7 +105,7 @@ abstract class BaseComponent implements Block {
     Object.assign(this._handlers, nextHandlers);
   };
 
-  get element(): ChildNode {
+  get element(): DomNode {
     return this._element;
   }
 
@@ -113,11 +115,15 @@ abstract class BaseComponent implements Block {
 
     const element = templator.compile(this.props, this._handlers);
 
-    if (this._element) {
-      this._element.replaceWith(element as Node);
+    if (isNull(element)) {
+      return;
     }
 
-    this._element = element as ChildNode;
+    if (this._element) {
+      this._element.replaceWith(element);
+    }
+
+    this._element = element;
 
     this._addEvents();
   }
@@ -146,7 +152,7 @@ abstract class BaseComponent implements Block {
 
   abstract render(): string;
 
-  getContent(): ChildNode {
+  getContent(): DomNode {
     return this.element;
   }
 

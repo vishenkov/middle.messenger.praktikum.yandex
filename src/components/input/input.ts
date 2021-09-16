@@ -1,9 +1,15 @@
-import BaseComponent, { Props } from '../../lib/base-component';
+import BaseComponent from '../../lib/base-component';
 import getInputTmpl from './input.tmpl';
 
 import Native from '../native';
 import isEqual from '../../lib/utils/is-equal';
 import FormValidator from '../../lib/services/form-validator';
+
+import { Event, Props } from '../../lib/types';
+
+type InputProps = Props & {
+  validate?:string
+};
 
 const initialState = {
   error: false,
@@ -12,7 +18,7 @@ const initialState = {
 class Input extends BaseComponent {
   formValidator: FormValidator;
 
-  constructor(props: Props) {
+  constructor(props: InputProps) {
     super({ ...initialState, ...props }, {
       Native,
     });
@@ -24,10 +30,10 @@ class Input extends BaseComponent {
     return !isEqual(oldProps, newProps);
   }
 
-  handleBlur(e) {
+  handleBlur(e: Event) {
     const { value } = e.currentTarget;
     const isValid = this.props.validate
-      ? this.formValidator.prop(this.props.validate).validate(value)
+      ? this.formValidator.prop(this.props.validate as string).validate(value)
       : true;
 
     this.setProps({

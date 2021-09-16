@@ -1,5 +1,8 @@
-import { Component as C, Handler, Props } from '../types';
+import {
+  Component as C, Handler, Props, DomNode,
+} from '../types';
 import get from '../utils/get';
+import isArray from '../utils/is-array';
 import sanitize from '../utils/sanitize';
 
 const enum Nodes {
@@ -29,7 +32,7 @@ export default class Templator {
     this.__tags = [];
   }
 
-  compile(ctx: Props, events: Handler) {
+  compile(ctx: Props, events: Handler): DomNode | null {
     return this.__compileTemplate(this.__template, ctx, events);
   }
 
@@ -277,7 +280,7 @@ export default class Templator {
     };
   }
 
-  __getTextNode(astNode: ASTNode): ChildNode {
+  __getTextNode(astNode: ASTNode): DomNode {
     if (astNode.children.length > 1) {
       throw new Error('Text node should have only one children');
     }
@@ -287,7 +290,7 @@ export default class Templator {
     return document.createTextNode(textValue);
   }
 
-  __createComponent(astNode: ASTNode, events: Handler, children: ChildNode[]) {
+  __createComponent(astNode: ASTNode, events: Handler, children: DomNode[]) {
     const Component = this.__components[astNode.node];
     if (!Component) {
       throw new Error(`Component ${astNode.node} is not provided!`);
@@ -333,16 +336,16 @@ export default class Templator {
     astNode: ASTNode,
     ctx: Props,
     events: Handler,
-  ): ChildNode[] | ChildNode {
+  ): DomNode[] | DomNode {
     if (astNode.node === 'children') {
-      return ctx.children as HTMLElement[];
+      return ctx.children as DomNode[];
     }
 
     if (astNode.node === 'raw') {
       return this.__getTextNode(astNode);
     }
 
-    const childrenElements: ChildNode[] = [];
+    const childrenElements: DomNode[] = [];
     if (astNode.children.length > 0) {
       astNode.children.forEach((childNode) => {
         const childElement = this.__createDomElement(childNode as ASTNode, ctx, events);
@@ -381,7 +384,11 @@ export default class Templator {
       throw new Error('Should be only one parent element for component!');
     }
 
-    return this.__createDomElement(ast.children[0] as ASTNode, ctx, events);
+    const resultDomElement = this.__createDomElement(ast.children[0] as ASTNode, ctx, events);
+
+    return isArray(resultDomElement)
+      ? resultDomElement[0]
+      : resultDomElement;
   }
 
   __compileTemplate(template: string, ctx: Props, events: Handler) {

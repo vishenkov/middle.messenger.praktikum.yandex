@@ -1,4 +1,4 @@
-function isArray(arg?: unknown): arg is [] {
+function isArray<T>(arg?: unknown): arg is T[] {
   if (!arg) {
     return false;
   }

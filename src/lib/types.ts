@@ -10,3 +10,17 @@ export interface Block {
 export type Props = Record<string, unknown>;
 export type Component = Record<string, Type<Block>>;
 export type Handler = Record<string, Function>;
+
+export type EventTarget = {
+  value: string
+};
+
+export type Event = {
+  currentTarget: EventTarget,
+  preventDefault(): void,
+  stopPropagation(): void
+};
+
+export interface DomNode extends ChildNode {
+  replaceWith(...nodes: (DomNode | Node | string)[]): void
+}
