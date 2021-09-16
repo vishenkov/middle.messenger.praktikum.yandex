@@ -25,7 +25,7 @@ function isEqual(arg1: unknown, arg2: unknown): boolean {
     }
 
     const entries1 = Object.entries(obj1);
-    const entries2 = Object.entries(obj1);
+    const entries2 = Object.entries(obj2);
 
     if (entries1.length !== entries2.length) {
       return false;
@@ -34,13 +34,11 @@ function isEqual(arg1: unknown, arg2: unknown): boolean {
     for (let i = 0; i < entries1.length; i += 1) {
       const [key1, value1] = entries1[i];
 
-      if (!obj2[key1]) {
-        return false;
-      }
-
       const value2 = obj2[key1];
 
-      return isEqual(value1, value2);
+      if (!isEqual(value1, value2)) {
+        return false;
+      }
     }
 
     return true;
