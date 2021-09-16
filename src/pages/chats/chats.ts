@@ -6,9 +6,9 @@ import Button from '../../components/button';
 import Typography from '../../components/typography';
 import Paper from '../../components/paper';
 import Native from '../../components/native';
-import Avatar from '../../components/Avatar';
-import Link from '../../components/Link';
-import Input from '../../components/Input';
+import Avatar from '../../components/avatar';
+import Link from '../../components/link';
+import Input from '../../components/input';
 
 import { Props } from '../../lib/types';
 import isEqual from '../../lib/utils/is-equal';
