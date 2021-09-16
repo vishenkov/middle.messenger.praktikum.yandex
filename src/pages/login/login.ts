@@ -45,7 +45,7 @@ class Login extends BaseComponent {
       return !isValid;
     });
 
-    console.log('hasError', hasError);
+    console.warn('Has errors:', hasError);
 
     console.table(Object.entries(formProps));
   }

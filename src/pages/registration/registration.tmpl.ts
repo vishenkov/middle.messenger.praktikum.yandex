@@ -11,54 +11,67 @@ export default () => `
             Регистрация
           </Typography>
 
-          <Input
-            fullWidth="true"
-            gutterBottom="true"
-            name="email"
-            placeholder="Почта"
-          />
-          <Input
-            fullWidth="true"
-            gutterBottom="true"
-            name="login"
-            placeholder="Логин"
-          />
-          <Input
-            fullWidth="true"
-            gutterBottom="true"
-            name="first_name"
-            placeholder="Имя"
-          />
-          <Input
-            fullWidth="true"
-            gutterBottom="true"
-            name="second_name"
-            placeholder="Фамилия"
-          />
-          <Input
-            fullWidth="true"
-            gutterBottom="true"
-            name="password"
-            placeholder="Пароль"
-          />
-          <Input
-            fullWidth="true"
-            gutterBottom="true"
-            name="repeat-password"
-            placeholder="Повтор пароля"
-          />
-          <Input
-            fullWidth="true"
-            gutterBottom="true"
-            name="phone"
-            placeholder="Телефон"
-          />
+          <form method="POST" onSubmit={{handleSubmit}}>
+            <Input
+              fullWidth="true"
+              gutterBottom="true"
+              name="email"
+              placeholder="Почта"
+              validate="email"
+            />
+            <Input
+              fullWidth="true"
+              gutterBottom="true"
+              name="login"
+              placeholder="Логин"
+              validate="login"
+            />
+            <Input
+              fullWidth="true"
+              gutterBottom="true"
+              name="first_name"
+              placeholder="Имя"
+              validate="first_name"
+            />
+            <Input
+              fullWidth="true"
+              gutterBottom="true"
+              name="second_name"
+              placeholder="Фамилия"
+              validate="second_name"
+            />
+            <Input
+              fullWidth="true"
+              gutterBottom="true"
+              name="password"
+              placeholder="Пароль"
+              validate="password"
+              type="password"
+            />
+            <Input
+              fullWidth="true"
+              gutterBottom="true"
+              name="repeat-password"
+              placeholder="Повтор пароля"
+              validate="password"
+              type="password"
+            />
+            <Input
+              fullWidth="true"
+              gutterBottom="true"
+              name="phone"
+              placeholder="Телефон"
+              validate="phone"
+            />
 
-          <Button
-            fullWidth="true"
-            gutterBottom="true"
-            label="Создать аккаунт"
-          />
+            <Button
+              type="submit"
+              fullWidth="true"
+              gutterBottom="true"
+              label="Создать аккаунт"
+            />
+          </form>
+
           <Link
             fullWidth="true"
             text="Войти"
