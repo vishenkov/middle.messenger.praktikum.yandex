@@ -7,11 +7,9 @@ import {
 
 import isNull from './utils/is-null';
 
-export { Props, Component, Handler };
-
 type Meta = {
-  props: Props,
-  components: Component
+  props: Props;
+  components: Component;
 };
 abstract class BaseComponent implements Block {
   static EVENTS = {
@@ -131,7 +129,7 @@ abstract class BaseComponent implements Block {
   _addEvents() {
     Object.keys(BaseComponent.HANDLERS).forEach((eventName) => {
       if (this.props[eventName]) {
-        this._element!.addEventListener(
+        this._element?.addEventListener(
           BaseComponent.HANDLERS[eventName],
           this.props[eventName] as EventListener,
         );
@@ -142,7 +140,7 @@ abstract class BaseComponent implements Block {
   _removeEvents(oldProps: Props) {
     Object.keys(BaseComponent.HANDLERS).forEach((eventName) => {
       if (oldProps[eventName]) {
-        this._element!.removeEventListener(
+        this._element?.removeEventListener(
           BaseComponent.HANDLERS[eventName],
           oldProps[eventName] as EventListener,
         );
@@ -178,3 +176,5 @@ abstract class BaseComponent implements Block {
 }
 
 export default BaseComponent;
+
+export { Props, Component, Handler };

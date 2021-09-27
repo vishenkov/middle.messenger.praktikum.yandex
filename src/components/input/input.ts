@@ -8,7 +8,7 @@ import FormValidator from '../../lib/services/form-validator';
 import { Event, Props } from '../../lib/types';
 
 type InputProps = Props & {
-  validate?:string
+  validate?: string;
 };
 
 const initialState = {
@@ -17,6 +17,8 @@ const initialState = {
 };
 class Input extends BaseComponent {
   formValidator: FormValidator;
+
+  props: InputProps;
 
   constructor(props: InputProps) {
     super({ ...initialState, ...props }, {
@@ -32,7 +34,7 @@ class Input extends BaseComponent {
 
   validate(value: string) {
     if (this.props.validate) {
-      return this.formValidator.prop(this.props.validate as string).validate(value);
+      return this.formValidator.prop(this.props.validate).validate(value);
     }
 
     return true;

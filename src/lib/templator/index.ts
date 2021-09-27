@@ -1,5 +1,5 @@
 import {
-  Component as C, Handler, Props, DomNode,
+  Component as ComponentType, Handler, Props, DomNode,
 } from '../types';
 import get from '../utils/get';
 import isArray from '../utils/is-array';
@@ -22,11 +22,11 @@ type ASTNodeChildrenResult = [ASTNode | null, string | null];
 export default class Templator {
   private __template: string;
 
-  private __components: C;
+  private __components: ComponentType;
 
   private __tags: string[];
 
-  constructor(template: string, components: C) {
+  constructor(template: string, components: ComponentType) {
     this.__template = template;
     this.__components = components;
     this.__tags = [];
@@ -80,11 +80,7 @@ export default class Templator {
   }
 
   __parsePropsKeyValue({ key, value }: Record<string, string>) {
-    if (!key) {
-      return { key: null, value: null };
-    }
-
-    if (!value) {
+    if (!key || !value) {
       return { key: null, value: null };
     }
 
@@ -170,7 +166,8 @@ export default class Templator {
       }, restText];
     }
 
-    const childrenLength = '{{children}}'.length;
+    // {{children}}
+    const childrenLength = 12;
     const restText = Array.prototype.slice.call(template, match.index + childrenLength).join('');
     const sanitizedRestText = sanitize(restText).trim();
 

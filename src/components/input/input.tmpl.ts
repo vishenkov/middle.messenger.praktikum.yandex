@@ -2,28 +2,30 @@ import { Props } from '../../lib/base-component';
 import cn from '../../lib/classnames';
 import * as styles from './input.css';
 
-const Input = (props: Props) => {
-  const valueProp = props.value
-    ? `value="${props.value}"`
-    : '';
-
-  const typeProp = props.type ?? 'text';
-
+const Input = ({
+  value = '',
+  type = 'text',
+  name,
+  placeholder,
+  fullWidth = false,
+  gutterBottom = false,
+  error = false,
+}: Props) => {
   const classNames = cn(styles, 'input', {
-    'input_full-width': props.fullWidth,
-    'input_gutter-bottom': props.gutterBottom,
-    input_error: props.error,
+    'input_full-width': fullWidth,
+    'input_gutter-bottom': gutterBottom,
+    input_error: error,
   });
 
   return `
     <input
-      type="${typeProp}"
+      type="${type}"
       class="${classNames}"
-      placeholder="${props.placeholder}"
-      name="${props.name}"
+      placeholder="${placeholder}"
+      name="${name}"
       onBlur={{handleBlur}}
       onFocus={{handleFocus}}
-      ${valueProp}
+      value="${value}"
     />
   `;
 };

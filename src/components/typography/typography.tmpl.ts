@@ -21,8 +21,12 @@ const getComponent = (variant: string) => {
   }
 };
 
-export default (props: Props) => {
-  const component = getComponent(String(props.variant));
+type TypographyProps = Props & {
+  variant: string;
+};
+
+export default (props: TypographyProps) => {
+  const component = getComponent(props.variant);
 
   const classNames = cn(styles, {
     h1: props.variant === 'h1',

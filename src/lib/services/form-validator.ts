@@ -8,18 +8,24 @@ enum Props {
   second_name = 'second_name',
 }
 
+const loginRegExp = /^(?=.{3,20}$)\d*[a-zA-Z\-_]+\w*$/g;
+const phoneRegExp = /^(?=.{10,15}$)\+{0,1}\d+$/g;
+const passwordRegExp = /^(?=.{8,40}$)(?=.*\d+)(?=.*[A-Z]+)\w*$/g;
+const emailRegExp = /^[\w-]+@[\w-]+\.[\w-]+$/g;
+const nameRegExp = /^[A-ZА-Я]+[a-zA-Zа-яА-Я-]+$/g;
+
 function getValidator(prop: string) {
   switch (prop) {
     case Props.login: {
-      return (value: string) => (/^(?=.{3,20}$)\d*[a-zA-Z\-_]+\w*$/g).test(value);
+      return (value: string) => (loginRegExp).test(value);
     }
 
     case Props.password: {
-      return (value: string) => (/^(?=.{8,40}$)(?=.*\d+)(?=.*[A-Z]+)\w*$/g).test(value);
+      return (value: string) => (passwordRegExp).test(value);
     }
 
     case Props.phone: {
-      return (value: string) => (/^(?=.{10,15}$)\+{0,1}\d+$/g).test(value);
+      return (value: string) => (phoneRegExp).test(value);
     }
 
     case Props.message: {
@@ -27,11 +33,11 @@ function getValidator(prop: string) {
     }
 
     case Props.email:
-      return (value: string) => (/^[\w-]+@[\w-]+\.[\w-]+$/g).test(value);
+      return (value: string) => (emailRegExp).test(value);
 
     case Props.first_name:
     case Props.second_name:
-      return (value: string) => (/^[A-ZА-Я]+[a-zA-Zа-яА-Я-]+$/g).test(value);
+      return (value: string) => (nameRegExp).test(value);
 
     default:
       throw new Error(`Unknown ${prop} for validation!`);

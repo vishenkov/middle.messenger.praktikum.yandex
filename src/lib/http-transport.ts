@@ -10,13 +10,13 @@ enum METHODS {
 type TProps = Record<string, unknown>;
 
 type Options = TProps & {
-  timeout?: number,
-  headers?: TProps,
-  data?: TProps | null | undefined
+  timeout?: number;
+  headers?: TProps;
+  data?: TProps | null;
 };
 
 type RequestOption = Options & {
-  method: METHODS,
+  method: METHODS;
 };
 
 function queryStringify(data: TProps) {
