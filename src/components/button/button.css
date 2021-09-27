@@ -6,17 +6,19 @@
   padding: var(--spacing);
   border: var(--component-border);
   border-radius: var(--corner-radius);
+
   &:hover {
     box-shadow: var(--shadow-level-1);
     background-color: var(--button-hover);
   }
+
   &:active {
     box-shadow: var(--shadow-level-2);
   }
 }
 
 .button__text {
-  font-family: Roboto;
+  font-family: Roboto, sans-serif;
   font-style: normal;
   font-weight: 900;
   font-size: 0.7rem;

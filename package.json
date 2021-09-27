@@ -1,6 +1,6 @@
 {
   "name": "chat-project",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Yet another chat",
   "scripts": {
     "start": "node server.js",
@@ -9,7 +9,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "rimraf": "rimraf",
     "parcel": "parcel",
-    "lint": "eslint src/*.js"
+    "stylelint": "stylelint",
+    "lint-css": "stylelint \"**/*.css\"",
+    "lint-js": "eslint src/*.ts",
+    "lint": "npm run lint-js && npm run lint-css"
   },
   "repository": {
     "type": "git",
@@ -25,14 +28,22 @@
   },
   "homepage": "https://github.com/vishenkov/chat-project#readme",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.31.0",
+    "@typescript-eslint/parser": "^4.31.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-airbnb-typescript": "^14.0.0",
     "eslint-plugin-import": "^2.24.1",
     "parcel": "^2.0.0-rc.0",
     "postcss": "^8.3.6",
     "postcss-import": "^14.0.2",
     "postcss-preset-env": "^6.7.0",
-    "rimraf": "^3.0.2"
+    "prettier": "^2.4.0",
+    "rimraf": "^3.0.2",
+    "stylelint": "^13.13.1",
+    "stylelint-config-standard": "^22.0.0",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.2"
   },
   "dependencies": {
     "express": "^4.17.1"

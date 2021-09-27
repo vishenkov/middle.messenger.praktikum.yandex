@@ -2,6 +2,7 @@
   display: flex;
   justify-content: center;
   color: var(--font-color);
+
   &:visited {
     color: var(--font-color);
   }
