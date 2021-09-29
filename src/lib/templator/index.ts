@@ -55,6 +55,10 @@ export default class Templator {
   }
 
   __getRawValue(rawValue: string) {
+    if (rawValue === '""') {
+      return '';
+    }
+
     const lastCharIndex = rawValue.length - 1;
     if (rawValue[lastCharIndex] !== '"') {
       throw new Error(`Props value should have closing " at ${rawValue}`);

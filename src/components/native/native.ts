@@ -15,7 +15,7 @@ class NativeComponent extends BaseComponent {
         return;
       }
 
-      if (!BaseComponent.HANDLERS[prop]) {
+      if (BaseComponent.HANDLERS[prop]) {
         return;
       }
 
