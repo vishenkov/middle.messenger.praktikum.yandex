@@ -27,8 +27,15 @@ function queryStringify(data: TProps) {
   const result = `?${dataArray.join('&')}`;
   return result;
 }
-
 class HTTPTransport {
+  static apiUrl = 'https://ya-praktikum.tech/api/v2';
+
+  _baseApiUrl: string;
+
+  constructor(baseApiUrl: string) {
+    this._baseApiUrl = `${HTTPTransport.apiUrl}${baseApiUrl}`;
+  }
+
   get = (url: string, options: Options = {}) => {
     const resultUrl = options.data
       ? `${url}${queryStringify(options.data)}`
@@ -39,19 +46,19 @@ class HTTPTransport {
       options.timeout);
   };
 
-  post = (url: string, options: Options = {}) => this.request(url,
+  post = (url: string, options: Options = {}) => this.request(`${this._baseApiUrl}${url}`,
     { ...options, method: METHODS.POST },
     options.timeout);
 
-  put = (url: string, options: Options = {}) => this.request(url,
+  put = (url: string, options: Options = {}) => this.request(`${this._baseApiUrl}${url}`,
     { ...options, method: METHODS.PUT },
     options.timeout);
 
-  delete = (url: string, options: Options = {}) => this.request(url,
+  delete = (url: string, options: Options = {}) => this.request(`${this._baseApiUrl}${url}`,
     { ...options, method: METHODS.DELETE },
     options.timeout);
 
-  request = (url: string, options: RequestOption, timeout = 5000) => {
+  private request = (url: string, options: RequestOption, timeout = 5000) => {
     const { method, data, headers } = options;
 
     return new Promise((resolve, reject) => {
@@ -77,10 +84,14 @@ class HTTPTransport {
 
       xhr.timeout = timeout;
 
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.withCredentials = true;
+      xhr.responseType = 'json';
+
       if (method === METHODS.GET || !data) {
         xhr.send();
       } else {
-        xhr.send(data as unknown as XMLHttpRequestBodyInit);
+        xhr.send(JSON.stringify(data));
       }
     });
   };
