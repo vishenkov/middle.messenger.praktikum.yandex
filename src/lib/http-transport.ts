@@ -37,9 +37,10 @@ class HTTPTransport {
   }
 
   get = (url: string, options: Options = {}) => {
+    const baseURl = `${this._baseApiUrl}${url}`;
     const resultUrl = options.data
-      ? `${url}${queryStringify(options.data)}`
-      : url;
+      ? `${baseURl}${queryStringify(options.data)}`
+      : baseURl;
 
     return this.request(resultUrl,
       { ...options, method: METHODS.GET, data: null },
@@ -74,13 +75,19 @@ class HTTPTransport {
         });
       }
 
-      xhr.onload = () => {
-        resolve(xhr);
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status < 400) {
+            resolve(xhr.response);
+          } else {
+            reject(xhr.response);
+          }
+        }
       };
 
-      xhr.onabort = reject;
-      xhr.onerror = reject;
-      xhr.ontimeout = reject;
+      xhr.onabort = () => reject({ reason: 'abort' });
+      xhr.onerror = () => reject({ reason: 'error' });
+      xhr.ontimeout = () => reject({ reason: 'timeout' });
 
       xhr.timeout = timeout;
 
