@@ -1,5 +1,5 @@
 import {
-  Component as ComponentType, Handler, Props, DomNode,
+  Component as ComponentType, Props, DomNode,
 } from '../types';
 import get from '../utils/get';
 import isArray from '../utils/is-array';
@@ -32,8 +32,8 @@ export default class Templator {
     this.__tags = [];
   }
 
-  compile(ctx: Props, events: Handler): DomNode | null {
-    return this.__compileTemplate(this.__template, ctx, events);
+  compile(ctx: Props): DomNode | null {
+    return this.__compileTemplate(this.__template, ctx);
   }
 
   __addOpeningTag(tag: string) {
@@ -291,31 +291,31 @@ export default class Templator {
     return document.createTextNode(textValue);
   }
 
-  __createComponent(astNode: ASTNode, events: Handler, children: DomNode[]) {
+  __createComponent(astNode: ASTNode, ctx: Props, children: DomNode[]) {
     const Component = this.__components[astNode.node];
     if (!Component) {
       throw new Error(`Component ${astNode.node} is not provided!`);
     }
 
-    const props = this.__replaceProps(astNode.props, events);
+    const props = this.__replaceProps(astNode.props, ctx);
     const component = new Component({ ...props, children }, this.__components);
 
     return component.getContent();
   }
 
-  __createNativeComponent(astNode: ASTNode, events: Handler) {
+  __createNativeComponent(astNode: ASTNode, ctx: Props) {
     const Component = this.__components.Native;
     if (!Component) {
       throw new Error(`Native component for ${astNode.node} is not provided!`);
     }
 
-    const props = this.__replaceProps(astNode.props, events);
+    const props = this.__replaceProps(astNode.props, ctx);
     const component = new Component({ ...props, __tag: astNode.node }, this.__components);
 
     return component.getContent();
   }
 
-  __replaceProps(props: Props | null, events: Handler) {
+  __replaceProps(props: Props | null, ctx: Props) {
     if (!props) {
       return props;
     }
@@ -323,7 +323,7 @@ export default class Templator {
     return Object.keys(props).reduce((acc, prop) => {
       const propValue = props[prop];
       const value = typeof propValue === 'function'
-        ? propValue(events)
+        ? propValue(ctx)
         : propValue;
 
       return {
@@ -336,7 +336,6 @@ export default class Templator {
   __createDomElement(
     astNode: ASTNode,
     ctx: Props,
-    events: Handler,
   ): DomNode[] | DomNode {
     if (astNode.node === 'children') {
       return ctx.children as DomNode[];
@@ -349,7 +348,7 @@ export default class Templator {
     const childrenElements: DomNode[] = [];
     if (astNode.children.length > 0) {
       astNode.children.forEach((childNode) => {
-        const childElement = this.__createDomElement(childNode as ASTNode, ctx, events);
+        const childElement = this.__createDomElement(childNode as ASTNode, ctx);
         if (Array.isArray(childElement)) {
           childrenElements.push(...childElement);
         } else {
@@ -359,10 +358,10 @@ export default class Templator {
     }
 
     if (/[A-Z]/.test(astNode.node[0])) {
-      return this.__createComponent(astNode, events, childrenElements);
+      return this.__createComponent(astNode, ctx, childrenElements);
     }
 
-    const element = this.__createNativeComponent(astNode, events);
+    const element = this.__createNativeComponent(astNode, ctx);
 
     childrenElements.forEach((child) => {
       element.appendChild(child);
@@ -371,7 +370,7 @@ export default class Templator {
     return element;
   }
 
-  __createDomElements(ast: ASTNode, ctx: Props, events: Handler) {
+  __createDomElements(ast: ASTNode, ctx: Props) {
     if (ast.node !== 'root') {
       throw new Error(`Should be root element! Received: ${ast.node}`);
     }
@@ -385,16 +384,16 @@ export default class Templator {
       throw new Error('Should be only one parent element for component!');
     }
 
-    const resultDomElement = this.__createDomElement(ast.children[0] as ASTNode, ctx, events);
+    const resultDomElement = this.__createDomElement(ast.children[0] as ASTNode, ctx);
 
     return isArray(resultDomElement)
       ? resultDomElement[0]
       : resultDomElement;
   }
 
-  __compileTemplate(template: string, ctx: Props, events: Handler) {
+  __compileTemplate(template: string, ctx: Props) {
     const ast = this.__createAST(template);
-    const element = this.__createDomElements(ast, ctx, events);
+    const element = this.__createDomElements(ast, ctx);
     return element;
   }
 }

@@ -119,7 +119,7 @@ abstract class BaseComponent implements Block {
     const block = this.render();
     const templator = new Templator(block, this._meta.components);
 
-    const element = templator.compile(this.props, this._handlers);
+    const element = templator.compile({ ...this.props, ...this._handlers });
 
     if (isNull(element)) {
       return;
