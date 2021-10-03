@@ -14,6 +14,7 @@ type Meta = {
 abstract class BaseComponent implements Block {
   static EVENTS = {
     INIT: 'init',
+    FLOW_CWM: 'flow:component-did-mount',
     FLOW_CDM: 'flow:component-did-mount',
     FLOW_CDU: 'flow:component-did-update',
     FLOW_RENDER: 'flow:render',
@@ -53,21 +54,26 @@ abstract class BaseComponent implements Block {
 
   protected _registerEvents() {
     this.eventBus.on(BaseComponent.EVENTS.INIT, this.init.bind(this));
+    this.eventBus.on(BaseComponent.EVENTS.FLOW_CWM, this._componentWillMount.bind(this));
+    this.eventBus.on(BaseComponent.EVENTS.FLOW_RENDER, this._render.bind(this));
     this.eventBus.on(BaseComponent.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     this.eventBus.on(BaseComponent.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
-    this.eventBus.on(BaseComponent.EVENTS.FLOW_RENDER, this._render.bind(this));
   }
 
   protected init() {
     this.registerHandlers();
-    this.eventBus.emit(BaseComponent.EVENTS.FLOW_CDM);
+    this.eventBus.emit(BaseComponent.EVENTS.FLOW_CWM);
   }
 
   registerHandlers() {}
 
+  protected _componentWillMount() {
+    this.componentWillMount();
+    this.eventBus.emit(BaseComponent.EVENTS.FLOW_RENDER);
+  }
+
   protected _componentDidMount() {
     this.componentDidMount();
-    this.eventBus.emit(BaseComponent.EVENTS.FLOW_RENDER);
   }
 
   componentDidMount(): void {}
@@ -80,6 +86,8 @@ abstract class BaseComponent implements Block {
       this._render();
     }
   }
+
+  componentWillMount(): void {}
 
   componentDidUpdate(oldProps: Props, newProps: Props): boolean {
     return oldProps !== newProps;
@@ -148,7 +156,9 @@ abstract class BaseComponent implements Block {
     });
   }
 
-  abstract render(): string;
+  render(): string {
+    return '';
+  }
 
   getContent(): DomNode {
     return this.element;
