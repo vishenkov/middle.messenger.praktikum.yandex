@@ -1,7 +1,7 @@
 import Route from './route';
 
 class Router {
-  constructor(rootQuery) {
+  constructor(rootQuery?: string) {
     if (Router.__instance) {
       return Router.__instance;
     }
@@ -32,6 +32,7 @@ class Router {
 
   _onRoute(pathname) {
     const route = this.getRoute(pathname);
+
     if (!route) {
       return;
     }
@@ -41,10 +42,11 @@ class Router {
     }
 
     route.render(route, pathname);
+    this._currentRoute = route;
   }
 
-  go(pathname) {
-    this.history.pushState({}, '', pathname);
+  go(pathname, state = {}) {
+    this.history.pushState(state, '', pathname);
     this._onRoute(pathname);
   }
 
