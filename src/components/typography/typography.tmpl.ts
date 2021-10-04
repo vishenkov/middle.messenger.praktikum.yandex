@@ -34,6 +34,7 @@ export default (props: TypographyProps) => {
     h3: props.variant === 'h3',
     h4: props.variant === 'h4',
     body: props.variant === 'body',
+    error: props.error,
     'typography_gutter-bottom': props.gutterBottom,
   });
 

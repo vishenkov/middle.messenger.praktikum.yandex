@@ -133,10 +133,11 @@ export default class Templator {
       return value;
     }
 
+    // Ищем {{ Значение }}
+    const contextRegExp = /\{\{(.*?)\}\}/gi;
+    const key = contextRegExp.exec(value);
+
     return (ctx: Props) => {
-      // Ищем {{ Значение }}
-      const contextRegExp = /\{\{(.*?)\}\}/gi;
-      const key = contextRegExp.exec(value);
       if (key) {
         const tmplValue = key[1].trim();
 

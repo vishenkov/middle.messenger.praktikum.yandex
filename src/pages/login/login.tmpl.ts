@@ -12,12 +12,17 @@ export default () => `
         </Typography>
 
         <form method="POST" onSubmit={{handleSubmit}}>
+          <Alert
+            error={{requestError}}
+          />
           <Input
             fullWidth="true"
             gutterBottom="true"
             name="login"
             placeholder="Логин"
             validate="login"
+            formValues={{formValues}}
+            formErrors={{formErrors}}
           />
           <Input
             fullWidth="true"
@@ -26,6 +31,8 @@ export default () => `
             placeholder="Пароль"
             validate="password"
             type="password"
+            formValues={formValues}}
+            formErrors={{formErrors}}
           />
 
           <Button

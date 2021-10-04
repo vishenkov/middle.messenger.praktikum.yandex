@@ -82,7 +82,9 @@ abstract class BaseComponent implements Block {
     const response = this.componentDidUpdate(oldProps, newProps);
 
     if (response) {
-      this._removeEvents(oldProps);
+      if (this._removeEvents) {
+        this._removeEvents(oldProps);
+      }
       this._render();
     }
   }
@@ -134,27 +136,9 @@ abstract class BaseComponent implements Block {
     this._addEvents();
   }
 
-  _addEvents() {
-    Object.keys(BaseComponent.HANDLERS).forEach((eventName) => {
-      if (this.props[eventName]) {
-        this._element?.addEventListener(
-          BaseComponent.HANDLERS[eventName],
-          this.props[eventName] as EventListener,
-        );
-      }
-    });
-  }
+  _addEvents(): void {}
 
-  _removeEvents(oldProps: Props) {
-    Object.keys(BaseComponent.HANDLERS).forEach((eventName) => {
-      if (oldProps[eventName]) {
-        this._element?.removeEventListener(
-          BaseComponent.HANDLERS[eventName],
-          oldProps[eventName] as EventListener,
-        );
-      }
-    });
-  }
+  _removeEvents?(oldProps: Props):void;
 
   render(): string {
     return '';

@@ -40,3 +40,7 @@
 .body .typography_gutter-bottom {
   margin-bottom: var(--spacing1);
 }
+
+.error {
+  color: var(--error-color);
+}
