@@ -18,7 +18,7 @@ const Input = ({
   });
 
   const value = isObject(formValues) && Object.prototype.hasOwnProperty.call(formValues, name)
-    ? formValues[name]
+    ? formValues[name] ?? ''
     : '';
 
   return `

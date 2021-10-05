@@ -9,16 +9,17 @@ import Input from '../../components/input';
 import Typography from '../../components/typography';
 import Paper from '../../components/paper';
 import Native from '../../components/native';
+import Alert from '../../components/Alert';
 
 import { Props } from '../../lib/types';
+import { State } from '../../lib/store/types';
 import isEqual from '../../lib/utils/is-equal';
-import FormValidator from '../../lib/services/form-validator';
+import connect from '../../store/connect';
+import userController from '../../controllers/user-controller';
 
 class Profile extends BaseComponent {
-  formValidator: FormValidator;
-
-  constructor() {
-    super({}, {
+  constructor(props) {
+    super(props, {
       Container,
       Link,
       Avatar,
@@ -27,9 +28,14 @@ class Profile extends BaseComponent {
       Typography,
       Paper,
       Native,
+      Alert,
     });
+  }
 
-    this.formValidator = new FormValidator();
+  componentWillMount() {
+    if (!this.props.user) {
+      userController.load();
+    }
   }
 
   componentDidUpdate(oldProps: Props, newProps: Props) {
@@ -42,18 +48,8 @@ class Profile extends BaseComponent {
     const formData = new FormData(e.target as HTMLFormElement);
     const formProps = Object.fromEntries(formData);
 
-    const hasError = Object.entries(formProps).some(([key, value]) => {
-      if (this.formValidator.supports(key)) {
-        const isValid = this.formValidator.prop(key).validate(value as string);
-        return !isValid;
-      }
-
-      return false;
-    });
-
-    console.warn('Has errors:', hasError);
-
     console.table(Object.entries(formProps));
+    userController.updateProfile(formProps);
   }
 
   registerHandlers() {
@@ -63,8 +59,13 @@ class Profile extends BaseComponent {
   }
 
   render() {
-    return getProfileTmpl();
+    return getProfileTmpl(this.props);
   }
 }
 
-export default Profile;
+export default connect((state: State) => ({
+  user: state.user,
+  formErrors: state.formErrors,
+  formValues: state.formValues,
+  requestError: state.requestError,
+}))(Profile);

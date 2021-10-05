@@ -18,10 +18,7 @@ import { State } from '../../lib/store/types';
 
 class Login extends BaseComponent {
   constructor(props: Props) {
-    super({
-      ...props,
-      hasError: false,
-    }, {
+    super(props, {
       Container,
       Link,
       Button,
@@ -58,7 +55,6 @@ class Login extends BaseComponent {
 }
 
 export default connect((state: State) => ({
-  user: state.user,
   formErrors: state.formErrors,
   formValues: state.formValues,
   requestError: state.requestError,

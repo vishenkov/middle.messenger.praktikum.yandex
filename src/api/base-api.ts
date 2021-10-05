@@ -9,6 +9,8 @@ abstract class BaseAPI {
 
   update?(id: string, data: unknown): Promise<unknown>;
 
+  put?(id: string, data: unknown): Promise<unknown>;
+
   delete?(id: string): Promise<unknown>;
 }
 

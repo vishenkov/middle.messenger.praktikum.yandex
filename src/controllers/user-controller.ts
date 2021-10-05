@@ -7,6 +7,7 @@ import Router from '../lib/router/router';
 import store from '../store';
 import actions from '../store/actions';
 import isEmpty from '../lib/utils/is-empty';
+import profileApi from '../api/profile-api';
 
 function getError(key: string) {
   switch (key) {
@@ -76,8 +77,6 @@ function validate() {
       } else {
         store.dispatch({ type: actions.setFormErrors, payload: errors });
       }
-
-      console.log('store', store.getState());
     };
   };
 }
@@ -117,8 +116,16 @@ class UserController {
   @handleError()
   async load() {
     const user = await userApi.read();
-    console.log('user', user);
     store.dispatch({ type: actions.setUser, payload: user });
+    store.dispatch({ type: actions.setFormValues, payload: user });
+  }
+
+  @validate()
+  @handleError()
+  async updateProfile(data) {
+    const { user } = store.getState();
+    const updatedUser = await profileApi.put({ ...data, login: user.login });
+    store.dispatch({ type: actions.setUser, payload: updatedUser });
   }
 }
 

@@ -24,7 +24,7 @@ function getValidator(prop: string) {
       return (value: string) => value.match(passwordRegExp);
 
     case Props.phone:
-      return (value: string) => value.match(phoneRegExp);
+      return (value: string) => Boolean(value.match(phoneRegExp));
 
     case Props.message: {
       return (value: string) => value.length > 0;
