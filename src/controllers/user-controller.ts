@@ -16,6 +16,13 @@ function getError(key: string) {
     case 'email':
       return 'Должен содержать @ и точку в конце';
 
+    case 'first_name':
+    case 'second_name':
+      return 'Может содержать латиницу и цифры, без пробелов';
+
+    case 'phone':
+      return 'Должке содержать цифры';
+
     case 'password':
       return 'Должен быть от 8 до 40 символов, и иметь хотя бы 1 заглавную';
 
@@ -49,6 +56,7 @@ function validate() {
       const errors = Object.entries(data).reduce((acc, [key, value]) => {
         if (formValidator.supports(key)) {
           const isValid = formValidator.prop(key).validate(value as string);
+          console.log('key', key, 'value', value, 'isValid', isValid);
           if (!isValid) {
             acc[key] = getError(key);
           }
@@ -91,6 +99,17 @@ class UserController {
   @validate()
   @handleError()
   async registration(data) {
+    if (data.password !== data.repeat_password) {
+      store.dispatch({
+        type: actions.setFormErrors,
+        payload: {
+          password: '',
+          repeat_password: 'Пароль не совпадает',
+        },
+      });
+      return;
+    }
+
     const userId = await registrationApi.create({ data });
     console.log('userId', userId);
   }

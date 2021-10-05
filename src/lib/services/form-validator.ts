@@ -17,27 +17,25 @@ const nameRegExp = /^[A-ZА-Я]+[a-zA-Zа-яА-Я-]+$/g;
 function getValidator(prop: string) {
   switch (prop) {
     case Props.login: {
-      return (value: string) => (loginRegExp).test(value);
+      return (value: string) => value.match(loginRegExp);
     }
 
-    case Props.password: {
-      return (value: string) => (passwordRegExp).test(value);
-    }
+    case Props.password:
+      return (value: string) => value.match(passwordRegExp);
 
-    case Props.phone: {
-      return (value: string) => (phoneRegExp).test(value);
-    }
+    case Props.phone:
+      return (value: string) => value.match(phoneRegExp);
 
     case Props.message: {
       return (value: string) => value.length > 0;
     }
 
     case Props.email:
-      return (value: string) => (emailRegExp).test(value);
+      return (value: string) => value.match(emailRegExp);
 
     case Props.first_name:
     case Props.second_name:
-      return (value: string) => (nameRegExp).test(value);
+      return (value: string) => Boolean(value.match(nameRegExp));
 
     default:
       throw new Error(`Unknown ${prop} for validation!`);

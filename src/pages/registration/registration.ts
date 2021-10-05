@@ -8,14 +8,15 @@ import Input from '../../components/input';
 import Typography from '../../components/typography';
 import Paper from '../../components/paper';
 import Native from '../../components/native';
+import Alert from '../../components/alert';
 
 import { Props } from '../../lib/types';
+import { State } from '../../lib/store/types';
 import isEqual from '../../lib/utils/is-equal';
-import FormValidator from '../../lib/services/form-validator';
+import userController from '../../controllers/user-controller';
+import connect from '../../store/connect';
 
 class Registration extends BaseComponent {
-  formValidator: FormValidator;
-
   constructor() {
     super({}, {
       Container,
@@ -25,9 +26,8 @@ class Registration extends BaseComponent {
       Typography,
       Paper,
       Native,
+      Alert,
     });
-
-    this.formValidator = new FormValidator();
   }
 
   componentDidUpdate(oldProps: Props, newProps: Props) {
@@ -40,18 +40,7 @@ class Registration extends BaseComponent {
     const formData = new FormData(e.target as HTMLFormElement);
     const formProps = Object.fromEntries(formData);
 
-    const hasError = Object.entries(formProps).some(([key, value]) => {
-      if (this.formValidator.supports(key)) {
-        const isValid = this.formValidator.prop(key).validate(value as string);
-        return !isValid;
-      }
-
-      return false;
-    });
-
-    console.warn('Has errors:', hasError);
-
-    console.table(Object.entries(formProps));
+    userController.registration(formProps);
   }
 
   registerHandlers() {
@@ -65,4 +54,8 @@ class Registration extends BaseComponent {
   }
 }
 
-export default Registration;
+export default connect((state: State) => ({
+  formErrors: state.formErrors,
+  formValues: state.formValues,
+  requestError: state.requestError,
+}))(Registration);

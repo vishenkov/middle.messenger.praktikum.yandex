@@ -12,11 +12,17 @@ export default () => `
           </Typography>
 
           <form method="POST" onSubmit={{handleSubmit}}>
+            <Alert
+              error={{requestError}}
+            />
+
             <Input
               fullWidth="true"
               gutterBottom="true"
               name="email"
               placeholder="Почта"
+              formValues={{formValues}}
+              formErrors={{formErrors}}
               validate="email"
             />
             <Input
@@ -24,6 +30,8 @@ export default () => `
               gutterBottom="true"
               name="login"
               placeholder="Логин"
+              formValues={{formValues}}
+              formErrors={{formErrors}}
               validate="login"
             />
             <Input
@@ -31,6 +39,8 @@ export default () => `
               gutterBottom="true"
               name="first_name"
               placeholder="Имя"
+              formValues={{formValues}}
+              formErrors={{formErrors}}
               validate="first_name"
             />
             <Input
@@ -38,6 +48,8 @@ export default () => `
               gutterBottom="true"
               name="second_name"
               placeholder="Фамилия"
+              formValues={{formValues}}
+              formErrors={{formErrors}}
               validate="second_name"
             />
             <Input
@@ -45,22 +57,27 @@ export default () => `
               gutterBottom="true"
               name="password"
               placeholder="Пароль"
-              validate="password"
               type="password"
+              formValues={{formValues}}
+              formErrors={{formErrors}}
+              validate="password"
             />
             <Input
               fullWidth="true"
               gutterBottom="true"
-              name="repeat-password"
+              name="repeat_password"
               placeholder="Повтор пароля"
-              validate="password"
               type="password"
+              formValues={{formValues}}
+              formErrors={{formErrors}}
             />
             <Input
               fullWidth="true"
               gutterBottom="true"
               name="phone"
               placeholder="Телефон"
+              formValues={{formValues}}
+              formErrors={{formErrors}}
               validate="phone"
             />
 

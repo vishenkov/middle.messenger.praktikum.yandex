@@ -15,24 +15,25 @@ export default () => `
           <Alert
             error={{requestError}}
           />
+
           <Input
             fullWidth="true"
             gutterBottom="true"
             name="login"
             placeholder="Логин"
-            validate="login"
             formValues={{formValues}}
             formErrors={{formErrors}}
+            validate="login"
           />
           <Input
             fullWidth="true"
             gutterBottom="true"
             name="password"
             placeholder="Пароль"
-            validate="password"
             type="password"
             formValues={formValues}}
             formErrors={{formErrors}}
+            validate="password"
           />
 
           <Button
@@ -40,7 +41,6 @@ export default () => `
             fullWidth="true"
             gutterBottom="true"
             label="Войти"
-            onClick={{handleClick}}
           />
         </form>
 
