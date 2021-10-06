@@ -20,6 +20,7 @@
       }
     ],
     "no-underscore-dangle": "off",
-    "class-methods-use-this": "off"
+    "class-methods-use-this": "off",
+    "prefer-promise-reject-errors": "off"
   }
 }
