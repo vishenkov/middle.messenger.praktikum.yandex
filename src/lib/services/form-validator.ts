@@ -6,6 +6,7 @@ enum Props {
   email = 'email',
   first_name = 'first_name',
   second_name = 'second_name',
+  newPassword = 'newPassword',
 }
 
 const loginRegExp = /^(?=.{3,20}$)\d*[a-zA-Z\-_]+\w*$/g;
@@ -21,6 +22,7 @@ function getValidator(prop: string) {
     }
 
     case Props.password:
+    case Props.newPassword:
       return (value: string) => value.match(passwordRegExp);
 
     case Props.phone:

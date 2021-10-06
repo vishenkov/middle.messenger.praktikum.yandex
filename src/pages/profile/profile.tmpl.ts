@@ -5,7 +5,14 @@ export default ({ user }) => `
     <div class="${styles.root}">
       <Paper>
         <div class="${styles.avatarRoot}">
-          <Avatar gutterBottom="true" />
+          <Avatar gutterBottom="true" src="${user?.avatar}" />
+          <Link
+            fullWidth="true"
+            text="Изменить аватар"
+            gutterBottom="true"
+            href="/settings/avatar"
+          />
+
           <Typography variant="h4">
             ${user?.first_name} ${user?.second_name}
           </Typography>
@@ -71,10 +78,11 @@ export default ({ user }) => `
           </form>
         </div>
 
-        <Button
+        <Link
           fullWidth="true"
+          text="Сменить пароль"
           gutterBottom="true"
-          label="Сменить пароль"
+          href="/settings/password"
         />
 
         <Link

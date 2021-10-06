@@ -60,11 +60,19 @@ class HTTPTransport {
     options.timeout);
 
   private request = (url: string, options: RequestOption, timeout = 5000) => {
-    const { method, data, headers } = options;
+    const {
+      method, data, headers = {
+        'Content-Type': 'application/json',
+      },
+    } = options;
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open(method, url);
+
+      xhr.withCredentials = true;
+      xhr.responseType = 'json';
+
       if (headers) {
         Object.keys(headers).forEach((key) => {
           const value = headers[key];
@@ -91,14 +99,10 @@ class HTTPTransport {
 
       xhr.timeout = timeout;
 
-      xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.withCredentials = true;
-      xhr.responseType = 'json';
-
       if (method === METHODS.GET || !data) {
         xhr.send();
       } else {
-        xhr.send(JSON.stringify(data));
+        xhr.send(data instanceof FormData ? data : JSON.stringify(data));
       }
     });
   };

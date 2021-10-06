@@ -2,6 +2,8 @@ import loginApi from '../api/login-api';
 import logoutApi from '../api/logout-api';
 import registrationApi from '../api/registration-api';
 import userApi from '../api/user-api';
+import passwordApi from '../api/password-api';
+import avatarApi from '../api/avatar-api';
 import FormValidator from '../lib/services/form-validator';
 import Router from '../lib/router/router';
 import store from '../store';
@@ -126,6 +128,18 @@ class UserController {
     const { user } = store.getState();
     const updatedUser = await profileApi.put({ ...data, login: user.login });
     store.dispatch({ type: actions.setUser, payload: updatedUser });
+  }
+
+  @validate()
+  @handleError()
+  async updatePassword(data) {
+    await passwordApi.put(data);
+  }
+
+  @validate()
+  @handleError()
+  async updateAvatar(data) {
+    await avatarApi.put(data);
   }
 }
 
