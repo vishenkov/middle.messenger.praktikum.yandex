@@ -13,12 +13,16 @@ import Input from '../../components/input';
 import { Props } from '../../lib/types';
 import isEqual from '../../lib/utils/is-equal';
 import FormValidator from '../../lib/services/form-validator';
+import userController from '../../controllers/user-controller';
+import chatsController from '../../controllers/chats-controller';
+import connect from '../../store/connect';
+import { State } from '../../lib/store/types';
 
 class Chats extends BaseComponent {
   formValidator: FormValidator;
 
-  constructor() {
-    super({}, {
+  constructor(props) {
+    super(props, {
       Container,
       Button,
       Typography,
@@ -30,6 +34,14 @@ class Chats extends BaseComponent {
     });
 
     this.formValidator = new FormValidator();
+  }
+
+  componentWillMount() {
+    if (!this.props.user) {
+      userController.load();
+    }
+
+    chatsController.loadAll();
   }
 
   componentDidUpdate(oldProps: Props, newProps: Props) {
@@ -56,15 +68,26 @@ class Chats extends BaseComponent {
     console.table(Object.entries(formProps));
   }
 
+  handleLogoutClick(e) {
+    e.preventDefault();
+
+    return userController.logout();
+  }
+
   registerHandlers() {
     this.setHandlers({
       handleSubmit: this.handleSubmit.bind(this),
+      handleLogoutClick: this.handleLogoutClick.bind(this),
     });
   }
 
   render() {
-    return getChatsTmpl();
+    console.log('RENDER', this.props.user);
+    return getChatsTmpl(this.props);
   }
 }
 
-export default Chats;
+export default connect((state: State) => console.log('connect::state', state) || ({
+  user: state.user,
+  chats: state.chats,
+}))(Chats);

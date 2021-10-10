@@ -1,24 +1,37 @@
 import * as styles from './chats.css';
 
-export default () => `
+export default (props) => `
   <main class="${styles.root}">
     <div class="${styles.chatsRoot}">
       <div class="${styles.toolbar}">
         <div class="${styles.avatarRoot}">
-          <Avatar s="true" />
+          <Avatar s="true" src="${props.user?.avatar}" />
           <Typography className="${styles.toolbarItem}" variant="body">
-            John Doe
+            ${props.user?.first_name}
+            ${props.user?.second_name}
           </Typography>
         </div>
 
         <Link
           className="${styles.toolbarItem}"
           text="Профиль"
-          href="/profile"
+          href="/settings"
+        />
+
+        <Link
+          className="${styles.toolbarItem}"
+          text="Выйти"
+          onClick={{handleLogoutClick}}
         />
       </div>
 
       <div class="${styles.chatList}">
+        <Link
+          className="${styles.chatListItem}"
+          text="Новый чат"
+          href="/messenger/new"
+        />
+
         <div class="${styles.chatListItem}">
           <div class="${styles.avatarRoot}">
             <Avatar s="true" />

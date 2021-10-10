@@ -6,7 +6,8 @@ import ProfilePage from './pages/profile';
 import RegistrationPage from './pages/registration';
 import PasswordPage from './pages/password';
 import AvatarPage from './pages/avatar';
-// import ChatsPage from './pages/chats';
+import ChatsPage from './pages/chats';
+import NewChatPage from './pages/new-chat';
 // import ErrorPage from './pages/error';
 
 const router = new Router('#root');
@@ -18,5 +19,6 @@ router
   .use('/settings', ProfilePage)
   .use('/settings/password', PasswordPage)
   .use('/settings/avatar', AvatarPage)
-  // .use('/chats', ChatsPage)
+  .use('/messenger', ChatsPage)
+  .use('/messenger/new', NewChatPage)
   .start();

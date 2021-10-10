@@ -10,4 +10,6 @@ export default {
 
   setRequestError: 'SET_REQUEST_ERROR',
   clearRequestError: 'CLEAR_REQUEST_ERROR',
+
+  setChats: 'SET_CHATS',
 };
