@@ -82,12 +82,11 @@ class Chats extends BaseComponent {
   }
 
   render() {
-    console.log('RENDER', this.props.user);
     return getChatsTmpl(this.props);
   }
 }
 
-export default connect((state: State) => console.log('connect::state', state) || ({
+export default connect((state: State) => ({
   user: state.user,
   chats: state.chats,
 }))(Chats);

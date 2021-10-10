@@ -31,24 +31,18 @@ export default (props) => `
           text="Новый чат"
           href="/messenger/new"
         />
-
-        <div class="${styles.chatListItem}">
-          <div class="${styles.avatarRoot}">
+        ${props.chats.map((chat) => (`
+          <div class="${styles.chatListItem}">
+            <div class="${styles.avatarRoot}">
             <Avatar s="true" />
             <Typography className="${styles.toolbarItem}" variant="body">
-              Chat 1
+              ${chat?.title}
             </Typography>
           </div>
         </div>
+        `
+  )).join(' ')}
 
-        <div class="${styles.chatListItem}">
-          <div class="${styles.avatarRoot}">
-            <Avatar s="true" />
-            <Typography className="${styles.toolbarItem}" variant="body">
-              Chat 2
-            </Typography>
-          </div>
-        </div>
       </div>
     </div>
 
