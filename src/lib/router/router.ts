@@ -41,7 +41,7 @@ class Router {
       this._currentRoute.leave();
     }
 
-    route.render(route, pathname);
+    route.render(pathname);
     this._currentRoute = route;
   }
 
