@@ -1,15 +1,14 @@
 import loginApi from '../api/login-api';
 import logoutApi from '../api/logout-api';
 import registrationApi from '../api/registration-api';
+import authApi from '../api/auth-api';
 import userApi from '../api/user-api';
-import passwordApi from '../api/password-api';
 import avatarApi from '../api/avatar-api';
 import FormValidator from '../lib/services/form-validator';
 import Router from '../lib/router/router';
 import store from '../store';
 import actions from '../store/actions';
 import isEmpty from '../lib/utils/is-empty';
-import profileApi from '../api/profile-api';
 
 function getError(key: string) {
   switch (key) {
@@ -117,7 +116,7 @@ class UserController {
 
   @handleError()
   async load() {
-    const user = await userApi.read();
+    const user = await authApi.read();
     store.dispatch({ type: actions.setUser, payload: user });
     store.dispatch({ type: actions.setFormValues, payload: user });
   }
@@ -126,20 +125,27 @@ class UserController {
   @handleError()
   async updateProfile(data) {
     const { user } = store.getState();
-    const updatedUser = await profileApi.put({ ...data, login: user.login });
+    const updatedUser = await userApi.changeProfile({ ...data, login: user.login });
     store.dispatch({ type: actions.setUser, payload: updatedUser });
   }
 
   @validate()
   @handleError()
   async updatePassword(data) {
-    await passwordApi.put(data);
+    await userApi.changePassword(data);
   }
 
   @validate()
   @handleError()
   async updateAvatar(data) {
     await avatarApi.put(data);
+  }
+
+  @validate()
+  @handleError()
+  async search(data) {
+    const results = await userApi.search(data);
+    console.log('results', results);
   }
 }
 
