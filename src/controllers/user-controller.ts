@@ -58,12 +58,18 @@ class UserController {
   @handleError()
   async updatePassword(data) {
     await userApi.changePassword(data);
+
+    const router = new Router();
+    router.go('/settings');
   }
 
   @validate()
   @handleError()
   async updateAvatar(data) {
     await avatarApi.put(data);
+
+    const router = new Router();
+    router.go('/settings');
   }
 
   @validate()
