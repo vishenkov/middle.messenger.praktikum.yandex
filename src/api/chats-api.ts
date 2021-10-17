@@ -15,6 +15,18 @@ class ChatsApi extends BaseAPI {
   loadAll() {
     return this._http.get('/');
   }
+
+  getChatUsers(id) {
+    return this._http.get(`/${id}/users`);
+  }
+
+  addUser(data) {
+    return this._http.put('/users', { data });
+  }
+
+  removeUser(data) {
+    return this._http.delete('/users', { data });
+  }
 }
 
 export default new ChatsApi();

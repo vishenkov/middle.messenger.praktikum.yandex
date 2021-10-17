@@ -12,4 +12,10 @@ export default {
   clearRequestError: 'CLEAR_REQUEST_ERROR',
 
   setChats: 'SET_CHATS',
+
+  setChatUsers: 'SET_CHAT_USERS',
+
+  setToken: 'SET_TOKEN',
+
+  setMessage: 'SET_MESSAGE',
 };

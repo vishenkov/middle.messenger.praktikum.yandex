@@ -5,6 +5,9 @@ import store from '../store';
 import actions from '../store/actions';
 import isEmpty from '../lib/utils/is-empty';
 
+import authApi from '../api/auth-api';
+import tokenApi from '../api/token-api';
+
 function getError(key: string) {
   switch (key) {
     case 'login':
@@ -77,11 +80,10 @@ function validate() {
   };
 }
 
-class UserController {
+class ChatsController {
   @handleError()
   async loadAll() {
     const chats = await chatsApi.loadAll();
-    console.log('chats::loadAll', chats);
     store.dispatch({ type: actions.setChats, payload: chats });
   }
 
@@ -89,9 +91,45 @@ class UserController {
   @handleError()
   async createChat(data) {
     const chat = await chatsApi.create(data);
-    console.log('chat::create', chat);
     (new Router()).go(`/messenger/chats/${chat.id}`);
+  }
+
+  @handleError()
+  async loadChat(id) {
+    const { user } = store.getState();
+    if (!user) {
+      const currentUser = await authApi.read();
+      store.dispatch({ type: actions.setUser, payload: currentUser });
+    }
+
+    const chatUsers = await chatsApi.getChatUsers(id);
+    store.dispatch({ type: actions.setChatUsers, payload: chatUsers });
+
+    const { token } = await tokenApi.create(id);
+    store.dispatch({ type: actions.setToken, payload: { id, token } });
+  }
+
+  @handleError()
+  async getToken(chatId: number) {
+    const token = await tokenApi.create(chatId);
+    store.dispatch({ type: actions.setToken, payload: { id: chatId, token } });
+  }
+
+  @handleError()
+  async addUser(chatId: number, userId: number) {
+    await chatsApi.addUser({
+      users: [userId],
+      chatId,
+    });
+  }
+
+  @handleError()
+  async removeUser(chatId: number, userId: number) {
+    await chatsApi.removeUser({
+      users: [userId],
+      chatId,
+    });
   }
 }
 
-export default new UserController();
+export default new ChatsController();

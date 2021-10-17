@@ -5,6 +5,9 @@ import formErrorsReducer from './reducers/formErrorsReducer';
 import formValuesReducer from './reducers/formValuesReducer';
 import requestErrorReducer from './reducers/requestErrorReducer';
 import chatsReducer from './reducers/chatsReducer';
+import chatUsersReducer from './reducers/chatUsersReducer';
+import tokenReducer from './reducers/tokenReducer';
+import messagesReducer from './reducers/messagesReducer';
 
 const reducers = {
   user: userReducer,
@@ -12,6 +15,9 @@ const reducers = {
   formValues: formValuesReducer,
   requestError: requestErrorReducer,
   chats: chatsReducer,
+  chatUsers: chatUsersReducer,
+  tokens: tokenReducer,
+  messages: messagesReducer,
 };
 
 const initialState = {
@@ -19,7 +25,10 @@ const initialState = {
   formErrors: {},
   formValues: {},
   requestError: null,
+  chatUsers: {},
   chats: [],
+  tokens: {},
+  messages: [],
 };
 
 export default new Store(reducers, initialState);

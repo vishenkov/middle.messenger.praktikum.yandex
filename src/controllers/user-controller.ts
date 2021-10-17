@@ -39,7 +39,7 @@ function handleError() {
     descriptor.value = async (...args: any) => {
       try {
         store.dispatch({ type: actions.clearRequestError });
-        await originalValue.apply(target, args);
+        return await originalValue.apply(target, args);
       } catch (error) {
         console.error(error);
         store.dispatch({ type: actions.setRequestError, payload: error.reason });
@@ -74,10 +74,9 @@ function validate() {
       console.log('data', data);
 
       if (isEmpty(errors)) {
-        originalValue.call(target, data);
-      } else {
-        store.dispatch({ type: actions.setFormErrors, payload: errors });
+        return originalValue.call(target, data);
       }
+      store.dispatch({ type: actions.setFormErrors, payload: errors });
     };
   };
 }
@@ -86,8 +85,7 @@ class UserController {
   @validate()
   @handleError()
   async login(data) {
-    const userId = await loginApi.create(data);
-    console.log('userId', userId);
+    await loginApi.create(data);
   }
 
   @handleError()
@@ -110,8 +108,7 @@ class UserController {
       return;
     }
 
-    const userId = await registrationApi.create({ data });
-    console.log('userId', userId);
+    await registrationApi.create({ data });
   }
 
   @handleError()
@@ -145,7 +142,8 @@ class UserController {
   @handleError()
   async search(data) {
     const results = await userApi.search(data);
-    console.log('results', results);
+
+    return results;
   }
 }
 

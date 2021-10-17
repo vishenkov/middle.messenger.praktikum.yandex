@@ -22,7 +22,7 @@ const Input = ({
     : '';
 
   return `
-    <div>
+    <div class="${fullWidth && styles['input_full-width']}">
       <input
         type={{type}}
         class="${classNames}"
