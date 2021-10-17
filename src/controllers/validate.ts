@@ -51,10 +51,9 @@ export default function validate() {
       console.table(Object.entries(data));
 
       if (isEmpty(errors)) {
-        originalValue.call(target, data);
-      } else {
-        store.dispatch({ type: actions.setFormErrors, payload: errors });
+        return originalValue.call(target, data);
       }
+      store.dispatch({ type: actions.setFormErrors, payload: errors });
     };
   };
 }

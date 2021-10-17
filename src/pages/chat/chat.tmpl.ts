@@ -22,7 +22,7 @@ export default (props) => `
           <Link
             className="${styles.toolbarItem}"
             text="Пользователи"
-            href="/messenger/${props.id}/users/new"
+            href="/messenger/${props.id}/users"
           />
 
           <Link

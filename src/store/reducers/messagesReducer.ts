@@ -2,7 +2,6 @@ import { Action, State } from '../../lib/store/types';
 import actions from '../actions';
 
 export default function messagesReducer(state: State, action: Action) {
-  console.log('action', action);
   switch (action.type) {
     case actions.setMessage:
       return [

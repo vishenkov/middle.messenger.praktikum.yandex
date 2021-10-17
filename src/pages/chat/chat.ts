@@ -71,7 +71,6 @@ class Chat extends BaseComponent {
   }
 
   render() {
-    console.log('chat:props', { ...this.props });
     return getChatTmpl(this.props);
   }
 }

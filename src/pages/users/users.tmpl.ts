@@ -28,7 +28,15 @@ export default (props) => `
             `).join('')} 
           </div>
 
+        <div class="${styles.divider}"></div>
+
         <div class="${styles.formRoot}">
+          <Typography
+            variant="h5"
+            gutterBottom="true"
+          >
+            Добавить пользователя
+          </Typography>
           <form method="POST" onSubmit={{handleSubmit}}>
             <Alert
               error={{requestError}}

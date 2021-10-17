@@ -20,11 +20,11 @@ class ChatsController {
   @handleError()
   async createChat(data) {
     const chat = await chatsApi.create(data);
-    (new Router()).go(`/messenger/chats/${chat.id}`);
+    (new Router()).go(`/messenger/${chat.id}`);
   }
 
   @handleError()
-  async loadChat(id) {
+  async loadChat(id: number) {
     const { user } = store.getState();
     if (!user) {
       const currentUser = await authApi.getUser();
@@ -50,6 +50,9 @@ class ChatsController {
       users: [userId],
       chatId,
     });
+
+    const router = new Router();
+    router.go(`/messenger/${chatId}`);
   }
 
   @handleError()
@@ -58,6 +61,9 @@ class ChatsController {
       users: [userId],
       chatId,
     });
+
+    const router = new Router();
+    router.go(`/messenger/${chatId}`);
   }
 }
 

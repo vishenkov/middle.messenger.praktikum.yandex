@@ -9,7 +9,7 @@ export default function handleError() {
     descriptor.value = async (...args: any) => {
       try {
         store.dispatch({ type: actions.clearRequestError });
-        await originalValue.apply(target, args);
+        return originalValue.apply(target, args);
       } catch (error) {
         if (error.code === 401) {
           (new Router()).go('/login');
