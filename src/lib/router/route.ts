@@ -16,7 +16,7 @@ export default class Route {
 
       let regexpString = String(this._pathname);
       regexpProps.forEach((prop) => {
-        regexpString = regexpString.replace(`:${prop}`, `(?<${prop}>\\w+)`);
+        regexpString = `${regexpString.replace(`:${prop}`, `(?<${prop}>\\w+)`)}$`;
       });
 
       const pathNameRegExp = new RegExp(regexpString, 'gm');
