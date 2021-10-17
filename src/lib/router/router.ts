@@ -11,6 +11,8 @@ class Router {
     this._currentRoute = null;
     this._rootQuery = rootQuery;
 
+    this._defaultPathname = null;
+
     Router.__instance = this;
   }
 
@@ -18,6 +20,12 @@ class Router {
     const route = new Route(pathname, block, { rootQuery: this._rootQuery });
 
     this.routes.push(route);
+
+    return this;
+  }
+
+  default(pathname) {
+    this._defaultPathname = pathname;
 
     return this;
   }
@@ -31,10 +39,10 @@ class Router {
   }
 
   _onRoute(pathname) {
-    const route = this.getRoute(pathname);
+    let route = this.getRoute(pathname);
 
     if (!route) {
-      return;
+      route = this.getRoute(this._defaultPathname);
     }
 
     if (this._currentRoute) {

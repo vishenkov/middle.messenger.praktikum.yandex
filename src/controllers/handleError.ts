@@ -13,8 +13,12 @@ export default function handleError() {
       } catch (error) {
         if (error.code === 401) {
           (new Router()).go('/login');
-        } else {
+        } else if (error.code === 400) {
           store.dispatch({ type: actions.setRequestError, payload: error.reason });
+        } else if (error.code === 404) {
+          (new Router()).go('/404');
+        } else {
+          (new Router()).go('/500');
         }
       }
     };

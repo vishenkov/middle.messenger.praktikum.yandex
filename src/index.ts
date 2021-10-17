@@ -10,7 +10,8 @@ import ChatsPage from './pages/chats';
 import NewChatPage from './pages/new-chat';
 import UsersPage from './pages/users';
 import ChatPage from './pages/chat';
-// import ErrorPage from './pages/error';
+import Page404 from './pages/404';
+import Page500 from './pages/500';
 
 const router = new Router('#root');
 
@@ -25,4 +26,7 @@ router
   .use('/messenger/new', NewChatPage)
   .use('/messenger/:id', ChatPage)
   .use('/messenger/:id/users', UsersPage)
+  .use('/404', Page404)
+  .use('/500', Page500)
+  .default('/404')
   .start();
