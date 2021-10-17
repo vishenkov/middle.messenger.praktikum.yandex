@@ -1,0 +1,25 @@
+.root {
+  width: 620px;
+}
+
+.avatarRoot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: var(--spacing2);
+}
+
+.formRoot {
+  margin-bottom: var(--spacing2);
+}
+
+.input {
+  display: flex;
+  justify-content: center;
+}
+
+.users {
+  margin-top: var(--spacing2);
+  max-height: 300px;
+  overflow: auto;
+}
