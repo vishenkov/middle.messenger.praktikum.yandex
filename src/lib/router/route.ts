@@ -1,12 +1,22 @@
 import isEqual from '../utils/is-equal';
 import render from '../render-dom';
+import BaseComponent from '../base-component';
+import { Type } from '../types';
 
 export default class Route {
-  constructor(pathname, view, props) {
+  private _pathname: string;
+
+  private _pathnameRegExp?: RegExp;
+
+  private _blockClass: Type<BaseComponent>;
+
+  private _props: Record<string, unknown>;
+
+  private _block?: BaseComponent;
+
+  constructor(pathname: string, view: Type<BaseComponent>, props: Record<string, unknown>) {
     this._pathname = pathname;
-    this._pathnameRegExp = null;
     this._blockClass = view;
-    this._block = null;
     this._props = props;
 
     const hasTemplate = this._pathname.match(/:/);
@@ -39,21 +49,21 @@ export default class Route {
     return result;
   }
 
-  navigate(pathname) {
+  navigate(pathname: string) {
     if (this.match(pathname)) {
       this._pathname = pathname;
-      this.render();
+      this.render(pathname);
     }
   }
 
   leave() {
     if (this._block) {
       this._block.getContent().remove();
-      this._block = null;
+      this._block = undefined;
     }
   }
 
-  match(pathname) {
+  match(pathname: string) {
     if (this._pathnameRegExp) {
       return (this._pathnameRegExp).test(pathname);
     }
@@ -61,7 +71,7 @@ export default class Route {
     return isEqual(pathname, this._pathname);
   }
 
-  private getRouteProps(pathname) {
+  private getRouteProps(pathname: string) {
     if (this._pathnameRegExp) {
       const result = (new RegExp(this._pathnameRegExp)).exec(pathname);
 
@@ -75,11 +85,11 @@ export default class Route {
     return {};
   }
 
-  render(pathname) {
+  render(pathname: string) {
     if (!this._block) {
       const props = this.getRouteProps(pathname);
       this._block = new this._blockClass(props);
-      render(this._props.rootQuery, this._block);
+      render(this._props.rootQuery as string, this._block);
     }
   }
 }

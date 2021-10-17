@@ -1,22 +1,37 @@
+import BaseComponent from '../base-component';
+import { Type } from '../types';
 import Route from './route';
 
 class Router {
+  private static instance: Router;
+
+  routes: Array<Route>;
+
+  history: History;
+
+  private _currentRoute?: Route;
+
+  private _rootQuery: string;
+
+  private _defaultPathname: string;
+
   constructor(rootQuery?: string) {
-    if (Router.__instance) {
-      return Router.__instance;
+    if (Router.instance) {
+      return Router.instance;
+    }
+
+    if (!rootQuery) {
+      throw new Error('rootQuery is required!');
     }
 
     this.routes = [];
     this.history = window.history;
-    this._currentRoute = null;
     this._rootQuery = rootQuery;
 
-    this._defaultPathname = null;
-
-    Router.__instance = this;
+    Router.instance = this;
   }
 
-  use(pathname, block) {
+  use(pathname:string, block: Type<BaseComponent>) {
     const route = new Route(pathname, block, { rootQuery: this._rootQuery });
 
     this.routes.push(route);
@@ -24,25 +39,29 @@ class Router {
     return this;
   }
 
-  default(pathname) {
+  default(pathname: string) {
     this._defaultPathname = pathname;
 
     return this;
   }
 
   start() {
-    window.onpopstate = (event) => {
+    window.onpopstate = (event: PopStateEvent) => {
       this._onRoute(event.currentTarget.location.pathname);
     };
 
     this._onRoute(window.location.pathname);
   }
 
-  _onRoute(pathname) {
+  _onRoute(pathname: string) {
     let route = this.getRoute(pathname);
 
     if (!route) {
       route = this.getRoute(this._defaultPathname);
+    }
+
+    if (!route) {
+      throw new Error(`Route ${pathname} is not provided!`);
     }
 
     if (this._currentRoute) {
@@ -53,12 +72,12 @@ class Router {
     this._currentRoute = route;
   }
 
-  go(pathname, state = {}) {
+  go(pathname: string, state = {}) {
     this.history.pushState(state, '', pathname);
     this._onRoute(pathname);
   }
 
-  getRoute(pathname) {
+  getRoute(pathname: string) {
     return this.routes.find((route) => route.match(pathname));
   }
 }
