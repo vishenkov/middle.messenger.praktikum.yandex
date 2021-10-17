@@ -4,24 +4,10 @@ export default (props) => `
   <main class="${styles.root}">
     <div class="${styles.chatsRoot}">
       <div class="${styles.toolbar}">
-        <div class="${styles.avatarRoot}">
-          <Avatar s="true" src="${props.user?.avatar}" />
-          <Typography className="${styles.toolbarItem}" variant="body">
-            ${props.user?.first_name}
-            ${props.user?.second_name}
-          </Typography>
-        </div>
-
-        <Link
-          className="${styles.toolbarItem}"
-          text="Профиль"
+        <ListItem
+          avatar="${props.user?.avatar}"
+          title="${props.user?.first_name} ${props.user?.second_name}"
           href="/settings"
-        />
-
-        <Link
-          className="${styles.toolbarItem}"
-          text="Выйти"
-          onClick={{handleLogoutClick}}
         />
       </div>
 
@@ -32,57 +18,41 @@ export default (props) => `
           href="/messenger/new"
         />
         ${props.chats.map((chat) => (`
-          <div class="${styles.chatListItem}">
-            <div class="${styles.avatarRoot}">
-            <Avatar s="true" />
-            <Typography className="${styles.toolbarItem}" variant="body">
-              ${chat?.title}
-            </Typography>
-          </div>
-        </div>
-        `
-  )).join(' ')}
+          <ListItem
+            title="${chat.title}"
+            href="/messenger/${chat.id}"
+          />
+        `)).join(' ')}
 
       </div>
     </div>
 
     <div class="${styles.chatContainer}">
-      <div class="${styles.toolbar}">
+      <div class="${styles.toolbar} ${styles.toolbar__right}">
+        <Link
+          className="${styles.toolbarItem}"
+          text="Выйти"
+          onClick={{handleLogoutClick}}
+        />
       </div>
 
       <div class="${styles.chatRoom}">
         <div class="${styles.chatRoomDummy}">
           <Paper centered="true">
             <Typography
-              variant="h4"
+              variant="h5"
               gutterBottom="true"
             >
-              Chat dummy
+              Выберите чат слева или создайте новый!
             </Typography>
 
             <Link
-              href="/"
-              text="Назад"
+              text="Новый чат"
+              href="/messenger/new"
             />
           </Paper>
         </div>
       </div>
-
-      <form method="POST" onSubmit={{handleSubmit}}>
-        <div class="${styles.messageRoot}">
-          <Input
-            fullWidth="true"
-            name="message"
-            placeholder="Сообщение"
-            validate="message"
-          />
-
-          <Button
-            type="submit"
-            label="Отправить"
-          />
-        </div>
-      </form>
     </div>
   </main>
 `;

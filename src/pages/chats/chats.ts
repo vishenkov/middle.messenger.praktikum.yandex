@@ -9,6 +9,7 @@ import Native from '../../components/native';
 import Avatar from '../../components/avatar';
 import Link from '../../components/link';
 import Input from '../../components/input';
+import ListItem from '../../components/list-item';
 
 import { Props } from '../../lib/types';
 import isEqual from '../../lib/utils/is-equal';
@@ -31,6 +32,7 @@ class Chats extends BaseComponent {
       Avatar,
       Link,
       Input,
+      ListItem,
     });
 
     this.formValidator = new FormValidator();
