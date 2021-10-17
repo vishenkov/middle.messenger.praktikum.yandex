@@ -1,6 +1,3 @@
-import loginApi from '../api/login-api';
-import logoutApi from '../api/logout-api';
-import registrationApi from '../api/registration-api';
 import authApi from '../api/auth-api';
 import userApi from '../api/user-api';
 import avatarApi from '../api/avatar-api';
@@ -88,13 +85,13 @@ class UserController {
   @validate()
   @handleError()
   async login(data) {
-    await loginApi.create(data);
+    await authApi.login(data);
     (new Router()).go('/');
   }
 
   @handleError()
   async logout() {
-    logoutApi.create();
+    authApi.logout();
     (new Router()).go('/login');
   }
 
@@ -112,12 +109,12 @@ class UserController {
       return;
     }
 
-    await registrationApi.create({ data });
+    await authApi.registration({ data });
   }
 
   @handleError()
   async load() {
-    const user = await authApi.read();
+    const user = await authApi.getUser();
     store.dispatch({ type: actions.setUser, payload: user });
     store.dispatch({ type: actions.setFormValues, payload: user });
   }

@@ -101,7 +101,7 @@ class ChatsController {
   async loadChat(id) {
     const { user } = store.getState();
     if (!user) {
-      const currentUser = await authApi.read();
+      const currentUser = await authApi.getUser();
       store.dispatch({ type: actions.setUser, payload: currentUser });
     }
 

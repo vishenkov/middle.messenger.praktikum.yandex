@@ -5,11 +5,23 @@ class AuthApi extends BaseAPI {
   constructor() {
     super();
 
-    this._http = new HTTPTransport('/auth/user');
+    this._http = new HTTPTransport('/auth');
   }
 
-  read() {
-    return this._http.get('/');
+  getUser() {
+    return this._http.get('/user');
+  }
+
+  login(data) {
+    return this._http.post('/signin', { data });
+  }
+
+  logout() {
+    return this._http.post('/logout');
+  }
+
+  registration(data) {
+    return this._http.post('/signup', data);
   }
 }
 
