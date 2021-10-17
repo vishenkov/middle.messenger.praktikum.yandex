@@ -11,9 +11,6 @@ import Link from '../../components/link';
 import Input from '../../components/input';
 import ListItem from '../../components/list-item';
 import Messages from '../../components/messages';
-
-import { Props } from '../../lib/types';
-import isEqual from '../../lib/utils/is-equal';
 import userController from '../../controllers/user-controller';
 import chatsController from '../../controllers/chats-controller';
 import connect from '../../store/connect';
@@ -41,10 +38,6 @@ class Chat extends BaseComponent {
       .then(() => {
         messagesController.init(this.props.id);
       });
-  }
-
-  componentDidUpdate(oldProps: Props, newProps: Props) {
-    return !isEqual(oldProps, newProps);
   }
 
   handleSubmit(e: Event) {

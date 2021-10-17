@@ -11,8 +11,6 @@ import Link from '../../components/link';
 import Input from '../../components/input';
 import ListItem from '../../components/list-item';
 
-import { Props } from '../../lib/types';
-import isEqual from '../../lib/utils/is-equal';
 import FormValidator from '../../lib/services/form-validator';
 import userController from '../../controllers/user-controller';
 import chatsController from '../../controllers/chats-controller';
@@ -44,10 +42,6 @@ class Chats extends BaseComponent {
     }
 
     chatsController.loadAll();
-  }
-
-  componentDidUpdate(oldProps: Props, newProps: Props) {
-    return !isEqual(oldProps, newProps);
   }
 
   handleSubmit(e: Event) {

@@ -3,7 +3,6 @@ import getInputTmpl from './input.tmpl';
 
 import Native from '../native';
 import Typography from '../typography';
-import isEqual from '../../lib/utils/is-equal';
 
 import { Props } from '../../lib/types';
 
@@ -23,10 +22,6 @@ class Input extends BaseComponent {
       Native,
       Typography,
     });
-  }
-
-  componentDidUpdate(oldProps: Props, newProps: Props) {
-    return !isEqual(oldProps, newProps);
   }
 
   render() {

@@ -9,7 +9,6 @@ import Typography from '../../components/typography';
 import Paper from '../../components/paper';
 import Native from '../../components/native';
 import Alert from '../../components/alert';
-import isEqual from '../../lib/utils/is-equal';
 
 import { Props } from '../../lib/types';
 import userController from '../../controllers/user-controller';
@@ -28,10 +27,6 @@ class Login extends BaseComponent {
       Native,
       Alert,
     });
-  }
-
-  componentDidUpdate(oldProps: Props, newProps: Props) {
-    return !isEqual(oldProps, newProps);
   }
 
   handleSubmit(e: Event) {

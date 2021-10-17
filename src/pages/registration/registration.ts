@@ -10,9 +10,7 @@ import Paper from '../../components/paper';
 import Native from '../../components/native';
 import Alert from '../../components/alert';
 
-import { Props } from '../../lib/types';
 import { State } from '../../lib/store/types';
-import isEqual from '../../lib/utils/is-equal';
 import userController from '../../controllers/user-controller';
 import connect from '../../store/connect';
 
@@ -28,10 +26,6 @@ class Registration extends BaseComponent {
       Native,
       Alert,
     });
-  }
-
-  componentDidUpdate(oldProps: Props, newProps: Props) {
-    return !isEqual(oldProps, newProps);
   }
 
   handleSubmit(e: Event) {

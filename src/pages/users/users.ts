@@ -12,9 +12,7 @@ import Native from '../../components/native';
 import Alert from '../../components/Alert';
 import ListItem from '../../components/list-item';
 
-import { Props } from '../../lib/types';
 import { State } from '../../lib/store/types';
-import isEqual from '../../lib/utils/is-equal';
 import connect from '../../store/connect';
 import userController from '../../controllers/user-controller';
 import chatsController from '../../controllers/chats-controller';
@@ -40,10 +38,6 @@ class NewUser extends BaseComponent {
 
   componentWillMount() {
     chatsController.loadChat(this.props.id);
-  }
-
-  componentDidUpdate(oldProps: Props, newProps: Props) {
-    return !isEqual(oldProps, newProps);
   }
 
   async handleSubmit(e: Event) {

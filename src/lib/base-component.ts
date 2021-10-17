@@ -1,6 +1,8 @@
 import EventBus from './services/event-bus';
 import Templator from './templator';
 
+import isEqual from './utils/is-equal';
+
 import {
   Props, Component, Handler, Block, DomNode,
 } from './types';
@@ -91,8 +93,8 @@ abstract class BaseComponent implements Block {
 
   componentWillMount(): void {}
 
-  componentDidUpdate(oldProps: Props, newProps: Props): boolean {
-    return oldProps !== newProps;
+  componentDidUpdate(oldProps: Props, newProps: Props) {
+    return !isEqual(oldProps, newProps);
   }
 
   setProps = (nextProps: Props) => {

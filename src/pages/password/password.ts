@@ -11,9 +11,7 @@ import Paper from '../../components/paper';
 import Native from '../../components/native';
 import Alert from '../../components/Alert';
 
-import { Props } from '../../lib/types';
 import { State } from '../../lib/store/types';
-import isEqual from '../../lib/utils/is-equal';
 import connect from '../../store/connect';
 import userController from '../../controllers/user-controller';
 
@@ -36,10 +34,6 @@ class Password extends BaseComponent {
     if (!this.props.user) {
       userController.load();
     }
-  }
-
-  componentDidUpdate(oldProps: Props, newProps: Props) {
-    return !isEqual(oldProps, newProps);
   }
 
   handleSubmit(e: Event) {
