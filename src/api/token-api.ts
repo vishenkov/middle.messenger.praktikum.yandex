@@ -8,7 +8,7 @@ class TokenApi extends BaseAPI {
     this._http = new HTTPTransport('/chats/token');
   }
 
-  create(id) {
+  create(id: number) {
     return this._http.post(`/${id}`);
   }
 }

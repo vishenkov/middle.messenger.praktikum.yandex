@@ -20,6 +20,8 @@ export default function handleError() {
         } else {
           (new Router()).go('/500');
         }
+
+        return error;
       }
     };
   };

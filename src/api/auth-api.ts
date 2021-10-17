@@ -1,5 +1,8 @@
 import HTTPTransport from '../lib/http-transport';
+import { Indexed } from '../lib/types';
 import BaseAPI from './base-api';
+
+import { Registration, Login } from './types';
 
 class AuthApi extends BaseAPI {
   constructor() {
@@ -12,7 +15,7 @@ class AuthApi extends BaseAPI {
     return this._http.get('/user');
   }
 
-  login(data) {
+  login(data: Login) {
     return this._http.post('/signin', { data });
   }
 
@@ -20,7 +23,7 @@ class AuthApi extends BaseAPI {
     return this._http.post('/logout');
   }
 
-  registration(data) {
+  registration(data: Indexed) {
     return this._http.post('/signup', data);
   }
 }

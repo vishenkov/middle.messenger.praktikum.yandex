@@ -8,6 +8,8 @@ import tokenApi from '../api/token-api';
 
 import handleError from './handleError';
 import validate from './validate';
+import { Chat, Token } from '../api/types';
+import { Indexed } from '../lib/types';
 
 class ChatsController {
   @handleError()
@@ -18,8 +20,8 @@ class ChatsController {
 
   @validate()
   @handleError()
-  async createChat(data) {
-    const chat = await chatsApi.create(data);
+  async createChat(data: Indexed) {
+    const chat = await chatsApi.create(data) as Chat;
     (new Router()).go(`/messenger/${chat.id}`);
   }
 
@@ -34,7 +36,7 @@ class ChatsController {
     const chatUsers = await chatsApi.getChatUsers(id);
     store.dispatch({ type: actions.setChatUsers, payload: chatUsers });
 
-    const { token } = await tokenApi.create(id);
+    const { token } = await tokenApi.create(id) as Token;
     store.dispatch({ type: actions.setToken, payload: { id, token } });
   }
 

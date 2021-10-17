@@ -1,17 +1,18 @@
 import authApi from '../api/auth-api';
 import userApi from '../api/user-api';
-import avatarApi from '../api/avatar-api';
 import Router from '../lib/router/router';
 import store from '../store';
 import actions from '../store/actions';
 
 import validate from './validate';
 import handleError from './handleError';
+import { Login, Registration } from '../api/types';
+import { Indexed } from '../lib/types';
 
 class UserController {
   @validate()
   @handleError()
-  async login(data) {
+  async login(data: Login) {
     await authApi.login(data);
     (new Router()).go('/');
   }
@@ -24,7 +25,7 @@ class UserController {
 
   @validate()
   @handleError()
-  async registration(data) {
+  async registration(data: Registration) {
     if (data.password !== data.repeat_password) {
       store.dispatch({
         type: actions.setFormErrors,
@@ -48,7 +49,7 @@ class UserController {
 
   @validate()
   @handleError()
-  async updateProfile(data) {
+  async updateProfile(data: Indexed) {
     const { user } = store.getState();
     const updatedUser = await userApi.changeProfile({ ...data, login: user.login });
     store.dispatch({ type: actions.setUser, payload: updatedUser });
@@ -56,7 +57,7 @@ class UserController {
 
   @validate()
   @handleError()
-  async updatePassword(data) {
+  async updatePassword(data: Indexed) {
     await userApi.changePassword(data);
 
     const router = new Router();
@@ -65,8 +66,8 @@ class UserController {
 
   @validate()
   @handleError()
-  async updateAvatar(data) {
-    await avatarApi.put(data);
+  async updateAvatar(data: Indexed) {
+    await userApi.changeAvatar(data);
 
     const router = new Router();
     router.go('/settings');
@@ -74,7 +75,7 @@ class UserController {
 
   @validate()
   @handleError()
-  async search(data) {
+  async search(data: Indexed) {
     const results = await userApi.search(data);
 
     return results;

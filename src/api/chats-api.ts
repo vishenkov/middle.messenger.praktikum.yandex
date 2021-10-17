@@ -1,6 +1,8 @@
 import HTTPTransport from '../lib/http-transport';
 import BaseAPI from './base-api';
 
+import { Indexed } from '../lib/types';
+
 class ChatsApi extends BaseAPI {
   constructor() {
     super();
@@ -8,7 +10,7 @@ class ChatsApi extends BaseAPI {
     this._http = new HTTPTransport('/chats');
   }
 
-  create(data) {
+  create(data: Indexed) {
     return this._http.post('/', { data });
   }
 
@@ -16,15 +18,15 @@ class ChatsApi extends BaseAPI {
     return this._http.get('/');
   }
 
-  getChatUsers(id) {
+  getChatUsers(id: number) {
     return this._http.get(`/${id}/users`);
   }
 
-  addUser(data) {
+  addUser(data: Indexed) {
     return this._http.put('/users', { data });
   }
 
-  removeUser(data) {
+  removeUser(data: Indexed) {
     return this._http.delete('/users', { data });
   }
 }

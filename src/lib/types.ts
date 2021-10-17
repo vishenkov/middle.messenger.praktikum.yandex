@@ -24,3 +24,5 @@ export type Event = {
 export interface DomNode extends ChildNode {
   replaceWith(...nodes: (DomNode | Node | string)[]): void;
 }
+
+export type Indexed = Record<string, unknown>;

@@ -1,6 +1,8 @@
 import HTTPTransport from '../lib/http-transport';
 import BaseAPI from './base-api';
 
+import { Indexed } from '../lib/types';
+
 class UserApi extends BaseAPI {
   constructor() {
     super();
@@ -12,16 +14,23 @@ class UserApi extends BaseAPI {
     return this._http.get('/');
   }
 
-  changePassword(data) {
+  changePassword(data: Indexed) {
     return this._http.put('/password', { data });
   }
 
-  changeProfile(data) {
+  changeProfile(data: Indexed) {
     return this._http.put('/profile', { data });
   }
 
-  search(data) {
+  search(data: Indexed) {
     return this._http.post('/search', { data });
+  }
+
+  changeAvatar(data: Indexed) {
+    return this._http.put('/profile/avatar', {
+      data,
+      headers: {},
+    });
   }
 }
 
