@@ -17,7 +17,7 @@ const router = new Router('#root');
 router
   .use('/', ChatsPage)
   .use('/login', LoginPage)
-  .use('/registration', RegistrationPage)
+  .use('/sign-up', RegistrationPage)
   .use('/settings', ProfilePage)
   .use('/settings/password', PasswordPage)
   .use('/settings/avatar', AvatarPage)
