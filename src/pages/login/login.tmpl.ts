@@ -47,7 +47,7 @@ export default () => `
         <Link
          fullWidth="true"
          text="Создать аккаунт"
-         href="/registration"
+         href="/sign-up"
        />
       </Paper>
     </div>

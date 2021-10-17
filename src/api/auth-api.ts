@@ -2,7 +2,7 @@ import HTTPTransport from '../lib/http-transport';
 import { Indexed } from '../lib/types';
 import BaseAPI from './base-api';
 
-import { Registration, Login } from './types';
+import { Login } from './types';
 
 class AuthApi extends BaseAPI {
   constructor() {

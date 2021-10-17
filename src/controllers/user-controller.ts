@@ -38,6 +38,7 @@ class UserController {
     }
 
     await authApi.registration({ data });
+    (new Router()).go('/');
   }
 
   @handleError()
