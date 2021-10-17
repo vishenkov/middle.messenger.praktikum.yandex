@@ -41,8 +41,11 @@ function handleError() {
         store.dispatch({ type: actions.clearRequestError });
         return await originalValue.apply(target, args);
       } catch (error) {
-        console.error(error);
-        store.dispatch({ type: actions.setRequestError, payload: error.reason });
+        if (error.code === 401) {
+          (new Router()).go('/login');
+        } else {
+          store.dispatch({ type: actions.setRequestError, payload: error.reason });
+        }
       }
     };
   };
@@ -86,6 +89,7 @@ class UserController {
   @handleError()
   async login(data) {
     await loginApi.create(data);
+    (new Router()).go('/');
   }
 
   @handleError()

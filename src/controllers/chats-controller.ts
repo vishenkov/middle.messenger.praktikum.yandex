@@ -39,8 +39,11 @@ function handleError() {
         store.dispatch({ type: actions.clearRequestError });
         await originalValue.apply(target, args);
       } catch (error) {
-        console.error(error);
-        store.dispatch({ type: actions.setRequestError, payload: error.reason });
+        if (error.code === 401) {
+          (new Router()).go('/login');
+        } else {
+          store.dispatch({ type: actions.setRequestError, payload: error.reason });
+        }
       }
     };
   };
