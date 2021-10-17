@@ -15,7 +15,7 @@ import ChatPage from './pages/chat';
 const router = new Router('#root');
 
 router
-  .use('/', LoginPage)
+  .use('/', ChatsPage)
   .use('/login', LoginPage)
   .use('/registration', RegistrationPage)
   .use('/settings', ProfilePage)
