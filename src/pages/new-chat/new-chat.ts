@@ -9,7 +9,7 @@ import Input from '../../components/input';
 import Typography from '../../components/typography';
 import Paper from '../../components/paper';
 import Native from '../../components/native';
-import Alert from '../../components/Alert';
+import Alert from '../../components/alert';
 
 import { State } from '../../lib/store/types';
 import connect from '../../store/connect';
