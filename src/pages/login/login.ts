@@ -14,6 +14,7 @@ import { Props } from '../../lib/types';
 import userController from '../../controllers/user-controller';
 import connect from '../../store/connect';
 import { State } from '../../lib/store/types';
+import { Login as LoginProps } from '../../api/types';
 
 class Login extends BaseComponent {
   constructor(props: Props) {
@@ -35,7 +36,7 @@ class Login extends BaseComponent {
     const formData = new FormData(e.target as HTMLFormElement);
     const formProps = Object.fromEntries(formData);
 
-    userController.login(formProps);
+    userController.login(formProps as LoginProps);
   }
 
   registerHandlers() {
