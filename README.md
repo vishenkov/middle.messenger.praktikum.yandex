@@ -28,3 +28,8 @@ npm run lint
 npm run build
 npm run start
 ```
+
+Запуск тестов
+```bash
+npm run test
+```
