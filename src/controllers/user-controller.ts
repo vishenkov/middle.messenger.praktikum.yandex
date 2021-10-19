@@ -67,7 +67,8 @@ class UserController {
   @validate()
   @handleError()
   async updateAvatar(data: Indexed) {
-    await userApi.changeAvatar(data);
+    const updatedUser = await userApi.changeAvatar(data);
+    store.dispatch({ type: actions.setUser, payload: updatedUser });
 
     const router = new Router();
     router.go('/settings');
