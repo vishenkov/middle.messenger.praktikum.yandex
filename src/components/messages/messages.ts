@@ -33,7 +33,7 @@ class Messages extends BaseComponent {
   }
 
   render() {
-    console.log('messages', messages);
+    const { messages } = this.props;
 
     return (`
       <div class="${styles.root}">
