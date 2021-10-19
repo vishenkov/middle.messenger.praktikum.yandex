@@ -11,7 +11,7 @@ export default () => `
             Регистрация
           </Typography>
 
-          <form method="POST" onSubmit={{handleSubmit}}>
+          <form onSubmit={{handleSubmit}}>
             <Alert
               error={{requestError}}
             />

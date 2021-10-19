@@ -11,7 +11,7 @@ export default () => `
           Сменить пароль
         </Typography>
         <div class="${styles.inputsRoot}">
-          <form method="POST" onSubmit={{handleSubmit}}>
+          <form onSubmit={{handleSubmit}}>
             <Alert
               error={{requestError}}
             />

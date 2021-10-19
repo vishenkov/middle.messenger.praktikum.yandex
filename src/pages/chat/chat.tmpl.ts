@@ -39,7 +39,7 @@ export default (props) => `
         />
       </div>
 
-      <form method="POST" onSubmit={{handleSubmit}}>
+      <form onSubmit={{handleSubmit}}>
         <div class="${styles.messageRoot}">
           <Input
             fullWidth="true"

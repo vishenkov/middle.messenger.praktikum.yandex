@@ -37,7 +37,7 @@ export default (props) => `
           >
             Добавить пользователя
           </Typography>
-          <form method="POST" onSubmit={{handleSubmit}}>
+          <form onSubmit={{handleSubmit}}>
             <Alert
               error={{requestError}}
             />
