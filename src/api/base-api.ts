@@ -3,6 +3,10 @@ import HTTPTransport from '../lib/http-transport';
 abstract class BaseAPI {
   _http: HTTPTransport;
 
+  constructor(endpoint: string) {
+    this._http = new HTTPTransport(endpoint);
+  }
+
   create?(data: unknown): Promise<unknown>;
 
   read?(id?: string): Promise<unknown>;

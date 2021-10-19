@@ -1,11 +1,8 @@
-import HTTPTransport from '../lib/http-transport';
 import BaseAPI from './base-api';
 
 class TokenApi extends BaseAPI {
   constructor() {
-    super();
-
-    this._http = new HTTPTransport('/chats/token');
+    super('/chats/token');
   }
 
   create(id: number) {

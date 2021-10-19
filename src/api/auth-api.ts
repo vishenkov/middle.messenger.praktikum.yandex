@@ -1,4 +1,3 @@
-import HTTPTransport from '../lib/http-transport';
 import { Indexed } from '../lib/types';
 import BaseAPI from './base-api';
 
@@ -6,9 +5,7 @@ import { Login } from './types';
 
 class AuthApi extends BaseAPI {
   constructor() {
-    super();
-
-    this._http = new HTTPTransport('/auth');
+    super('/auth');
   }
 
   getUser() {

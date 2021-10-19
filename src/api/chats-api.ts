@@ -1,13 +1,10 @@
-import HTTPTransport from '../lib/http-transport';
 import BaseAPI from './base-api';
 
 import { Indexed } from '../lib/types';
 
 class ChatsApi extends BaseAPI {
   constructor() {
-    super();
-
-    this._http = new HTTPTransport('/chats');
+    super('/chats');
   }
 
   create(data: Indexed) {
