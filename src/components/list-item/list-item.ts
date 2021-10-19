@@ -19,8 +19,6 @@ class ListItem extends BaseComponent {
   handleClick(e: Event) {
     e.preventDefault();
 
-    console.log('this.props::clicl', this.props);
-
     if (this.props.onClick) {
       this.props.onClick({ ...this.props });
       return;

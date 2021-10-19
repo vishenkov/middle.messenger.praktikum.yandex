@@ -47,7 +47,6 @@ class ChatSocket {
 
     socket.on(EVENTS.message, (rawData) => {
       const data = JSON.parse(rawData as string);
-      console.log('data', data);
       if (isArray(data)) {
         data.forEach(this.processMessage);
       } else {
@@ -63,13 +62,11 @@ class ChatSocket {
   processMessage(message) {
     switch (message.type) {
       case TYPES.message: {
-        console.log('MESSAGE', message);
         store.dispatch({ type: actions.setMessage, payload: message });
         break;
       }
 
       case TYPES.getOld: {
-        console.log('OLD MESSAGES', message);
         break;
       }
 

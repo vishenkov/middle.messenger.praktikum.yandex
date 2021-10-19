@@ -42,7 +42,6 @@ class Password extends BaseComponent {
     const formData = new FormData(e.target as HTMLFormElement);
     const formProps = Object.fromEntries(formData);
 
-    console.table(Object.entries(formProps));
     userController.updatePassword(formProps);
   }
 

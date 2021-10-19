@@ -18,7 +18,6 @@ class Socket extends EventBus {
     this.socket = socket;
 
     socket.addEventListener('open', () => {
-      console.log('Соединение установлено');
       this.emit(EVENTS.open);
     });
 

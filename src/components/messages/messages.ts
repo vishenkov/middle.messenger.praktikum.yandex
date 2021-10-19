@@ -33,7 +33,6 @@ class Messages extends BaseComponent {
   }
 
   render() {
-    const { messages } = this.props;
     console.log('messages', messages);
 
     return (`

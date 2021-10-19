@@ -44,26 +44,6 @@ class Chats extends BaseComponent {
     chatsController.loadAll();
   }
 
-  handleSubmit(e: Event) {
-    e.preventDefault();
-
-    const formData = new FormData(e.target as HTMLFormElement);
-    const formProps = Object.fromEntries(formData);
-
-    const hasError = Object.entries(formProps).some(([key, value]) => {
-      if (this.formValidator.supports(key)) {
-        const isValid = this.formValidator.prop(key).validate(value as string);
-        return !isValid;
-      }
-
-      return false;
-    });
-
-    console.warn('Has errors:', hasError);
-
-    console.table(Object.entries(formProps));
-  }
-
   handleLogoutClick(e) {
     e.preventDefault();
 
@@ -72,7 +52,6 @@ class Chats extends BaseComponent {
 
   registerHandlers() {
     this.setHandlers({
-      handleSubmit: this.handleSubmit.bind(this),
       handleLogoutClick: this.handleLogoutClick.bind(this),
     });
   }
