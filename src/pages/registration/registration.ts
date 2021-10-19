@@ -13,6 +13,8 @@ import Alert from '../../components/alert';
 import { State } from '../../lib/store/types';
 import userController from '../../controllers/user-controller';
 import connect from '../../store/connect';
+import store from '../../store';
+import actions from '../../store/actions';
 
 class Registration extends BaseComponent {
   constructor() {
@@ -33,6 +35,17 @@ class Registration extends BaseComponent {
 
     const formData = new FormData(e.target as HTMLFormElement);
     const formProps = Object.fromEntries(formData);
+
+    if (formProps.password !== formProps.repeat_password) {
+      store.dispatch({
+        type: actions.setFormErrors,
+        payload: {
+          password: '',
+          repeat_password: 'Пароль не совпадает',
+        },
+      });
+      return;
+    }
 
     userController.registration(formProps);
   }
