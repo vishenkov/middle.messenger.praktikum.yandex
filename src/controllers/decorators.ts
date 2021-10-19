@@ -1,7 +1,36 @@
 import store from '../store';
 import actions from '../store/actions';
+import Router from '../lib/router/router';
+
 import isEmpty from '../lib/utils/is-empty';
 import FormValidator from '../lib/services/form-validator';
+
+export function handleError() {
+  return function decorator(target: any, propertyName: string, descriptor: PropertyDescriptor) {
+    const originalValue = descriptor.value;
+    // eslint-disable-next-line no-param-reassign
+    descriptor.value = async (...args: any) => {
+      try {
+        store.dispatch({ type: actions.clearRequestError });
+        const result = await originalValue.apply(target, args);
+        return result;
+      } catch (error) {
+        if (error.code === 401) {
+          store.dispatch({ type: actions.setRequestError, payload: error.reason });
+          (new Router()).go('/login');
+        } else if (error.code === 400) {
+          store.dispatch({ type: actions.setRequestError, payload: error.reason });
+        } else if (error.code === 404) {
+          (new Router()).go('/404');
+        } else {
+          (new Router()).go('/500');
+        }
+
+        return error;
+      }
+    };
+  };
+}
 
 function getError(key: string) {
   switch (key) {
@@ -27,7 +56,7 @@ function getError(key: string) {
   }
 }
 
-export default function validate() {
+export function validate() {
   return function decorator(target: any, propertyName: string, descriptor: PropertyDescriptor) {
     const originalValue = descriptor.value;
     // eslint-disable-next-line no-param-reassign
@@ -46,13 +75,10 @@ export default function validate() {
         return acc;
       }, {});
 
-      console.warn('errors:', errors);
-
-      console.table(Object.entries(data));
-
       if (isEmpty(errors)) {
         return originalValue.call(target, data);
       }
+
       store.dispatch({ type: actions.setFormErrors, payload: errors });
     };
   };

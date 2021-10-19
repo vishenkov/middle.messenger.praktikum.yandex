@@ -4,8 +4,7 @@ import Router from '../lib/router/router';
 import store from '../store';
 import actions from '../store/actions';
 
-import validate from './validate';
-import handleError from './handleError';
+import { validate, handleError } from './decorators';
 import { Login, Registration } from '../api/types';
 import { Indexed } from '../lib/types';
 

@@ -6,8 +6,7 @@ import actions from '../store/actions';
 import authApi from '../api/auth-api';
 import tokenApi from '../api/token-api';
 
-import handleError from './handleError';
-import validate from './validate';
+import { validate, handleError } from './decorators';
 import { Chat, Token } from '../api/types';
 import { Indexed } from '../lib/types';
 
