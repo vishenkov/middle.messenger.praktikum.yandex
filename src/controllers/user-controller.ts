@@ -25,17 +25,6 @@ class UserController {
   @validate()
   @handleError()
   async registration(data: Registration) {
-    if (data.password !== data.repeat_password) {
-      store.dispatch({
-        type: actions.setFormErrors,
-        payload: {
-          password: '',
-          repeat_password: 'Пароль не совпадает',
-        },
-      });
-      return;
-    }
-
     await authApi.registration({ data });
     (new Router()).go('/');
   }
@@ -68,7 +57,9 @@ class UserController {
   @handleError()
   async updateAvatar(data: Indexed) {
     const updatedUser = await userApi.changeAvatar(data);
+
     store.dispatch({ type: actions.setUser, payload: updatedUser });
+    store.dispatch({ type: actions.setFormValues, payload: updatedUser });
 
     const router = new Router();
     router.go('/settings');
