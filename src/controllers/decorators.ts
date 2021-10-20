@@ -18,15 +18,19 @@ export function handleError() {
         if (error.code === 401) {
           store.dispatch({ type: actions.setRequestError, payload: error.reason });
           (new Router()).go('/login');
-        } else if (error.code === 400) {
-          store.dispatch({ type: actions.setRequestError, payload: error.reason });
-        } else if (error.code === 404) {
+          return;
+        }
+        if (error.code === 404) {
           (new Router()).go('/404');
-        } else {
-          (new Router()).go('/500');
+          return;
         }
 
-        return error;
+        if (error.code >= 400) {
+          store.dispatch({ type: actions.setRequestError, payload: error.reason });
+          return;
+        }
+
+        (new Router()).go('/500');
       }
     };
   };
