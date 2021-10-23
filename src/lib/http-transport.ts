@@ -27,36 +27,52 @@ function queryStringify(data: TProps) {
   const result = `?${dataArray.join('&')}`;
   return result;
 }
-
 class HTTPTransport {
+  static apiUrl = 'https://ya-praktikum.tech/api/v2';
+
+  _baseApiUrl: string;
+
+  constructor(baseApiUrl: string) {
+    this._baseApiUrl = `${HTTPTransport.apiUrl}${baseApiUrl}`;
+  }
+
   get = (url: string, options: Options = {}) => {
+    const baseURl = `${this._baseApiUrl}${url}`;
     const resultUrl = options.data
-      ? `${url}${queryStringify(options.data)}`
-      : url;
+      ? `${baseURl}${queryStringify(options.data)}`
+      : baseURl;
 
     return this.request(resultUrl,
       { ...options, method: METHODS.GET, data: null },
       options.timeout);
   };
 
-  post = (url: string, options: Options = {}) => this.request(url,
+  post = (url: string, options: Options = {}) => this.request(`${this._baseApiUrl}${url}`,
     { ...options, method: METHODS.POST },
     options.timeout);
 
-  put = (url: string, options: Options = {}) => this.request(url,
+  put = (url: string, options: Options = {}) => this.request(`${this._baseApiUrl}${url}`,
     { ...options, method: METHODS.PUT },
     options.timeout);
 
-  delete = (url: string, options: Options = {}) => this.request(url,
+  delete = (url: string, options: Options = {}) => this.request(`${this._baseApiUrl}${url}`,
     { ...options, method: METHODS.DELETE },
     options.timeout);
 
-  request = (url: string, options: RequestOption, timeout = 5000) => {
-    const { method, data, headers } = options;
+  private request = (url: string, options: RequestOption, timeout = 5000) => {
+    const {
+      method, data, headers = {
+        'Content-Type': 'application/json',
+      },
+    } = options;
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open(method, url);
+
+      xhr.withCredentials = true;
+      xhr.responseType = 'json';
+
       if (headers) {
         Object.keys(headers).forEach((key) => {
           const value = headers[key];
@@ -67,20 +83,26 @@ class HTTPTransport {
         });
       }
 
-      xhr.onload = () => {
-        resolve(xhr);
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status < 400) {
+            resolve(xhr.response);
+          } else {
+            reject({ code: xhr.status, ...xhr.response });
+          }
+        }
       };
 
-      xhr.onabort = reject;
-      xhr.onerror = reject;
-      xhr.ontimeout = reject;
+      xhr.onabort = () => reject({ reason: 'abort' });
+      xhr.onerror = () => reject({ reason: 'error' });
+      xhr.ontimeout = () => reject({ reason: 'timeout' });
 
       xhr.timeout = timeout;
 
       if (method === METHODS.GET || !data) {
         xhr.send();
       } else {
-        xhr.send(data as unknown as XMLHttpRequestBodyInit);
+        xhr.send(data instanceof FormData ? data : JSON.stringify(data));
       }
     });
   };

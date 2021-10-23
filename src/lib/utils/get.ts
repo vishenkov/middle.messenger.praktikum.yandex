@@ -3,6 +3,7 @@ function get(obj: object, path: string, defaultValue?: unknown): unknown {
 
   let result = obj;
   for (const key of keys) {
+    // @ts-ignore
     result = result[key];
 
     if (result === null) {

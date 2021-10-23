@@ -1,12 +1,12 @@
 {
   "name": "chat-project",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Yet another chat",
   "scripts": {
     "start": "node server.js",
     "dev": "parcel ./src/index.html",
     "build": "rimraf ./dist && parcel build ./src/index.html",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha -r ts-node/register -r jsdom-global/register -r ignore-styles src/**/*.spec.ts",
     "rimraf": "rimraf",
     "parcel": "parcel",
     "stylelint": "stylelint",
@@ -28,24 +28,35 @@
   },
   "homepage": "https://github.com/vishenkov/chat-project#readme",
   "devDependencies": {
+    "@types/chai": "^4.2.22",
+    "@types/jsdom": "^16.2.13",
+    "@types/mocha": "^9.0.0",
+    "@types/sinon": "^10.0.4",
     "@typescript-eslint/eslint-plugin": "^4.31.0",
     "@typescript-eslint/parser": "^4.31.0",
+    "chai": "^4.3.4",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-airbnb-typescript": "^14.0.0",
     "eslint-plugin-import": "^2.24.1",
+    "ignore-styles": "^5.0.1",
+    "jsdom": "18.0.0",
+    "jsdom-global": "3.0.2",
+    "mocha": "^9.1.2",
     "parcel": "^2.0.0-rc.0",
     "postcss": "^8.3.6",
     "postcss-import": "^14.0.2",
     "postcss-preset-env": "^6.7.0",
     "prettier": "^2.4.0",
     "rimraf": "^3.0.2",
+    "sinon": "^11.1.2",
     "stylelint": "^13.13.1",
     "stylelint-config-standard": "^22.0.0",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.2"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "helmet": "^4.6.0"
   }
 }

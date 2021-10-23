@@ -1,0 +1,21 @@
+.root {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: var(--spacing);
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: var(--shadow-level-1);
+    background-color: var(--button-hover);
+    color: #fff;
+  }
+
+  &:active {
+    box-shadow: var(--shadow-level-2);
+  }
+}
+
+.avatar {
+  margin-right: 4px;
+}

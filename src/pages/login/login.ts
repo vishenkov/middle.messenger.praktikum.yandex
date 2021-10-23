@@ -8,16 +8,17 @@ import Input from '../../components/input';
 import Typography from '../../components/typography';
 import Paper from '../../components/paper';
 import Native from '../../components/native';
-import isEqual from '../../lib/utils/is-equal';
+import Alert from '../../components/alert';
 
 import { Props } from '../../lib/types';
-import FormValidator from '../../lib/services/form-validator';
+import userController from '../../controllers/user-controller';
+import connect from '../../store/connect';
+import { State } from '../../lib/store/types';
+import { Login as LoginProps } from '../../api/types';
 
 class Login extends BaseComponent {
-  formValidator: FormValidator;
-
-  constructor() {
-    super({}, {
+  constructor(props: Props) {
+    super(props, {
       Container,
       Link,
       Button,
@@ -25,13 +26,8 @@ class Login extends BaseComponent {
       Typography,
       Paper,
       Native,
+      Alert,
     });
-
-    this.formValidator = new FormValidator();
-  }
-
-  componentDidUpdate(oldProps: Props, newProps: Props) {
-    return !isEqual(oldProps, newProps);
   }
 
   handleSubmit(e: Event) {
@@ -40,18 +36,7 @@ class Login extends BaseComponent {
     const formData = new FormData(e.target as HTMLFormElement);
     const formProps = Object.fromEntries(formData);
 
-    const hasError = Object.entries(formProps).some(([key, value]) => {
-      if (this.formValidator.supports(key)) {
-        const isValid = this.formValidator.prop(key).validate(value as string);
-        return !isValid;
-      }
-
-      return false;
-    });
-
-    console.warn('Has errors:', hasError);
-
-    console.table(Object.entries(formProps));
+    userController.login(formProps as LoginProps);
   }
 
   registerHandlers() {
@@ -65,4 +50,8 @@ class Login extends BaseComponent {
   }
 }
 
-export default Login;
+export default connect((state: State) => ({
+  formErrors: state.formErrors,
+  formValues: state.formValues,
+  requestError: state.requestError,
+}))(Login);

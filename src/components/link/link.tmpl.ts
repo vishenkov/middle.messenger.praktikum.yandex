@@ -9,6 +9,7 @@ const Link = (props: Props) => `
     'input_gutter-bottom': props.gutterBottom,
   })} ${props.className}"
     href="${props.href}"
+    onClick={{onClick}}
   >
     ${props.text}
   </a>

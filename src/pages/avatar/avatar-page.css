@@ -1,0 +1,11 @@
+.root {
+  width: 620px;
+}
+
+.inputsRoot {
+  margin-bottom: var(--spacing2);
+}
+
+.fileInput {
+  margin-bottom: var(--spacing2);
+}

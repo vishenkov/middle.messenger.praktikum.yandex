@@ -24,6 +24,10 @@
   padding: var(--spacing2);
 }
 
+.toolbar__right {
+  justify-content: flex-end;
+}
+
 .toolbarItem {
   margin-left: var(--spacing);
 }
@@ -53,5 +57,5 @@
 }
 
 .chatRoomDummy {
-  width: 360px;
+  width: 400px;
 }

@@ -19,9 +19,10 @@ export default (props: Props) => `
           ${props.subtitle}
         </Typography>
 
-        <Button
+        <Link
           gutterBottom="true"
-          label="Назад к чатам"
+          text="Назад к чатам"
+          href="/messenger"
         />
       </Paper>
     </div>

@@ -9,16 +9,19 @@ import Native from '../../components/native';
 import Avatar from '../../components/avatar';
 import Link from '../../components/link';
 import Input from '../../components/input';
+import ListItem from '../../components/list-item';
 
-import { Props } from '../../lib/types';
-import isEqual from '../../lib/utils/is-equal';
 import FormValidator from '../../lib/services/form-validator';
+import userController from '../../controllers/user-controller';
+import chatsController from '../../controllers/chats-controller';
+import connect from '../../store/connect';
+import { State } from '../../lib/store/types';
 
 class Chats extends BaseComponent {
   formValidator: FormValidator;
 
-  constructor() {
-    super({}, {
+  constructor(props) {
+    super(props, {
       Container,
       Button,
       Typography,
@@ -27,44 +30,38 @@ class Chats extends BaseComponent {
       Avatar,
       Link,
       Input,
+      ListItem,
     });
 
     this.formValidator = new FormValidator();
   }
 
-  componentDidUpdate(oldProps: Props, newProps: Props) {
-    return !isEqual(oldProps, newProps);
+  componentWillMount() {
+    if (!this.props.user) {
+      userController.load();
+    }
+
+    chatsController.loadAll();
   }
 
-  handleSubmit(e: Event) {
+  handleLogoutClick(e) {
     e.preventDefault();
 
-    const formData = new FormData(e.target as HTMLFormElement);
-    const formProps = Object.fromEntries(formData);
-
-    const hasError = Object.entries(formProps).some(([key, value]) => {
-      if (this.formValidator.supports(key)) {
-        const isValid = this.formValidator.prop(key).validate(value as string);
-        return !isValid;
-      }
-
-      return false;
-    });
-
-    console.warn('Has errors:', hasError);
-
-    console.table(Object.entries(formProps));
+    return userController.logout();
   }
 
   registerHandlers() {
     this.setHandlers({
-      handleSubmit: this.handleSubmit.bind(this),
+      handleLogoutClick: this.handleLogoutClick.bind(this),
     });
   }
 
   render() {
-    return getChatsTmpl();
+    return getChatsTmpl(this.props);
   }
 }
 
-export default Chats;
+export default connect((state: State) => ({
+  user: state.user,
+  chats: state.chats,
+}))(Chats);

@@ -1,35 +1,32 @@
 import './index.css';
 
+import Router from './lib/router';
 import LoginPage from './pages/login';
 import ProfilePage from './pages/profile';
 import RegistrationPage from './pages/registration';
+import PasswordPage from './pages/password';
+import AvatarPage from './pages/avatar';
 import ChatsPage from './pages/chats';
-import ErrorPage from './pages/error';
+import NewChatPage from './pages/new-chat';
+import UsersPage from './pages/users';
+import ChatPage from './pages/chat';
+import Page404 from './pages/404';
+import Page500 from './pages/500';
 
-import render from './lib/render-dom';
+const router = new Router('#root');
 
-function getCurrentPage() {
-  const { pathname } = window.location;
-
-  switch (pathname) {
-    case '/':
-      return new LoginPage();
-
-    case '/registration':
-      return new RegistrationPage();
-
-    case '/profile':
-      return new ProfilePage();
-
-    case '/chats':
-      return new ChatsPage();
-
-    case '/500':
-      return new ErrorPage({ errorCode: 500, subtitle: 'Уже чиним :(' });
-
-    default:
-      return new ErrorPage({ errorCode: 404, subtitle: 'Не туда попали' });
-  }
-}
-
-render('#root', getCurrentPage());
+router
+  .use('/', ChatsPage)
+  .use('/login', LoginPage)
+  .use('/sign-up', RegistrationPage)
+  .use('/settings', ProfilePage)
+  .use('/settings/password', PasswordPage)
+  .use('/settings/avatar', AvatarPage)
+  .use('/messenger', ChatsPage)
+  .use('/messenger/new', NewChatPage)
+  .use('/messenger/:id', ChatPage)
+  .use('/messenger/:id/users', UsersPage)
+  .use('/404', Page404)
+  .use('/500', Page500)
+  .default('/404')
+  .start();

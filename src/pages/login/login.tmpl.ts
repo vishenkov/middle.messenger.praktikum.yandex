@@ -11,12 +11,18 @@ export default () => `
           Вход
         </Typography>
 
-        <form method="POST" onSubmit={{handleSubmit}}>
+        <form onSubmit={{handleSubmit}}>
+          <Alert
+            error={{requestError}}
+          />
+
           <Input
             fullWidth="true"
             gutterBottom="true"
             name="login"
             placeholder="Логин"
+            formValues={{formValues}}
+            formErrors={{formErrors}}
             validate="login"
           />
           <Input
@@ -24,8 +30,10 @@ export default () => `
             gutterBottom="true"
             name="password"
             placeholder="Пароль"
-            validate="password"
             type="password"
+            formValues={formValues}}
+            formErrors={{formErrors}}
+            validate="password"
           />
 
           <Button
@@ -33,14 +41,13 @@ export default () => `
             fullWidth="true"
             gutterBottom="true"
             label="Войти"
-            onClick={{handleClick}}
           />
         </form>
 
         <Link
          fullWidth="true"
          text="Создать аккаунт"
-         href="/registration"
+         href="/sign-up"
        />
       </Paper>
     </div>

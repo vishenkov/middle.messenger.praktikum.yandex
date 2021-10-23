@@ -1,0 +1,67 @@
+.root {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  background: var(--chats-bd-color);
+}
+
+.chatsRoot {
+  min-width: 300px;
+}
+
+.chatContainer {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--chat-room-color);
+}
+
+.toolbar {
+  background: var(--bg-color);
+  height: 56px;
+  display: flex;
+  align-items: center;
+  padding: var(--spacing2);
+}
+
+.toolbar__left {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.toolbar__right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.toolbarItem {
+  margin-left: var(--spacing);
+}
+
+.avatarRoot {
+  display: flex;
+  align-items: center;
+}
+
+.chatList {
+  padding: var(--spacing2);
+}
+
+.chatListItem {
+  margin-bottom: var(--spacing2);
+}
+
+.messageRoot {
+  display: flex;
+}
+
+.chatRoom {
+  flex-grow: 1;
+  overflow: auto;
+}
+
+.chatRoomDummy {
+  width: 360px;
+}

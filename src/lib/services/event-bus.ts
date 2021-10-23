@@ -15,7 +15,8 @@ class EventBus {
 
   emit(event: string, ...args: unknown[]) {
     if (!this.listeners[event]) {
-      throw new Error(`Event ${event} is not defined!`);
+      console.warn(`Event ${event} is not defined!`);
+      return;
     }
 
     this.listeners[event].forEach((listener: VoidFunction) => {

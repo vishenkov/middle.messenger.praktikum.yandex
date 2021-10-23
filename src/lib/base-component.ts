@@ -1,6 +1,8 @@
 import EventBus from './services/event-bus';
 import Templator from './templator';
 
+import isEqual from './utils/is-equal';
+
 import {
   Props, Component, Handler, Block, DomNode,
 } from './types';
@@ -14,6 +16,7 @@ type Meta = {
 abstract class BaseComponent implements Block {
   static EVENTS = {
     INIT: 'init',
+    FLOW_CWM: 'flow:component-did-mount',
     FLOW_CDM: 'flow:component-did-mount',
     FLOW_CDU: 'flow:component-did-update',
     FLOW_RENDER: 'flow:render',
@@ -53,21 +56,26 @@ abstract class BaseComponent implements Block {
 
   protected _registerEvents() {
     this.eventBus.on(BaseComponent.EVENTS.INIT, this.init.bind(this));
+    this.eventBus.on(BaseComponent.EVENTS.FLOW_CWM, this._componentWillMount.bind(this));
+    this.eventBus.on(BaseComponent.EVENTS.FLOW_RENDER, this._render.bind(this));
     this.eventBus.on(BaseComponent.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     this.eventBus.on(BaseComponent.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
-    this.eventBus.on(BaseComponent.EVENTS.FLOW_RENDER, this._render.bind(this));
   }
 
   protected init() {
     this.registerHandlers();
-    this.eventBus.emit(BaseComponent.EVENTS.FLOW_CDM);
+    this.eventBus.emit(BaseComponent.EVENTS.FLOW_CWM);
   }
 
   registerHandlers() {}
 
+  protected _componentWillMount() {
+    this.componentWillMount();
+    this.eventBus.emit(BaseComponent.EVENTS.FLOW_RENDER);
+  }
+
   protected _componentDidMount() {
     this.componentDidMount();
-    this.eventBus.emit(BaseComponent.EVENTS.FLOW_RENDER);
   }
 
   componentDidMount(): void {}
@@ -76,13 +84,17 @@ abstract class BaseComponent implements Block {
     const response = this.componentDidUpdate(oldProps, newProps);
 
     if (response) {
-      this._removeEvents(oldProps);
+      if (this._removeEvents) {
+        this._removeEvents(oldProps);
+      }
       this._render();
     }
   }
 
-  componentDidUpdate(oldProps: Props, newProps: Props): boolean {
-    return oldProps !== newProps;
+  componentWillMount(): void {}
+
+  componentDidUpdate(oldProps: Props, newProps: Props) {
+    return !isEqual(oldProps, newProps);
   }
 
   setProps = (nextProps: Props) => {
@@ -111,7 +123,7 @@ abstract class BaseComponent implements Block {
     const block = this.render();
     const templator = new Templator(block, this._meta.components);
 
-    const element = templator.compile(this.props, this._handlers);
+    const element = templator.compile({ ...this.props, ...this._handlers });
 
     if (isNull(element)) {
       return;
@@ -126,29 +138,13 @@ abstract class BaseComponent implements Block {
     this._addEvents();
   }
 
-  _addEvents() {
-    Object.keys(BaseComponent.HANDLERS).forEach((eventName) => {
-      if (this.props[eventName]) {
-        this._element?.addEventListener(
-          BaseComponent.HANDLERS[eventName],
-          this.props[eventName] as EventListener,
-        );
-      }
-    });
-  }
+  _addEvents(): void {}
 
-  _removeEvents(oldProps: Props) {
-    Object.keys(BaseComponent.HANDLERS).forEach((eventName) => {
-      if (oldProps[eventName]) {
-        this._element?.removeEventListener(
-          BaseComponent.HANDLERS[eventName],
-          oldProps[eventName] as EventListener,
-        );
-      }
-    });
-  }
+  _removeEvents?(oldProps: Props):void;
 
-  abstract render(): string;
+  render(): string {
+    return '';
+  }
 
   getContent(): DomNode {
     return this.element;

@@ -8,9 +8,9 @@ const getAvatarTmpl = (props: Props) => `
     'avatar_size-m': props.m,
     'avatar_size-s': props.s,
     avatar_gutterBottom: props.gutterBottom,
-  })}"
+  })} ${props.className as string}"
   >
-    <div class="${styles.img}"></div>
+    <img src="https://ya-praktikum.tech/api/v2/resources${props.src}" class="${styles.img}" crossorigin="use-credentials" alt="🙃" />
   </div>
 `;
 
