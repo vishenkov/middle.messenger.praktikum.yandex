@@ -1,5 +1,5 @@
 import cn from '../../lib/classnames';
-import * as styles from './input.css';
+import styles from './input.css';
 import isObject from '../../lib/utils/is-object';
 import { Indexed } from '../../lib/types';
 import { InputProps } from './types';

@@ -1,4 +1,4 @@
-import * as styles from './avatar-page.css';
+import styles from './avatar-page.css';
 
 export default () => `
   <Container centered="true" min100vh="true">

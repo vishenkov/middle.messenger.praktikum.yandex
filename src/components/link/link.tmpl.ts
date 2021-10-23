@@ -1,6 +1,6 @@
 import { Props } from '../../lib/base-component';
 import cn from '../../lib/classnames';
-import * as styles from './link.css';
+import styles from './link.css';
 
 const Link = (props: Props) => `
   <a

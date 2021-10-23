@@ -1,4 +1,4 @@
-import * as styles from './new-chat.css';
+import styles from './new-chat.css';
 
 export default () => `
   <Container centered="true" min100vh="true">

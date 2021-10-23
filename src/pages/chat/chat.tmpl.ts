@@ -1,5 +1,5 @@
 import { ChatProps } from './types';
-import * as styles from './chat.css';
+import styles from './chat.css';
 
 export default (props: ChatProps) => `
   <main class="${styles.root}">

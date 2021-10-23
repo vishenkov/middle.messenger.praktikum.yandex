@@ -1,5 +1,5 @@
 import BaseComponent, { Props } from '../../lib/base-component';
-import * as styles from './message.css';
+import styles from './message.css';
 
 import Native from '../native';
 import Avatar from '../avatar';

@@ -1,6 +1,6 @@
 import { Props } from '../../lib/base-component';
 import cn from '../../lib/classnames';
-import * as styles from './button.css';
+import styles from './button.css';
 
 const Button = (props: Props) => {
   const typeProp = props.type ?? 'button';

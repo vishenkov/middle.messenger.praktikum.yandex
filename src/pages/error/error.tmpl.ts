@@ -1,5 +1,5 @@
 import { Props } from '../../lib/base-component';
-import * as styles from './error.css';
+import styles from './error.css';
 
 export default (props: Props) => `
   <Container centered="true" min100vh="true">

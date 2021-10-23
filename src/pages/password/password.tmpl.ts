@@ -1,4 +1,4 @@
-import * as styles from './password.css';
+import styles from './password.css';
 
 export default () => `
   <Container centered="true" min100vh="true">

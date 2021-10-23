@@ -1,4 +1,4 @@
-import * as styles from './login.css';
+import styles from './login.css';
 
 export default () => `
   <Container centered="true" min100vh="true">

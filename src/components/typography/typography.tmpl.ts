@@ -1,5 +1,5 @@
 import cn from '../../lib/classnames';
-import * as styles from './typography.css';
+import styles from './typography.css';
 import { TypographyProps } from './types';
 
 const getComponent = (variant: string) => {

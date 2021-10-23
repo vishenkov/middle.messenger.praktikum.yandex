@@ -1,4 +1,4 @@
-import * as styles from './profile.css';
+import styles from './profile.css';
 import { ProfileProps } from './types';
 
 export default ({ user }: ProfileProps) => `
