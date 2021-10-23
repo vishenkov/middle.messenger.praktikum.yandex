@@ -59,7 +59,7 @@ class ChatSocket {
     this.socket = socket;
   }
 
-  processMessage(message) {
+  processMessage(message: Record<string, unknown>) {
     switch (message.type) {
       case TYPES.message: {
         store.dispatch({ type: actions.setMessage, payload: message });

@@ -1,6 +1,7 @@
-import * as styles from './users.css';
+import styles from './users.css';
+import { UsersProps } from './types';
 
-export default (props) => `
+export default (props: UsersProps) => `
   <Container centered="true" min100vh="true">
     <div class="${styles.root}">
       <Paper>
@@ -59,7 +60,7 @@ export default (props) => `
           </form>
 
           <div class="${styles.users}">
-            ${props.users.map((user) => `
+            ${props.users?.map((user) => `
               <ListItem
                 id="${user.id}"
                 title="${user?.first_name}"

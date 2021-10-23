@@ -16,9 +16,11 @@ import chatsController from '../../controllers/chats-controller';
 import connect from '../../store/connect';
 import { State } from '../../lib/store/types';
 import messagesController from '../../controllers/messages-controller';
+import { ChatProps } from './types';
+import { Event } from '../../lib/types';
 
 class Chat extends BaseComponent {
-  constructor(props) {
+  constructor(props: ChatProps) {
     super(props, {
       Container,
       Button,
@@ -34,22 +36,22 @@ class Chat extends BaseComponent {
   }
 
   componentWillMount() {
-    chatsController.loadChat(this.props.id)
+    chatsController.loadChat(this.props.id as number)
       .then(() => {
-        messagesController.init(this.props.id);
+        messagesController.init(this.props.id as number);
       });
   }
 
   handleSubmit(e: Event) {
     e.preventDefault();
 
-    const formData = new FormData(e.target as HTMLFormElement);
+    const formData = new FormData(e.target as unknown as HTMLFormElement);
     const formProps = Object.fromEntries(formData);
 
-    messagesController.sendMessage(formProps.message);
+    messagesController.sendMessage(formProps.message as string);
   }
 
-  handleLogoutClick(e) {
+  handleLogoutClick(e: Event) {
     e.preventDefault();
 
     return userController.logout();
@@ -63,7 +65,7 @@ class Chat extends BaseComponent {
   }
 
   render() {
-    return getChatTmpl(this.props);
+    return getChatTmpl(this.props as ChatProps);
   }
 }
 

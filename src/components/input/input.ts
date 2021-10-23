@@ -3,12 +3,7 @@ import getInputTmpl from './input.tmpl';
 
 import Native from '../native';
 import Typography from '../typography';
-
-import { Props } from '../../lib/types';
-
-type InputProps = Props & {
-  validate?: string;
-};
+import { InputProps } from './types';
 
 const initialState = {
   error: false,
@@ -25,7 +20,7 @@ class Input extends BaseComponent {
   }
 
   render() {
-    return getInputTmpl(this.props);
+    return getInputTmpl(this.props as InputProps);
   }
 }
 

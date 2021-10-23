@@ -16,11 +16,13 @@ import userController from '../../controllers/user-controller';
 import chatsController from '../../controllers/chats-controller';
 import connect from '../../store/connect';
 import { State } from '../../lib/store/types';
+import { Event, Props } from '../../lib/types';
+import { ChatsProps } from './types';
 
 class Chats extends BaseComponent {
   formValidator: FormValidator;
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props, {
       Container,
       Button,
@@ -44,7 +46,7 @@ class Chats extends BaseComponent {
     chatsController.loadAll();
   }
 
-  handleLogoutClick(e) {
+  handleLogoutClick(e: Event) {
     e.preventDefault();
 
     return userController.logout();
@@ -57,7 +59,7 @@ class Chats extends BaseComponent {
   }
 
   render() {
-    return getChatsTmpl(this.props);
+    return getChatsTmpl(this.props as ChatsProps);
   }
 }
 

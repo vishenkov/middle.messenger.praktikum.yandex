@@ -16,9 +16,11 @@ import { State } from '../../lib/store/types';
 import connect from '../../store/connect';
 import userController from '../../controllers/user-controller';
 import chatsController from '../../controllers/chats-controller';
+import { UsersProps } from './types';
+import { User } from '../../api/types';
 
 class NewUser extends BaseComponent {
-  constructor(props) {
+  constructor(props: UsersProps) {
     super({
       users: [],
       ...props,
@@ -37,7 +39,7 @@ class NewUser extends BaseComponent {
   }
 
   componentWillMount() {
-    chatsController.loadChat(this.props.id);
+    chatsController.loadChat(this.props.id as number);
   }
 
   async handleSubmit(e: Event) {
@@ -53,12 +55,12 @@ class NewUser extends BaseComponent {
     });
   }
 
-  async handleUserClick(user) {
-    return chatsController.addUser(this.props.id, user.id);
+  async handleUserClick(user: User) {
+    return chatsController.addUser(this.props.id as number, user.id);
   }
 
-  async handleDeleteUserClick(user) {
-    return chatsController.removeUser(this.props.id, user.id);
+  async handleDeleteUserClick(user: User) {
+    return chatsController.removeUser(this.props.id as number, user.id);
   }
 
   registerHandlers() {
@@ -70,7 +72,7 @@ class NewUser extends BaseComponent {
   }
 
   render() {
-    return getNewUserTmpl(this.props);
+    return getNewUserTmpl(this.props as UsersProps);
   }
 }
 

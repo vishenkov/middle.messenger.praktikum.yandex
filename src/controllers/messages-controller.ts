@@ -1,3 +1,4 @@
+import { Token, User } from '../api/types';
 import Socket from '../socket';
 import store from '../store';
 
@@ -11,14 +12,14 @@ class MessagesController {
       return;
     }
 
-    const token = tokens[chatId];
+    const token = (tokens as Record<number, Token>)[chatId];
 
     if (!token) {
       return;
     }
 
-    const userId = user.id;
-    const socket = new Socket(userId, chatId, token);
+    const userId = (user as User).id;
+    const socket = new Socket(userId, chatId, token as unknown as string);
     this.socket = socket;
   }
 

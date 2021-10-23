@@ -1,5 +1,6 @@
 import BaseComponent, { Props } from '../../lib/base-component';
 import getTypographyTmpl from './typography.tmpl';
+import { TypographyProps } from './types';
 
 import Native from '../native';
 
@@ -11,7 +12,7 @@ class Typography extends BaseComponent {
   }
 
   render() {
-    return getTypographyTmpl(this.props);
+    return getTypographyTmpl(this.props as TypographyProps);
   }
 }
 

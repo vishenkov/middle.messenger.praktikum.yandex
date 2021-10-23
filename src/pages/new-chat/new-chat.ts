@@ -14,9 +14,10 @@ import Alert from '../../components/alert';
 import { State } from '../../lib/store/types';
 import connect from '../../store/connect';
 import chatsController from '../../controllers/chats-controller';
+import { Props } from '../../lib/types';
 
 class NewChat extends BaseComponent {
-  constructor(props) {
+  constructor(props: Props) {
     super(props, {
       Container,
       Link,

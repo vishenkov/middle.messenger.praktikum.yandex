@@ -6,9 +6,10 @@ import isEmpty from '../lib/utils/is-empty';
 import FormValidator from '../lib/services/form-validator';
 
 export function handleError() {
+  // @ts-ignore
   return function decorator(target: any, propertyName: string, descriptor: PropertyDescriptor) {
     const originalValue = descriptor.value;
-    // eslint-disable-next-line no-param-reassign
+    // eslint-disable-next-line no-param-reassign, consistent-return
     descriptor.value = async (...args: any) => {
       try {
         store.dispatch({ type: actions.clearRequestError });
@@ -18,19 +19,13 @@ export function handleError() {
         if (error.code === 401) {
           store.dispatch({ type: actions.setRequestError, payload: error.reason });
           (new Router()).go('/login');
-          return;
-        }
-        if (error.code === 404) {
+        } else if (error.code === 404) {
           (new Router()).go('/404');
-          return;
-        }
-
-        if (error.code >= 400) {
+        } else if (error.code >= 400) {
           store.dispatch({ type: actions.setRequestError, payload: error.reason });
-          return;
+        } else {
+          (new Router()).go('/500');
         }
-
-        (new Router()).go('/500');
       }
     };
   };
@@ -61,9 +56,10 @@ function getError(key: string) {
 }
 
 export function validate() {
+  // @ts-ignore
   return function decorator(target: any, propertyName: string, descriptor: PropertyDescriptor) {
     const originalValue = descriptor.value;
-    // eslint-disable-next-line no-param-reassign
+    // eslint-disable-next-line no-param-reassign, consistent-return
     descriptor.value = async (data: Record<string, unknown>) => {
       store.dispatch({ type: actions.setFormValues, payload: data });
 

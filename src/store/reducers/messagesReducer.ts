@@ -1,13 +1,13 @@
-import { Action, State } from '../../lib/store/types';
+import { Action } from '../../lib/store/types';
 import actions from '../actions';
 
-export default function messagesReducer(state: State, action: Action) {
+export default function messagesReducer(state: [], action: Action) {
   switch (action.type) {
     case actions.setMessage:
       return [
         ...state,
         { ...action.payload },
-      ].sort((a, b) => new Date(a.time) - new Date(b.time));
+      ].sort((a, b) => (new Date(a.time)).valueOf() - (new Date(b.time)).valueOf());
 
     default:
       return state;

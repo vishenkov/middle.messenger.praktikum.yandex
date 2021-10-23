@@ -5,7 +5,7 @@ import store from '../store';
 import actions from '../store/actions';
 
 import { validate, handleError } from './decorators';
-import { Login, Registration } from '../api/types';
+import { Login, Registration, User } from '../api/types';
 import { Indexed } from '../lib/types';
 
 class UserController {
@@ -40,7 +40,7 @@ class UserController {
   @handleError()
   async updateProfile(data: Indexed) {
     const { user } = store.getState();
-    const updatedUser = await userApi.changeProfile({ ...data, login: user.login });
+    const updatedUser = await userApi.changeProfile({ ...data, login: (user as User).login });
     store.dispatch({ type: actions.setUser, payload: updatedUser });
   }
 
