@@ -4,7 +4,7 @@
   "description": "Yet another chat",
   "scripts": {
     "start": "node server.js",
-    "dev": "parcel ./src/index.html",
+    "dev": "npm run webpack serve",
     "test": "mocha -r ts-node/register -r jsdom-global/register -r ignore-styles src/**/*.spec.ts",
     "rimraf": "rimraf",
     "parcel": "parcel",
@@ -13,7 +13,7 @@
     "lint-js": "eslint src/*.ts",
     "lint": "npm run lint-js && npm run lint-css",
     "webpack": "webpack",
-    "build": "rimraf ./dist && npm webpack"
+    "build": "rimraf ./dist && npm run webpack"
   },
   "repository": {
     "type": "git",
