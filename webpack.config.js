@@ -12,14 +12,18 @@ module.exports = {
   entry: './src/index.ts',
   output: {
     path: paths.dist,
+    publicPath: '/',
     filename: 'chat-project.bundle.js',
   },
   devtool: 'inline-source-map',
-  devServer: {},
+  devServer: {
+    historyApiFallback: true,
+    open: true,
+  },
   plugins: [
     new HtmlWebpackPlugin({
       inject: true,
-      template: 'src/index.html',
+      template: './src/index.html',
     }),
     new CleanWebpackPlugin(),
   ],
