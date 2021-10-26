@@ -12,7 +12,7 @@ app.use(
     useDefaults: true,
     directives: {
       defaultSrc: ["'self'", 'ya-praktikum.tech', 'wss://ya-praktikum.tech'],
-      imgSrc: ["'self", 'data:', 'ya-praktikum.tech'],
+      imgSrc: ['ya-praktikum.tech'],
     },
   }),
 );
