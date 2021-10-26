@@ -11,8 +11,8 @@ app.use(
   helmet.contentSecurityPolicy({
     useDefaults: true,
     directives: {
-      defaultSrc: ["'self'", 'https://ya-praktikum.tech'],
-      imgSrc: ["'self", 'data:', 'https://ya-praktikum.tech'],
+      defaultSrc: ["'self'", 'ya-praktikum.tech', 'wss://ya-praktikum.tech'],
+      imgSrc: ["'self", 'data:', 'ya-praktikum.tech'],
     },
   }),
 );
