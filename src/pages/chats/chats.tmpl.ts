@@ -1,8 +1,6 @@
 import styles from './chats.css';
 import { ChatsProps } from './types';
 
-console.log('styles', styles);
-
 export default (props: ChatsProps) => `
   <main class="${styles.root}">
     <div class="${styles.chatsRoot}">
