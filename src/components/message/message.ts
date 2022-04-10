@@ -1,5 +1,5 @@
 import BaseComponent, { Props } from '../../lib/base-component';
-import * as styles from './message.css';
+import styles from './message.css';
 
 import Native from '../native';
 import Avatar from '../avatar';
@@ -10,13 +10,18 @@ import Router from '../../lib/router';
 import { State } from '../../lib/store/types';
 
 import connect from '../../store/connect';
+import { User } from '../../api/types';
 
 function padZero(int: number) {
   return int < 10 ? `0${int}` : int;
 }
 
+type MessageProps = Props & {
+  author: User
+};
+
 class Message extends BaseComponent {
-  constructor(props: Props) {
+  constructor(props: MessageProps) {
     super(props, {
       Native,
       Typography,
@@ -28,7 +33,7 @@ class Message extends BaseComponent {
     e.preventDefault();
 
     if (this.props.href) {
-      (new Router()).go(this.props.href);
+      (new Router()).go(this.props.href as string);
     }
   }
 
@@ -41,7 +46,7 @@ class Message extends BaseComponent {
   render() {
     const {
       content, isCurrentUserAuthor, time, author,
-    } = this.props;
+    } = this.props as MessageProps;
     const timeString = new Date(time as string);
 
     const hours = padZero(timeString.getHours());
@@ -67,6 +72,6 @@ class Message extends BaseComponent {
 }
 
 export default connect((state: State, ownProps) => ({
-  author: state.chatUsers[ownProps.userId],
-  isCurrentUserAuthor: state.user?.id === ownProps.userId,
+  author: (state.chatUsers as User[])[ownProps.userId as number],
+  isCurrentUserAuthor: (state.user as User)?.id === ownProps.userId,
 }))(Message);

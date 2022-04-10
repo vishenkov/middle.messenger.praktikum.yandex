@@ -33,3 +33,9 @@ export type Chat = {
 export type Token = {
   token: string;
 };
+
+export type Message = {
+  content: string;
+  user_id: number;
+  time: number;
+};

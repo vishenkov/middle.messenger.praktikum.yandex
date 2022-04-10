@@ -1,6 +1,7 @@
-import * as styles from './profile.css';
+import styles from './profile.css';
+import { ProfileProps } from './types';
 
-export default ({ user }) => `
+export default ({ user }: ProfileProps) => `
   <Container centered="true" min100vh="true">
     <div class="${styles.root}">
       <Paper>

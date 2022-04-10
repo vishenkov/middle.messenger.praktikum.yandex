@@ -1,6 +1,7 @@
-import * as styles from './chat.css';
+import { ChatProps } from './types';
+import styles from './chat.css';
 
-export default (props) => `
+export default (props: ChatProps) => `
   <main class="${styles.root}">
     <div class="${styles.chatContainer}">
       <div class="${styles.toolbar}">

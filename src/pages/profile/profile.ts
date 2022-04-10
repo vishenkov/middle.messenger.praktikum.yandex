@@ -14,9 +14,10 @@ import Alert from '../../components/alert';
 import { State } from '../../lib/store/types';
 import connect from '../../store/connect';
 import userController from '../../controllers/user-controller';
+import { ProfileProps } from './types';
 
 class Profile extends BaseComponent {
-  constructor(props) {
+  constructor(props: ProfileProps) {
     super(props, {
       Container,
       Link,
@@ -52,7 +53,7 @@ class Profile extends BaseComponent {
   }
 
   render() {
-    return getProfileTmpl(this.props);
+    return getProfileTmpl(this.props as ProfileProps);
   }
 }
 

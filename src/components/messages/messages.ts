@@ -1,5 +1,5 @@
 import BaseComponent, { Props } from '../../lib/base-component';
-import * as styles from './messages.css';
+import styles from './messages.css';
 
 import Native from '../native';
 import Avatar from '../avatar';
@@ -7,9 +7,14 @@ import Message from '../message';
 import Typography from '../typography';
 import { Event } from '../../lib/types';
 import Router from '../../lib/router';
+import { Message as MessageType } from '../../api/types';
+
+type MessagesProps = Props & {
+  messages?: MessageType[]
+};
 
 class Messages extends BaseComponent {
-  constructor(props: Props) {
+  constructor(props: MessagesProps) {
     super(props, {
       Native,
       Typography,
@@ -22,7 +27,7 @@ class Messages extends BaseComponent {
     e.preventDefault();
 
     if (this.props.href) {
-      (new Router()).go(this.props.href);
+      (new Router()).go(this.props.href as string);
     }
   }
 
@@ -33,7 +38,7 @@ class Messages extends BaseComponent {
   }
 
   render() {
-    const { messages } = this.props;
+    const { messages } = this.props as MessagesProps;
 
     return (`
       <div class="${styles.root}">

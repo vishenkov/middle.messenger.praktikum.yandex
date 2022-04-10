@@ -14,9 +14,10 @@ import Alert from '../../components/alert';
 import { State } from '../../lib/store/types';
 import connect from '../../store/connect';
 import userController from '../../controllers/user-controller';
+import { Indexed, Props } from '../../lib/types';
 
 class AvatarPage extends BaseComponent {
-  constructor(props) {
+  constructor(props: Props) {
     super(props, {
       Container,
       Link,
@@ -40,7 +41,7 @@ class AvatarPage extends BaseComponent {
     e.preventDefault();
 
     const formData = new FormData(e.target as HTMLFormElement);
-    userController.updateAvatar(formData);
+    userController.updateAvatar(formData as unknown as Indexed);
   }
 
   registerHandlers() {

@@ -16,6 +16,7 @@ export type EventTarget = {
 };
 
 export type Event = {
+  target: EventTarget;
   currentTarget: EventTarget;
   preventDefault(): void;
   stopPropagation(): void;

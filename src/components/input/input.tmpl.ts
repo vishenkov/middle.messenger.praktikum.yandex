@@ -1,7 +1,8 @@
-import { Props } from '../../lib/base-component';
 import cn from '../../lib/classnames';
-import * as styles from './input.css';
+import styles from './input.css';
 import isObject from '../../lib/utils/is-object';
+import { Indexed } from '../../lib/types';
+import { InputProps } from './types';
 
 const Input = ({
   fullWidth = false,
@@ -9,7 +10,7 @@ const Input = ({
   formErrors = {},
   formValues = {},
   name = '',
-}: Props) => {
+}: InputProps) => {
   const hasError = isObject(formErrors) && Object.prototype.hasOwnProperty.call(formErrors, name);
   const classNames = cn(styles, 'input', {
     'input_full-width': fullWidth,
@@ -18,7 +19,7 @@ const Input = ({
   });
 
   const value = isObject(formValues) && Object.prototype.hasOwnProperty.call(formValues, name)
-    ? formValues[name] ?? ''
+    ? (formValues as Indexed)[name] ?? ''
     : '';
 
   return `
@@ -38,7 +39,7 @@ const Input = ({
               gutterBottom="true"
               error="true"
             >
-            ${formErrors[name]}
+            ${(formErrors as Indexed)[name]}
           </Typography>
           `
     : ''}

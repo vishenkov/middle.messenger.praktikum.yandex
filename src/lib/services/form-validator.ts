@@ -18,12 +18,12 @@ const nameRegExp = /^[A-ZА-Я]+[a-zA-Zа-яА-Я-]+$/g;
 function getValidator(prop: string) {
   switch (prop) {
     case Props.login: {
-      return (value: string) => value.match(loginRegExp);
+      return (value: string) => Boolean(value.match(loginRegExp));
     }
 
     case Props.password:
     case Props.newPassword:
-      return (value: string) => value.match(passwordRegExp);
+      return (value: string) => Boolean(value.match(passwordRegExp));
 
     case Props.phone:
       return (value: string) => Boolean(value.match(phoneRegExp));
@@ -33,7 +33,7 @@ function getValidator(prop: string) {
     }
 
     case Props.email:
-      return (value: string) => value.match(emailRegExp);
+      return (value: string) => Boolean(value.match(emailRegExp));
 
     case Props.first_name:
     case Props.second_name:

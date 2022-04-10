@@ -14,9 +14,10 @@ import Alert from '../../components/alert';
 import { State } from '../../lib/store/types';
 import connect from '../../store/connect';
 import userController from '../../controllers/user-controller';
+import { PasswordProps } from './types';
 
 class Password extends BaseComponent {
-  constructor(props) {
+  constructor(props: PasswordProps) {
     super(props, {
       Container,
       Link,

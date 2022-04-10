@@ -7,9 +7,6 @@
       "features": {
         "nesting-rules": true
       }
-    },
-    "postcss-modules": {
-      "generateScopedName": "_[name]__[local]"
     }
   }
 }

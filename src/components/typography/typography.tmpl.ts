@@ -1,6 +1,6 @@
-import { Props } from '../../lib/base-component';
 import cn from '../../lib/classnames';
-import * as styles from './typography.css';
+import styles from './typography.css';
+import { TypographyProps } from './types';
 
 const getComponent = (variant: string) => {
   switch (variant) {
@@ -19,10 +19,6 @@ const getComponent = (variant: string) => {
     default:
       return 'p';
   }
-};
-
-type TypographyProps = Props & {
-  variant: string;
 };
 
 export default (props: TypographyProps) => {

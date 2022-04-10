@@ -1,4 +1,4 @@
-import * as styles from './registration.css';
+import styles from './registration.css';
 
 export default () => `
   <Container centered="true" min100vh="true">

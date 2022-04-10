@@ -1,6 +1,6 @@
 import { Props } from '../../lib/base-component';
 import cn from '../../lib/classnames';
-import * as styles from './container.css';
+import styles from './container.css';
 
 export default (props: Props) => `
   <main class="${cn(styles, 'root', {

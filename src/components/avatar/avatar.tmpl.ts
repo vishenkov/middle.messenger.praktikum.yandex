@@ -1,6 +1,6 @@
 import { Props } from '../../lib/base-component';
 import cn from '../../lib/classnames';
-import * as styles from './avatar.css';
+import styles from './avatar.css';
 
 const getAvatarTmpl = (props: Props) => `
   <div

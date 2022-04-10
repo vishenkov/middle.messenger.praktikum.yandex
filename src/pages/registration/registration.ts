@@ -15,6 +15,7 @@ import userController from '../../controllers/user-controller';
 import connect from '../../store/connect';
 import store from '../../store';
 import actions from '../../store/actions';
+import { Registration as RegistrationType } from '../../api/types';
 
 class Registration extends BaseComponent {
   constructor() {
@@ -47,7 +48,7 @@ class Registration extends BaseComponent {
       return;
     }
 
-    userController.registration(formProps);
+    userController.registration(formProps as unknown as RegistrationType);
   }
 
   registerHandlers() {
